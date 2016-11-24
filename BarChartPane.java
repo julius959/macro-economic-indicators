@@ -28,9 +28,6 @@ public class BarChartPane extends StackPane {
         //Populate chart with given data
         passData(data);
 
-        //Add sample data to chart
-        /*barChart.getData().add(series1);*/
-
         //Add chart to container
         getChildren().add(barChart);
     }
