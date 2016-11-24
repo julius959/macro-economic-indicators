@@ -16,5 +16,12 @@ public class BarChartPane extends Pane {
 
         //Initialises empty bar chart
         barChart = new BarChart<>(dateAxis, valueAxis);
+
+        //Adds title and axis labels
+        barChart.setTitle("Bar Chart Title");
+        dateAxis.setLabel("Date");
+        valueAxis.setLabel("Value");
+
+
     }
 }
