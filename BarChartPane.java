@@ -26,11 +26,11 @@ public class BarChartPane extends Pane {
         //Creates a series of data
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
         series1.setName("Country");
-        series1.getData().add(new XYChart.Data<String, Number>("2012", 130));
-        series1.getData().add(new XYChart.Data<String, Number>("2013", 120));
-        series1.getData().add(new XYChart.Data<String, Number>("2014", 100));
-        series1.getData().add(new XYChart.Data<String, Number>("2015", 115));
-        series1.getData().add(new XYChart.Data<String, Number>("2016", 130));
+        series1.getData().add(new XYChart.Data<>("2012", 130));
+        series1.getData().add(new XYChart.Data<>("2013", 120));
+        series1.getData().add(new XYChart.Data<>("2014", 100));
+        series1.getData().add(new XYChart.Data<>("2015", 115));
+        series1.getData().add(new XYChart.Data<>("2016", 130));
 
         barChart.getData().add(series1);
 
