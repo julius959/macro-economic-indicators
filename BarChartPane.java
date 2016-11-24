@@ -1,6 +1,7 @@
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.layout.Pane;
 
 public class BarChartPane extends Pane {
@@ -22,6 +23,17 @@ public class BarChartPane extends Pane {
         dateAxis.setLabel("Date");
         valueAxis.setLabel("Value");
 
+        //Creates a series of data
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+        series1.setName("Country");
+        series1.getData().add(new XYChart.Data<String, Number>("2012", 130));
+        series1.getData().add(new XYChart.Data<String, Number>("2013", 120));
+        series1.getData().add(new XYChart.Data<String, Number>("2014", 100));
+        series1.getData().add(new XYChart.Data<String, Number>("2015", 115));
+        series1.getData().add(new XYChart.Data<String, Number>("2016", 130));
 
+        barChart.getData().add(series1);
+
+        getChildren().add(barChart);
     }
 }
