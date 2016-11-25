@@ -3,6 +3,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -13,13 +14,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class TableViewPane extends StackPane {
     private TableView<TableModelData> table;
     private ObservableList<TableModelData> data = FXCollections.observableArrayList();
 
-    public TableViewPane(/*ArrayList<HashMap<String, Number>> dataIn*/) {
+    public TableViewPane(HashMap<String, Number> dataIn) {
         super();
 
         //Creates table title
@@ -41,17 +43,7 @@ public class TableViewPane extends StackPane {
         tbcolValue.setStyle("-fx-alignment: CENTER;");
         table.getColumns().addAll(tbcolDate, tbcolValue);
 
-        //Defines sample data
-      /*  data =
-                FXCollections.observableArrayList(
-                        new TableModelData("2016", 120),
-                        new TableModelData("2015", 100),
-                        new TableModelData("2014", 95),
-                        new TableModelData("2013", 89),
-                        new TableModelData("2012", 101)
-                );*/
-
-        data.add(new TableModelData("2016", 120));
+        passData(dataIn);
 
         //Link data with data model
         tbcolDate.setCellValueFactory(
@@ -90,21 +82,14 @@ public class TableViewPane extends StackPane {
         public void setY(String y) { this.y.set(y); }
     }
 
-    /*private void passData(ArrayList<HashMap<String, Number>> dataIn) {
-        //Loop over data for every country
-        for (HashMap<String, Number> hm : data) {
-            //Create new series of data for each country
-            XYChart.Series<String, Number> tempSeries = new XYChart.Series<>();
-            //Get the date values
-            ArrayList<String> alstKeys = new ArrayList<>(hm.keySet());
-            Collections.reverse(alstKeys);
+    private void passData(HashMap<String, Number> dataIn) {
 
-            //Add each data instance to the series of data
-            for (String sKey : alstKeys)
-                tempSeries.getData().add(new XYChart.Data<>(sKey, hm.get(sKey)));
+        //Extract the dates from the data
+        ArrayList<String> alstKeys = new ArrayList<>(dataIn.keySet());
+        //Collections.reverse(alstKeys);
 
-            //Add the countries data to the chart
-            barChart.getData().add(tempSeries);
-        }
-    }*/
+        //Add each data entry to the table
+        for (String sKey : alstKeys)
+            data.add(new TableModelData(sKey, dataIn.get(sKey)));
+    }
 }
