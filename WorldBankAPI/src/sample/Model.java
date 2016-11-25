@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,27 +16,56 @@ import java.util.concurrent.atomic.DoubleAccumulator;
 public class Model {
     public static String[] countries = {"USA", "UK", "France", "Germany", "Italy", "Spain"};
     public static String[] countryCodes = {"usa", "gb", "fr", "deu", "it", "es"};
-    public static String[] indicatorCodes = {"NY.GDP.MKTP.CD", "SL.EMP.TOTL.SP.ZS", "SL.UEM.TOTL.ZS", "FP.CPI.TOTL.ZG", "NE.IMP.GNFS.ZS", "NE.EXP.GNFS.ZS", "FR.INR.RINR"};
+    //public static String[] indicatorCodes = {"NY.GDP.MKTP.CD", "SL.EMP.TOTL.SP.ZS", "SL.UEM.TOTL.ZS", "FP.CPI.TOTL.ZG","FR.INR.RINR", "NE.IMP.GNFS.ZS", "NE.EXP.GNFS.ZS"};
     //GDP, EMPLYMENT, UNEMPLOYMENT, INFLATION & CONSUMER PRICES, IMPORT, EXPORT,INTEREST RATE
-    public static String[] indicators = new String[indicatorCodes.length]; //Getting the names of the indicators from the JSON result
+    //public static String[] indicatorLabels = {"GDB","Employment Rate","Unemployment Rate","Inflation & Consumer Prices","Interest Rate","Import","Export"};
+    //   public static String[] indicators = new String[indicatorCodes.length]; //Getting the names of the indicators from the JSON result
+    public static ArrayList<Indicator> indicators;
 
-    public static int currentIndicator = 0; //default indicator is GDP
+    public static String currentIndicator; //default indicator is GDP
     public static String currentStartDate = "2006"; //default starting date
     public static String currentEndDate = "2016"; //default ending date
     public static ArrayList<Integer> currentCountries = new ArrayList<>();
 
-    ArrayList<HashMap<String, Double>> displayedResult = new ArrayList<>(); //FINAL RESULT FOR CHARTS
 
+    ArrayList<HashMap<String, Double>> displayedResult = new ArrayList<>(); //FINAL RESULT FOR CHARTS
     private ArrayList<String> isUpdated = new ArrayList<String>();
     public static Model instance = null;
 
     private Model() {
+        initLabels();
     }
 
     public static Model getInstance() {
         if (instance == null)
             instance = new Model();
         return instance;
+    }
+
+    private void initLabels() {
+        Indicator gdb = new Indicator("GDB");
+        Indicator labour = new Indicator("Labour");
+        Indicator prices = new Indicator("Prices");
+        Indicator money = new Indicator("Money");
+        Indicator trade = new Indicator("Trade");
+
+        gdb.setSubIndicatorsCodes(new String[]{"NY.GDP.MKTP.CD"});
+        gdb.setSubIndicatorsLabels(new String[]{"GDB"});
+
+        labour.setSubIndicatorsCodes(new String[]{"SL.EMP.TOTL.SP.ZS", "SL.UEM.TOTL.ZS"});
+        labour.setSubIndicatorsLabels(new String[]{"Employment Rate", "Unemployment Rate"});
+
+        prices.setSubIndicatorsCodes(new String[]{"FP.CPI.TOTL.ZG"});
+        prices.setSubIndicatorsLabels(new String[]{"Inflation & Consumer Prices"});
+
+        money.setSubIndicatorsCodes(new String[]{"FR.INR.RINR"});
+        money.setSubIndicatorsLabels(new String[]{"Interest Rate"});
+
+        trade.setSubIndicatorsCodes(new String[]{"NE.IMP.GNFS.ZS", "NE.EXP.GNFS.ZS"});
+        trade.setSubIndicatorsLabels(new String[]{"Import", "Export"});
+
+        indicators = new ArrayList<>(Arrays.asList(gdb,labour,prices,money,trade));
+
     }
 
     private void updateLocal(String fileName, StringBuilder data) { //First querry will update the local data
@@ -45,11 +75,10 @@ public class Model {
         }
     }
 
-    public HashMap<String, Double> getData(int countryIndex, int indicatorIndex, String startDate, String endDate) {
-         isUpdated.add("usaNY.GDP.MKTP.CD20062016"); //TEST THE CACHE
+    public HashMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
         HashMap<String, Double> data = new HashMap<>();
-        String fileName = countryCodes[countryIndex] + indicatorCodes[indicatorIndex] + startDate + endDate;
-        String generatedLink = "countries/" + countryCodes[countryIndex] + "/indicators/" + indicatorCodes[indicatorIndex] + "?date=" + startDate + ":" + endDate + "&per_page=10000&format=json";
+        String fileName = countryCodes[countryIndex] + indicator + startDate + endDate;
+        String generatedLink = "countries/" + countryCodes[countryIndex] + "/indicators/" + indicator + "?date=" + startDate + ":" + endDate + "&per_page=10000&format=json";
         StringBuilder result;
         if (isUpdated.contains(fileName)) result = CacheData.getInstance().getData(fileName);
         else {
@@ -59,8 +88,8 @@ public class Model {
         try {
             JSONArray array = new JSONArray(result.toString());
             JSONArray array1 = array.getJSONArray(1);
-            String in = array1.getJSONObject(0).getJSONObject("indicator").getString("value");
-            indicators[indicatorIndex] = in;
+            //   String in = array1.getJSONObject(0).getJSONObject("indicator").getString("value");
+
             for (int i = 0; i < array1.length(); ++i) {
                 JSONObject currentObject = array1.getJSONObject(i);
                 if (!currentObject.getString("value").equals("null"))
@@ -75,14 +104,14 @@ public class Model {
 
     public void setCurrentCountries(int[] countries) {
         currentCountries.clear();
-        for (int i = 0; i < countries.length ; ++i) {
+        for (int i = 0; i < countries.length; ++i) {
             currentCountries.add(countries[i]);
         }
     }
 
     public ArrayList<HashMap<String, Double>> gatherData() {
         displayedResult.clear();
-       ExecutorService executor = Executors.newFixedThreadPool(currentCountries.size());
+        ExecutorService executor = Executors.newFixedThreadPool(currentCountries.size());
         for (int i = 0; i < currentCountries.size(); ++i) {
             final int finalI = i;
             System.out.println(countries[i]);

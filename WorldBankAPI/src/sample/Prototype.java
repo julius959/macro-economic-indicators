@@ -28,7 +28,6 @@ public class Prototype {
         Model.getInstance().currentEndDate = "2016";
         ArrayList res =  Model.getInstance().gatherData();
 
-
         for(int i = 0; i<res.size();++i){
             System.out.println(res.get(i));
         }
