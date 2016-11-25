@@ -21,10 +21,13 @@ public class TableViewPane extends StackPane {
         //Initialises uneditable table
         table = new TableView<>();
         table.setEditable(false);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         //Initialises table columns and adds them to the table
         TableColumn<TableModelData, String> tbcolDate = new TableColumn<>("X");
         TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>("Y");
+        tbcolDate.setStyle("-fx-alignment: CENTER;");
+        tbcolValue.setStyle("-fx-alignment: CENTER;");
         table.getColumns().addAll(tbcolDate, tbcolValue);
 
         //Defines sample data
