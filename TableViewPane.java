@@ -1,11 +1,15 @@
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class TableViewPane extends StackPane {
@@ -15,8 +19,11 @@ public class TableViewPane extends StackPane {
         super();
 
         //Creates table title
-        final Label tableTitle = new Label("Table Title");
-        tableTitle.setFont(new Font("Arial", 20));
+        final Label lblTableTitle = new Label("Table Title");
+        lblTableTitle.setFont(new Font("Arial", 20));
+
+        HBox hbTableTitle = new HBox(lblTableTitle);
+        hbTableTitle.setAlignment(Pos.CENTER);
 
         //Initialises uneditable table
         table = new TableView<>();
@@ -40,6 +47,7 @@ public class TableViewPane extends StackPane {
                         new TableModelData("2012", 101)
                 );
 
+        //Link data with data model
         tbcolDate.setCellValueFactory(
                 new PropertyValueFactory<TableModelData, String>("x"));
 
@@ -48,13 +56,19 @@ public class TableViewPane extends StackPane {
 
         table.setItems(data);
 
+        final VBox vbRoot = new VBox();
+        vbRoot.setSpacing(5);
+        vbRoot.setPadding(new Insets(10, 0, 0, 10));
+        vbRoot.getChildren().addAll(hbTableTitle, table);
+
         //Adds table to container
-        getChildren().add(table);
+        getChildren().add(vbRoot);
     }
 
+     //Data Model for the Table
      public static class TableModelData {
-        private final SimpleStringProperty x;
-        private final SimpleStringProperty y;
+        //x and y values for each data entry
+        private final SimpleStringProperty x, y;
 
         private TableModelData(String xIn, Number yIn) {
             x = new SimpleStringProperty(xIn);
