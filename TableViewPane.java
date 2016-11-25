@@ -1,6 +1,7 @@
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 
@@ -23,5 +24,7 @@ public class TableViewPane extends StackPane {
         TableColumn<String, Number> tbcolValue = new TableColumn<>("Y");
         table.getColumns().addAll(tbcolDate, tbcolValue);
 
+        //Adds table to container
+        getChildren().add(table);
     }
 }
