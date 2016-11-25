@@ -12,10 +12,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class TableViewPane extends StackPane {
     private TableView<TableModelData> table;
+    private ObservableList<TableModelData> data = FXCollections.observableArrayList();
 
-    public TableViewPane() {
+    public TableViewPane(/*ArrayList<HashMap<String, Number>> dataIn*/) {
         super();
 
         //Creates table title
@@ -38,14 +42,16 @@ public class TableViewPane extends StackPane {
         table.getColumns().addAll(tbcolDate, tbcolValue);
 
         //Defines sample data
-        ObservableList<TableModelData> data =
+      /*  data =
                 FXCollections.observableArrayList(
                         new TableModelData("2016", 120),
                         new TableModelData("2015", 100),
                         new TableModelData("2014", 95),
                         new TableModelData("2013", 89),
                         new TableModelData("2012", 101)
-                );
+                );*/
+
+        data.add(new TableModelData("2016", 120));
 
         //Link data with data model
         tbcolDate.setCellValueFactory(
@@ -83,4 +89,22 @@ public class TableViewPane extends StackPane {
 
         public void setY(String y) { this.y.set(y); }
     }
+
+    /*private void passData(ArrayList<HashMap<String, Number>> dataIn) {
+        //Loop over data for every country
+        for (HashMap<String, Number> hm : data) {
+            //Create new series of data for each country
+            XYChart.Series<String, Number> tempSeries = new XYChart.Series<>();
+            //Get the date values
+            ArrayList<String> alstKeys = new ArrayList<>(hm.keySet());
+            Collections.reverse(alstKeys);
+
+            //Add each data instance to the series of data
+            for (String sKey : alstKeys)
+                tempSeries.getData().add(new XYChart.Data<>(sKey, hm.get(sKey)));
+
+            //Add the countries data to the chart
+            barChart.getData().add(tempSeries);
+        }
+    }*/
 }
