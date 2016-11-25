@@ -23,10 +23,10 @@ public class APIData {
     }
 
     public StringBuilder getResponse(String apiLink) {
-        System.out.println("RETRIEVED FROM API");
+      //  System.out.println("RETRIEVED FROM API");
         StringBuilder sb = new StringBuilder();
         String finalLink = apiBody + apiLink;
-        System.out.println(finalLink);
+      //  System.out.println(finalLink);
         try {
             URL url = new URL(finalLink);
             URLConnection urlConnection = url.openConnection();

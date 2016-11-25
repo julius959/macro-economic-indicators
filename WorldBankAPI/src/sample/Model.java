@@ -21,7 +21,6 @@ public class Model {
     //public static String[] indicatorLabels = {"GDB","Employment Rate","Unemployment Rate","Inflation & Consumer Prices","Interest Rate","Import","Export"};
     //   public static String[] indicators = new String[indicatorCodes.length]; //Getting the names of the indicators from the JSON result
     public static ArrayList<Indicator> indicators;
-
     public static String currentIndicator; //default indicator is GDP
     public static String currentStartDate = "2006"; //default starting date
     public static String currentEndDate = "2016"; //default ending date
@@ -29,6 +28,9 @@ public class Model {
 
 
     ArrayList<HashMap<String, Double>> displayedResult = new ArrayList<>(); //FINAL RESULT FOR CHARTS
+    HashMap<String,ArrayList<Integer>> currentQuerry = new HashMap<String,ArrayList<Integer>>(); //Current indicator code and countries that are querried
+
+
     private ArrayList<String> isUpdated = new ArrayList<String>();
     public static Model instance = null;
 
@@ -107,19 +109,34 @@ public class Model {
         for (int i = 0; i < countries.length; ++i) {
             currentCountries.add(countries[i]);
         }
+
     }
 
     public ArrayList<HashMap<String, Double>> gatherData() {
-        displayedResult.clear();
-        ExecutorService executor = Executors.newFixedThreadPool(currentCountries.size());
+
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+
+        if(!currentQuerry.containsKey(currentIndicator)){
+            displayedResult.clear();
+            ArrayList<Integer> currentC = new ArrayList<>();
+            currentQuerry.put(currentIndicator,currentC);
+
+        }
+
         for (int i = 0; i < currentCountries.size(); ++i) {
             final int finalI = i;
             System.out.println(countries[i]);
-
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    displayedResult.add(getData(currentCountries.get(finalI), currentIndicator, currentStartDate, currentEndDate));
+                    if(!currentQuerry.get(currentIndicator).contains(finalI)){
+                        displayedResult.add(getData(currentCountries.get(finalI), currentIndicator, currentStartDate, currentEndDate));
+                        currentQuerry.get(currentIndicator).add(currentCountries.get(finalI));
+
+                        System.out.println(currentIndicator+" NEW QUERRY FOR  "+countries[finalI]);
+                    }else System.out.println(currentIndicator+"HAS ALREADY BEEN QUERRIED FOR "+countries[currentCountries.get(finalI)]);
+
+
                 }
             });
 
@@ -128,7 +145,8 @@ public class Model {
         executor.shutdown();
         while (!executor.isTerminated()) {
         }
-        System.out.println("\nFinished all threads");
+        System.out.println("\nFinished all threads,");
+        System.out.println("------------------------------------------");
         return displayedResult;
     }
 

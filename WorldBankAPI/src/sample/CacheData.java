@@ -22,7 +22,7 @@ public class CacheData {
 
     public StringBuilder getData(String fileName) {
         StringBuilder sb = new StringBuilder();
-        System.out.println("RETRIEVED FROM CACHE");
+      //  System.out.println("RETRIEVED FROM CACHE");
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName + ".json"));
             String inputLine;
