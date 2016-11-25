@@ -9,9 +9,12 @@ public class TableViewPane extends StackPane {
     public TableViewPane() {
         super();
 
+        //Creates table title
         final Label tableTitle = new Label("Table Title");
         tableTitle.setFont(new Font("Arial", 20));
 
+        //Initialises uneditable table
+        table = new TableView();
         table.setEditable(false);
 
     }
