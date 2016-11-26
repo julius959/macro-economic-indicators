@@ -1,3 +1,4 @@
+import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
@@ -60,6 +61,7 @@ import com.sun.syndication.io.XmlReader;
 
 
 import java.net.URL;
+import java.util.List;
 
 public class NewsFeed {
     public static void main(String[] args) {
@@ -69,6 +71,15 @@ public class NewsFeed {
 
             SyndFeedInput input = new SyndFeedInput();
             SyndFeed feed = input.build(new XmlReader(feedUrl));
+
+            List lstArticles = feed.getEntries();
+
+            for (Object item : lstArticles) {
+                SyndEntry seArticle = (SyndEntry) item;
+                System.out.println(seArticle.getTitle());
+                System.out.println(seArticle.getLink());
+            }
+
         }
         catch (Exception ex) {
             ex.printStackTrace();
