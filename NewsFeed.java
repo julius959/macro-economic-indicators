@@ -1,7 +1,12 @@
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
 
 /*--
 
@@ -58,32 +63,35 @@ import com.sun.syndication.io.XmlReader;
  on the JDOM Project, please see <http://www.jdom.org/>.
 
  */
-
-
-import java.net.URL;
-import java.util.List;
-
 public class NewsFeed {
-    public static void main(String[] args) {
+    //News feed
+    private static SyndFeed sfFeed;
 
-        try {
-            URL feedUrl = new URL("http://feeds.bbci.co.uk/news/business/economy/rss.xml");
+    private static void establishConnection() throws IOException, FeedException {
+        //URL of BBC Economy RSS feed
+        URL feedUrl = new URL("http://feeds.bbci.co.uk/news/business/economy/rss.xml");
 
-            SyndFeedInput input = new SyndFeedInput();
-            SyndFeed feed = input.build(new XmlReader(feedUrl));
+        //Establish connection to news feed
+        SyndFeedInput sfiInput = new SyndFeedInput();
+        sfFeed = sfiInput.build(new XmlReader(feedUrl));
+    }
 
-            List lstArticles = feed.getEntries();
+    public static HashMap<String, String> getNews() throws IOException, FeedException {
+        //Establish connection to feed
+        establishConnection();
 
-            for (Object item : lstArticles) {
-                SyndEntry seArticle = (SyndEntry) item;
-                System.out.println(seArticle.getTitle());
-                System.out.println(seArticle.getLink());
-            }
+        //Container for articles
+        HashMap<String, String> hmArticles = new HashMap<>();
 
+        //Collection of articles
+        List lstArticles = sfFeed.getEntries();
+
+        //Add each article to the hash map of articles
+        for (Object item : lstArticles) {
+            SyndEntry seArticle = (SyndEntry) item;
+            hmArticles.put(seArticle.getLink(), seArticle.getTitle());
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
-            System.out.println("ERROR: "+ex.getMessage());
-        }
+
+        return hmArticles;
     }
 }
