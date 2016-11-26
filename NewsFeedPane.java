@@ -1,14 +1,10 @@
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +33,7 @@ public class NewsFeedPane extends BorderPane {
         //Add ScrollPane for articles
         VBox vbArticles = new VBox();
         vbArticles.setAlignment(Pos.CENTER);
-        vbArticles.setFillWidth(true);
+        vbArticles.setSpacing(10.0);
         ScrollPane spArticles = new ScrollPane(vbArticles);
         spArticles.setFitToHeight(true);
         spArticles.setFitToWidth(true);
