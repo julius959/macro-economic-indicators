@@ -1,8 +1,11 @@
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.feed.synd.SyndLink;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
+import org.jdom.Element;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -90,8 +93,20 @@ public class NewsFeed {
         //Add each article to the list of articles
         for (Object item : lstArticles) {
             SyndEntry seArticle = (SyndEntry) item;
-            alstArticles.add(new NewsArticle(seArticle.getTitle(), seArticle.getLink(), seArticle.getDescription().getValue(), seArticle.getPublishedDate()));
+
+            //URL of news articles image - defaults to no logo found
+            String imgURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1000px-No_image_available.svg.png";
+
+            //Retrieves image URL from news article xml
+            List<Element> foreignMarkups = (List<Element>) seArticle.getForeignMarkup();
+            for (Element foreignMarkup : foreignMarkups) {
+                imgURL = foreignMarkup.getAttribute("url").getValue();
+            }
+
+            alstArticles.add(new NewsArticle(seArticle.getTitle(), seArticle.getLink(), seArticle.getDescription().getValue(), seArticle.getPublishedDate(), imgURL));
         }
+
+
 
         return alstArticles;
     }
