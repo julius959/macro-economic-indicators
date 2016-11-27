@@ -43,6 +43,7 @@ public class NewsFeedPane extends BorderPane {
         if (hmNews.size() > 0) {
             for (Map.Entry<String, String> entry : hmNews.entrySet()) {
                 Label lblArticle = new Label(entry.getValue());
+                lblArticle.setStyle("-fx-border-color: black");
                 vbArticles.getChildren().add(lblArticle);
             }
         }
