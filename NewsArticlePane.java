@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class NewsArticlePane extends BorderPane {
 
-    public NewsArticlePane(String titleIn, String linkIn, String descriptionIn, String publishDateIn, String imgURLIn) {
+    public NewsArticlePane(String titleIn, String linkIn, String descriptionIn, String publishDateIn, String imgURLIn, WebView webvArticle) {
         super();
 
         //Temporary styling
@@ -57,7 +57,7 @@ public class NewsArticlePane extends BorderPane {
             @Override
             public void handle(MouseEvent event) {
                 //Creates web view for article
-                WebView webvArticle = new WebView();
+
                 webvArticle.getEngine().load(linkIn);
                 BorderPane bpArticle = new BorderPane();
                 bpArticle.setCenter(webvArticle);
