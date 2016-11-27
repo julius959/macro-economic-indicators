@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,12 +25,12 @@ public class NewsFeedPane extends BorderPane {
         hbTitle.setAlignment(Pos.CENTER);
         setTop(hbTitle);
 
-        //Hash map of news articles URL->Title
-        HashMap<String, String> hmNews = new HashMap<>();
+        //List of news article objects
+        ArrayList<NewsArticle> alstNews = new ArrayList<>();
 
         //Retrieve news
         try {
-            hmNews = NewsFeed.getNews();
+            alstNews = NewsFeed.getNews();
         } catch(Exception e) {
             setCenter(new Label("Failed to retrieve News. " +
                     "Please ensure you have an active Internet connection"));
@@ -45,23 +46,23 @@ public class NewsFeedPane extends BorderPane {
         setCenter(spArticles);
 
         //Add each news article title to the scroll pane
-        if (hmNews.size() > 0) {
-            for (Map.Entry<String, String> entry : hmNews.entrySet()) {
-                Label lblArticle = new Label(entry.getValue());
+        if (alstNews.size() > 0) {
+            for (NewsArticle na : alstNews) {
+                Label lblArticle = new Label(na.getTitle());
                 lblArticle.setStyle("-fx-border-color: black");
                 lblArticle.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
                         //Creates web view for article
                         WebView webvArticle = new WebView();
-                        webvArticle.getEngine().load(entry.getKey());
+                        webvArticle.getEngine().load(na.getLink());
                         BorderPane bpArticle = new BorderPane();
                         bpArticle.setCenter(webvArticle);
 
                         //Displays article in a new window
                         Scene scnArticle = new Scene(bpArticle);
                         Stage stgArticle = new Stage();
-                        stgArticle.setTitle("BBC Economy News: " + entry.getValue());
+                        stgArticle.setTitle("BBC Economy News: " + na.getTitle());
                         stgArticle.setScene(scnArticle);
                         stgArticle.show();
                     }
