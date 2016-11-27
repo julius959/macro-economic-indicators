@@ -1,18 +1,10 @@
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.web.WebView;
-import javafx.stage.Stage;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class NewsFeedPane extends BorderPane {
 
@@ -48,7 +40,7 @@ public class NewsFeedPane extends BorderPane {
         //Add each news article title to the scroll pane
         if (alstNews.size() > 0) {
             for (NewsArticle na : alstNews) {
-                vbArticles.getChildren().add(new NewsArticlePane(na.getTitle(), na.getLink(), na.getDescription(), na.getPublishDate()));
+                vbArticles.getChildren().add(new NewsArticlePane(na.getTitle(), na.getLink(), na.getDescription(), na.getPublishDate(), na.getImgURL()));
             }
         }
 
