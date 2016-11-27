@@ -48,26 +48,7 @@ public class NewsFeedPane extends BorderPane {
         //Add each news article title to the scroll pane
         if (alstNews.size() > 0) {
             for (NewsArticle na : alstNews) {
-                Label lblArticle = new Label(na.getTitle());
-                lblArticle.setStyle("-fx-border-color: black");
-                lblArticle.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        //Creates web view for article
-                        WebView webvArticle = new WebView();
-                        webvArticle.getEngine().load(na.getLink());
-                        BorderPane bpArticle = new BorderPane();
-                        bpArticle.setCenter(webvArticle);
-
-                        //Displays article in a new window
-                        Scene scnArticle = new Scene(bpArticle);
-                        Stage stgArticle = new Stage();
-                        stgArticle.setTitle("BBC Economy News: " + na.getTitle());
-                        stgArticle.setScene(scnArticle);
-                        stgArticle.show();
-                    }
-                });
-                vbArticles.getChildren().add(lblArticle);
+                vbArticles.getChildren().add(new NewsArticlePane(na.getTitle(), na.getLink(), na.getDescription(), na.getPublishDate()));
             }
         }
 
