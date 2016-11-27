@@ -5,6 +5,7 @@ import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,12 +77,12 @@ public class NewsFeed {
         sfFeed = sfiInput.build(new XmlReader(feedUrl));
     }
 
-    public static HashMap<String, String> getNews() throws IOException, FeedException {
+    public static ArrayList<NewsArticle> getNews() throws IOException, FeedException {
         //Establish connection to feed
         establishConnection();
 
         //Container for articles
-        HashMap<String, String> hmArticles = new HashMap<>();
+        ArrayList<NewsArticle> alstArticles = new ArrayList<>();
 
         //Collection of articles
         List lstArticles = sfFeed.getEntries();
@@ -89,9 +90,9 @@ public class NewsFeed {
         //Add each article to the hash map of articles
         for (Object item : lstArticles) {
             SyndEntry seArticle = (SyndEntry) item;
-            hmArticles.put(seArticle.getLink(), seArticle.getTitle());
+            alstArticles.add(new NewsArticle(seArticle.getTitle(), seArticle.getLink(), seArticle.getDescription().getValue(), seArticle.getPublishedDate()));
         }
 
-        return hmArticles;
+        return alstArticles;
     }
 }
