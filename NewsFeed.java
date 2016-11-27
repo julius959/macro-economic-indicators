@@ -87,7 +87,7 @@ public class NewsFeed {
         //Collection of articles
         List lstArticles = sfFeed.getEntries();
 
-        //Add each article to the hash map of articles
+        //Add each article to the list of articles
         for (Object item : lstArticles) {
             SyndEntry seArticle = (SyndEntry) item;
             alstArticles.add(new NewsArticle(seArticle.getTitle(), seArticle.getLink(), seArticle.getDescription().getValue(), seArticle.getPublishedDate()));

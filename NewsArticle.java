@@ -23,7 +23,8 @@ public class NewsArticle {
         return description;
     }
 
-    public Date getPublishDate() {
-        return publishDate;
+    public String getPublishDate() {
+        return String.valueOf(
+                publishDate);
     }
 }
