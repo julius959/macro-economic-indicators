@@ -1,9 +1,14 @@
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +49,17 @@ public class NewsFeedPane extends BorderPane {
             for (Map.Entry<String, String> entry : hmNews.entrySet()) {
                 Label lblArticle = new Label(entry.getValue());
                 lblArticle.setStyle("-fx-border-color: black");
+                lblArticle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        WebView webvArticle = new WebView();
+                        webvArticle.getEngine().load(entry.getKey());
+                        Scene scnArticle = new Scene(new VBox(webvArticle));
+                        Stage stgArticle = new Stage();
+                        stgArticle.setScene(scnArticle);
+                        stgArticle.show();
+                    }
+                });
                 vbArticles.getChildren().add(lblArticle);
             }
         }
