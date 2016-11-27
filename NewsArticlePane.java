@@ -12,13 +12,13 @@ import java.util.Date;
 
 public class NewsArticlePane extends StackPane {
 
-    public NewsArticlePane(String titleIn, String linkIn, String descriptionIn, Date publishDateIn) {
+    public NewsArticlePane(String titleIn, String linkIn, String descriptionIn, String publishDateIn) {
         super();
 
         //Creates labels containing title, description and publish date
         Label lblTitle = new Label(titleIn);
         Label lblDescription = new Label(descriptionIn);
-        Label lblDate = new Label(String.valueOf(publishDateIn));
+        Label lblDate = new Label(publishDateIn);
 
         //Add labels to container
         getChildren().addAll(lblTitle, lblDescription, lblDate);
