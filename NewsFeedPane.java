@@ -61,6 +61,7 @@ public class NewsFeedPane extends BorderPane {
                         //Displays article in a new window
                         Scene scnArticle = new Scene(bpArticle);
                         Stage stgArticle = new Stage();
+                        stgArticle.setTitle("BBC Economy News: " + entry.getValue());
                         stgArticle.setScene(scnArticle);
                         stgArticle.show();
                     }
