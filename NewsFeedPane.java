@@ -52,9 +52,14 @@ public class NewsFeedPane extends BorderPane {
                 lblArticle.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
+                        //Creates web view for article
                         WebView webvArticle = new WebView();
                         webvArticle.getEngine().load(entry.getKey());
-                        Scene scnArticle = new Scene(new VBox(webvArticle));
+                        BorderPane bpArticle = new BorderPane();
+                        bpArticle.setCenter(webvArticle);
+
+                        //Displays article in a new window
+                        Scene scnArticle = new Scene(bpArticle);
                         Stage stgArticle = new Stage();
                         stgArticle.setScene(scnArticle);
                         stgArticle.show();
