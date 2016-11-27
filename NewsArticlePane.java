@@ -4,29 +4,36 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.util.Date;
 
-public class NewsArticlePane extends StackPane {
+public class NewsArticlePane extends BorderPane {
 
     public NewsArticlePane(String titleIn, String linkIn, String descriptionIn, String publishDateIn) {
         super();
+
+        //Temporary styling
+        setStyle("-fx-border-color: black");
 
         //Creates labels containing title, description and publish date
         Label lblTitle = new Label(titleIn);
         Label lblDescription = new Label(descriptionIn);
         Label lblDate = new Label(publishDateIn);
 
-        //Add labels to container
-        getChildren().addAll(lblTitle, lblDescription, lblDate);
+        //Centre title and date labels
+        HBox hbTitle = new HBox(lblTitle);
+        hbTitle.setAlignment(Pos.CENTER);
+        HBox hbDate = new HBox(lblDate);
+        hbDate.setAlignment(Pos.CENTER);
 
-        //Align labels
-        setAlignment(lblTitle, Pos.TOP_CENTER);
-        setAlignment(lblDescription, Pos.BOTTOM_CENTER);
-        setAlignment(lblDate, Pos.TOP_RIGHT);
+        //Add labels to container
+        setTop(hbTitle);
+        setCenter(lblDescription);
+        setBottom(hbDate);
 
         //Action Listener for clicking on an article
         //Opens up article in web view
