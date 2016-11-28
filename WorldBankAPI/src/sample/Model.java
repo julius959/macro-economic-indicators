@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.DoubleAccumulator;
 
 /**
  * Created by Vlad-minihp on 24/11/2016.
@@ -22,6 +21,7 @@ public class Model {
             new Country("India", "in"), new Country("Indonesia", "id"), new Country("Japan", "jp"),
             new Country("Mexico", "mx"), new Country("Russian Federation", "ru"), new Country("Saudi Arabia", "sa"),
             new Country("South Africa", "za"), new Country("Turkey", "tr")};
+
     public static ArrayList<Indicator> indicators;
     public static String currentIndicator; //default indicator is GDP
     public static String currentStartDate = "2006"; //default starting date
