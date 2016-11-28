@@ -7,10 +7,15 @@ public class NewsFeedTest extends Application{
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Economy News from the BBC");
 
-        Scene primaryScene = new Scene(new NewsFeedPane(), 640, 480);
+        Scene primaryScene = new Scene(new NewsFeedPane(this), 640, 480);
         primaryStage.setScene(primaryScene);
 
         primaryStage.show();
+
+    }
+
+    public void showLink(String url) {
+        getHostServices().showDocument(url);
     }
 
     public static void main(String[] args) {

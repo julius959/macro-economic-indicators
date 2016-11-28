@@ -1,3 +1,4 @@
+import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 public class NewsFeedPane extends BorderPane {
 
-    public NewsFeedPane() {
+    public NewsFeedPane(NewsFeedTest app) {
         super();
 
         //Add title to news feed
@@ -43,12 +44,11 @@ public class NewsFeedPane extends BorderPane {
 
         //Creates web view only once - reduce memory usage
         //Avoids creating a new one every time an article is opened
-        WebView webvArticle = new WebView();
 
         //Add each news article title to the scroll pane
         if (alstNews.size() > 0) {
             for (NewsArticle na : alstNews) {
-                vbArticles.getChildren().add(new NewsArticlePane(na.getTitle(), na.getLink(), na.getDescription(), na.getPublishDate(), na.getImgURL(), webvArticle));
+                vbArticles.getChildren().add(new NewsArticlePane(na.getTitle(), na.getLink(), na.getDescription(), na.getPublishDate(), na.getImgURL(), app));
             }
         }
 
