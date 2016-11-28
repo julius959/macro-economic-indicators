@@ -25,17 +25,44 @@ public class LineCharts extends StackPane {
         lineChart.setTitle("");
         this.addData(data);
         this.getChildren().add(lineChart);
-        for(XYChart.Series<String, Number> series : lineChart.getData()) {
+        for(final XYChart.Series<String, Number> series : lineChart.getData()) {
             for (final XYChart.Data<String, Number> node : series.getData()) {
                 node.getNode().setOnMouseEntered(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        Label caption = new Label("");
+                        String toOutput = String.valueOf(node.getYValue());
+                        if (lineChart.getTitle().equals("GDP")){
+
+                            int nodeIndex = lineChart.getData().indexOf(node);
+                            if(nodeIndex != 0 && nodeIndex != (lineChart.getData().size() - 1)){
+                                int valueBefore = series.getData().get(nodeIndex - 1).getYValue().intValue();
+                                int valueAfter = series.getData().get(nodeIndex + 1).getYValue().intValue();
+                                int value = node.getYValue().intValue();
+
+                                if (valueBefore < value && value > valueAfter) {
+                                    toOutput = "Expansion Peak -" + node.getYValue();
+                                } else if (valueBefore > value && valueAfter > value) {
+                                    toOutput = "Low Peak -" + node.getYValue();
+                                } else if (valueBefore < value && valueAfter > value) {
+                                    toOutput = "Economic Recovery -" + node.getYValue();
+                                } else if (value < valueBefore && valueAfter < value) {
+                                    toOutput = "Economic Contraction -" + node.getYValue();
+                                }
+                            }
+                            else{
+                                if(nodeIndex == 0){
+                                    toOutput = "Starting point -" + node.getYValue();
+                                }
+                                else{
+                                    toOutput = "End point -" + node.getYValue();
+                                }
+                            }
+                        }
+                        Label caption = new Label(toOutput);
                         caption.setStyle("-fx-font: 35 arial;");
                         caption.setStyle("-fx-background-color: #FFFFFF");
                         caption.setTranslateX(event.getSceneX());
                         caption.setTranslateY(event.getSceneY());
-                        caption.setText(String.valueOf(node.getYValue()));
                         getChildren().add(caption);
                     }
                 });
