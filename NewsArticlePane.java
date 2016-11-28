@@ -1,6 +1,8 @@
+import javafx.application.HostServices;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,12 +10,13 @@ import javafx.scene.image.ImageViewBuilder;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 public class NewsArticlePane extends BorderPane {
 
-    public NewsArticlePane(String titleIn, String linkIn, String descriptionIn, String publishDateIn, String imgURLIn, WebView webvArticle) {
+    public NewsArticlePane(String titleIn, String linkIn, String descriptionIn, String publishDateIn, String imgURLIn, NewsFeedTest app) {
         super();
 
         //Temporary styling
@@ -57,17 +60,7 @@ public class NewsArticlePane extends BorderPane {
             @Override
             public void handle(MouseEvent event) {
                 //Creates web view for article
-
-                webvArticle.getEngine().load(linkIn);
-                BorderPane bpArticle = new BorderPane();
-                bpArticle.setCenter(webvArticle);
-
-                //Displays article in a new window
-                Scene scnArticle = new Scene(bpArticle);
-                Stage stgArticle = new Stage();
-                stgArticle.setTitle("BBC Economy News: " + titleIn);
-                stgArticle.setScene(scnArticle);
-                stgArticle.show();
+                app.showLink(linkIn);
             }
         });
     }
