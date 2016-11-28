@@ -29,6 +29,7 @@ public class APIData {
       //  System.out.println(finalLink);
         try {
             URL url = new URL(finalLink);
+            System.out.println(finalLink);
             URLConnection urlConnection = url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String inputLine;
