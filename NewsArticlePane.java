@@ -39,20 +39,20 @@ public class NewsArticlePane extends BorderPane {
         setBottom(hbDate);
 
         //Retrieves news articles image from url
-        ImageView imageView = ImageViewBuilder.create()
+        /*ImageView imageView = ImageViewBuilder.create()
                 .image(new Image(imgURLIn))
-                .build();
+                .build();*/
 
         //Resizes the image to have width of 100 while preserving the ratio and using
         // higher quality filtering method; this ImageView is also cached to
         // improve performance
-        imageView.setFitWidth(100);
+        /*imageView.setFitWidth(100);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
 
         //Adds the articles image to the news entry
-        setLeft(imageView);
+        setLeft(imageView);*/
 
         //Action Listener for clicking on an article
         //Opens up article in web view
