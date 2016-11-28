@@ -1,5 +1,5 @@
 import javafx.event.EventHandler;
-import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
@@ -7,26 +7,27 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javafx.scene.chart.LineChart;
 
-public class LineCharts extends StackPane {
+/**
+ * Created by jacobklerfelt on 2016-11-28.
+ */
+public class PhillipsCurve extends StackPane {
 
-    private LineChart<String,Number> lineChart;
+    private LineChart<Number,Number> lineChart;
 
-    public LineCharts(ArrayList<HashMap<String, Integer>> data) {
-
-        super();
-
-        final CategoryAxis xAxis = new CategoryAxis();
+    public PhillipsCurve(ArrayList<HashMap<Integer, Integer>> data) {
+        final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Date");
-        xAxis.setLabel("Values");
-        lineChart = new LineChart<String, Number>(xAxis, yAxis);
-        lineChart.setTitle("");
+        xAxis.setLabel("Inflation");
+        yAxis.setLabel("Unemployment");
+        //creating the chart
+        lineChart = new javafx.scene.chart.LineChart<Number, Number>(xAxis, yAxis);
+        lineChart.setTitle("Phillips Curve");
         this.addData(data);
         this.getChildren().add(lineChart);
-        for(XYChart.Series<String, Number> series : lineChart.getData()) {
-            for (final XYChart.Data<String, Number> node : series.getData()) {
+
+        for(XYChart.Series<Number, Number> series : lineChart.getData()) {
+            for (final XYChart.Data<Number, Number> node : series.getData()) {
                 node.getNode().setOnMouseEntered(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
@@ -35,7 +36,7 @@ public class LineCharts extends StackPane {
                         caption.setStyle("-fx-background-color: #FFFFFF");
                         caption.setTranslateX(event.getSceneX());
                         caption.setTranslateY(event.getSceneY());
-                        caption.setText(String.valueOf(node.getYValue()));
+                        caption.setText(String.valueOf(node.getXValue()) + ", " + String.valueOf(node.getYValue()));
                         getChildren().add(caption);
                     }
                 });
@@ -49,17 +50,18 @@ public class LineCharts extends StackPane {
         }
     }
 
-    private void addData(ArrayList <HashMap<String,Integer>> data){
 
-        //populating the series with data
-        int i = 0;
-        for (HashMap<String, Integer> temp : data) {
+    private void addData(ArrayList<HashMap<Integer, Integer>> data) {
+
+        for (HashMap<Integer, Integer> temp : data) {
             XYChart.Series series = new XYChart.Series();
-            series.setName("Country" + Integer.toString(i++));
-            for (String date : temp.keySet()) {
-                series.getData().add(new XYChart.Data(date, temp.get(date)));
+            series.setName("Country"); // wrapper from Vlad
+            for (Integer inflation : temp.keySet()) {
+                XYChart.Data toAdd = new XYChart.Data(inflation, temp.get(inflation));
+                series.getData().add(toAdd);
             }
             lineChart.getData().add(series);
         }
+
     }
 }

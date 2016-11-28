@@ -4,9 +4,10 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.chart.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javafx.scene.chart.PieChart;
+
 
 /**
  * Created by jacobklerfelt on 2016-11-25.
@@ -14,7 +15,7 @@ import java.util.HashMap;
 public class PieCharts extends StackPane {
 
     private PieChart pieChart;
-    private ObservableList<javafx.scene.chart.PieChart.Data> pieChartData;
+    private ObservableList<PieChart.Data> pieChartData;
 
     public PieCharts(ArrayList<HashMap<String, Integer>> data){
 
