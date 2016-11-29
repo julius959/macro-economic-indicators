@@ -8,18 +8,20 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.DoubleAccumulator;
 
 /**
  * Created by Vlad-minihp on 24/11/2016.
  */
 public class Model {
-    public static String[] countries = {"USA", "UK", "France", "Germany", "Italy", "Spain"};
-    public static String[] countryCodes = {"usa", "gb", "fr", "deu", "it", "es"};
-    //public static String[] indicatorCodes = {"NY.GDP.MKTP.CD", "SL.EMP.TOTL.SP.ZS", "SL.UEM.TOTL.ZS", "FP.CPI.TOTL.ZG","FR.INR.RINR", "NE.IMP.GNFS.ZS", "NE.EXP.GNFS.ZS"};
-    //GDP, EMPLYMENT, UNEMPLOYMENT, INFLATION & CONSUMER PRICES, IMPORT, EXPORT,INTEREST RATE
-    //public static String[] indicatorLabels = {"GDB","Employment Rate","Unemployment Rate","Inflation & Consumer Prices","Interest Rate","Import","Export"};
-    //   public static String[] indicators = new String[indicatorCodes.length]; //Getting the names of the indicators from the JSON result
+
+
+    public static Country[] countries = {new Country("USA", "usa"), new Country("UK", "gb"), new Country("France", "fr"), new Country("Germany", "deu"),
+            new Country("Italy", "it"), new Country("Spain", "es"), new Country("Australia", "au"), new Country("Argentina", "ar"),
+            new Country("Brazil", "br"), new Country("Canada", "ca"), new Country("China", "cn"),
+            new Country("India", "in"), new Country("Indonesia", "id"), new Country("Japan", "jp"),
+            new Country("Mexico", "mx"), new Country("Russian Federation", "ru"), new Country("Saudi Arabia", "sa"),
+            new Country("South Africa", "za"), new Country("Turkey", "tr")};
+
     public static ArrayList<Indicator> indicators;
     public static String currentIndicator; //default indicator is GDP
     public static String currentStartDate = "2006"; //default starting date
@@ -28,7 +30,7 @@ public class Model {
 
 
     ArrayList<HashMap<String, Double>> displayedResult = new ArrayList<>(); //FINAL RESULT FOR CHARTS
-    HashMap<String,ArrayList<Integer>> currentQuerry = new HashMap<String,ArrayList<Integer>>(); //Current indicator code and countries that are querried
+    HashMap<String, ArrayList<Integer>> currentQuerry = new HashMap<String, ArrayList<Integer>>(); //Current indicator code and countries that are querried
 
 
     private ArrayList<String> isUpdated = new ArrayList<String>();
@@ -66,7 +68,7 @@ public class Model {
         trade.setSubIndicatorsCodes(new String[]{"NE.IMP.GNFS.ZS", "NE.EXP.GNFS.ZS"});
         trade.setSubIndicatorsLabels(new String[]{"Import", "Export"});
 
-        indicators = new ArrayList<>(Arrays.asList(gdb,labour,prices,money,trade));
+        indicators = new ArrayList<>(Arrays.asList(gdb, labour, prices, money, trade));
 
     }
 
@@ -79,8 +81,8 @@ public class Model {
 
     public HashMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
         HashMap<String, Double> data = new HashMap<>();
-        String fileName = countryCodes[countryIndex] + indicator + startDate + endDate;
-        String generatedLink = "countries/" + countryCodes[countryIndex] + "/indicators/" + indicator + "?date=" + startDate + ":" + endDate + "&per_page=10000&format=json";
+        String fileName = countries[countryIndex].getCode() + indicator + startDate + endDate;
+        String generatedLink = "countries/" + countries[countryIndex].getCode() + "/indicators/" + indicator + "?date=" + startDate + ":" + endDate + "&per_page=10000&format=json";
         StringBuilder result;
         if (isUpdated.contains(fileName)) result = CacheData.getInstance().getData(fileName);
         else {
@@ -104,10 +106,10 @@ public class Model {
         return data;
     }
 
-    public void setCurrentCountries(int[] countries) {
+    public void setCurrentCountries(int[] c) {
         currentCountries.clear();
-        for (int i = 0; i < countries.length; ++i) {
-            currentCountries.add(countries[i]);
+        for (int i = 0; i < c.length; ++i) {
+            currentCountries.add(c[i]);
         }
 
     }
@@ -116,25 +118,26 @@ public class Model {
 
         ExecutorService executor = Executors.newFixedThreadPool(10);
 
-        if(!currentQuerry.containsKey(currentIndicator)){
+        if (!currentQuerry.containsKey(currentIndicator)) {
             displayedResult.clear();
             ArrayList<Integer> currentC = new ArrayList<>();
-            currentQuerry.put(currentIndicator,currentC);
+            currentQuerry.put(currentIndicator, currentC);
 
         }
 
         for (int i = 0; i < currentCountries.size(); ++i) {
             final int finalI = i;
-            System.out.println(countries[i]);
+            System.out.println(countries[i].getName());
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    if(!currentQuerry.get(currentIndicator).contains(finalI)){
+                    if (!currentQuerry.get(currentIndicator).contains(finalI)) {
                         displayedResult.add(getData(currentCountries.get(finalI), currentIndicator, currentStartDate, currentEndDate));
                         currentQuerry.get(currentIndicator).add(currentCountries.get(finalI));
 
-                        System.out.println(currentIndicator+" NEW QUERRY FOR  "+countries[finalI]);
-                    }else System.out.println(currentIndicator+"HAS ALREADY BEEN QUERRIED FOR "+countries[currentCountries.get(finalI)]);
+                        System.out.println(currentIndicator + " NEW QUERRY FOR  " + countries[finalI].getName());
+                    } else
+                        System.out.println(currentIndicator + "HAS ALREADY BEEN QUERRIED FOR " + countries[currentCountries.get(finalI)].getName());
 
 
                 }
