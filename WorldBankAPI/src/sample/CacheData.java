@@ -5,6 +5,12 @@ import jdk.nashorn.internal.parser.JSONParser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.DoubleSummaryStatistics;
+import java.util.HashMap;
 
 /**
  * Created by Vlad-minihp on 24/11/2016.
@@ -20,18 +26,38 @@ public class CacheData {
         return instance;
     }
 
-    public StringBuilder getData(String fileName) {
-        StringBuilder sb = new StringBuilder();
-      //  System.out.println("RETRIEVED FROM CACHE");
+    public HashMap<String,Double> getData(int countryIndex, String indicator, String startDate, String endDate){
+        HashMap<String,Double> cachedResult = new HashMap<>();
+        System.out.println("CALLED GET CACHED DATA");
+        Connection c = null;
+        Statement stmt = null;
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName + ".json"));
-            String inputLine;
-            while ((inputLine = bufferedReader.readLine()) != null) {
-                sb.append(inputLine);
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:cachedDB.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+            System.out.println("GETTING FROM CACHE FOR "+Model.getInstance().countries[countryIndex].getName());
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery( "SELECT year,value FROM data WHERE year>= "+startDate+" AND year<="+endDate+" AND country="+countryIndex+" AND indicator='"+indicator+"';" );
+            while ( rs.next() ) {
+                System.out.println("GETTING THE DATA FROM THE DB");
+                int year = rs.getInt("year");
+                String  value = rs.getString("value");
+                cachedResult.put(Integer.toString(year),Double.parseDouble(value));
+                System.out.println( "Year = " + year );
+                System.out.println( "Value = " + value );
+
+                System.out.println();
             }
-        } catch (Exception e) {
-            System.out.println("Could not connect");
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
         }
-        return sb;
+        System.out.println("Operation done successfully");
+        return cachedResult;
     }
+
 }

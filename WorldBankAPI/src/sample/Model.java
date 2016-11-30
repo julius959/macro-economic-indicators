@@ -3,9 +3,13 @@ package sample;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,7 +17,7 @@ import java.util.concurrent.Executors;
  * Created by Vlad-minihp on 24/11/2016.
  */
 public class Model {
-
+    public static Connection c = null;
 
     public static Country[] countries = {new Country("USA", "usa"), new Country("UK", "gb"), new Country("France", "fr"), new Country("Germany", "deu"),
             new Country("Italy", "it"), new Country("Spain", "es"), new Country("Australia", "au"), new Country("Argentina", "ar"),
@@ -38,6 +42,8 @@ public class Model {
 
     private Model() {
         initLabels();
+        createDB();
+        createInitialTable();
     }
 
     public static Model getInstance() {
@@ -71,39 +77,80 @@ public class Model {
         indicators = new ArrayList<>(Arrays.asList(gdb, labour, prices, money, trade));
 
     }
+    private void createDB(){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:cachedDB.db");
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        System.out.println("Opened database successfully");
 
-    private void updateLocal(String fileName, StringBuilder data) { //First querry will update the local data
-        if (!isUpdated.contains(fileName)) {
-            isUpdated.add(fileName);
-            APIData.getInstance().saveLocally(data, fileName);
+    }
+    private void createInitialTable(){
+        Statement querry =  null;
+        try{
+            querry = c.createStatement();
+            String sql = "CREATE TABLE data " +
+                    "(country        INT(6)    NOT NULL, " +
+                    " indicator      TEXT    NOT NULL, " +
+                    " year        INT(6), " +
+                    " value         TEXT," +
+                    "PRIMARY KEY (country,indicator,year,value))";
+            querry.executeUpdate(sql);
+            querry.close();
+            c.close();
+        }catch (Exception e){
+            System.out.println("ERROR IN CREATING THE DB ");
+        }
+        System.out.println("SUCCESSFULLY CREATED THE DB");
+    }
+
+    private void updateLocal(int countryIndex, String indicator, String startDate, String endDate,HashMap<String,Double> cachedData){ //First querry will update the local data
+        String checkedQuerry = Integer.toString(countryIndex)+"/"+indicator+"/"+startDate+"/"+endDate;
+
+        if (!isUpdated.contains(checkedQuerry)) {
+            isUpdated.add(checkedQuerry);
+            APIData.getInstance().saveLocally(countryIndex,indicator,cachedData);
         }
     }
 
     public HashMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
-        HashMap<String, Double> data = new HashMap<>();
-        String fileName = countries[countryIndex].getCode() + indicator + startDate + endDate;
-        String generatedLink = "countries/" + countries[countryIndex].getCode() + "/indicators/" + indicator + "?date=" + startDate + ":" + endDate + "&per_page=10000&format=json";
-        StringBuilder result;
-        if (isUpdated.contains(fileName)) result = CacheData.getInstance().getData(fileName);
-        else {
-            result = APIData.getInstance().getResponse(generatedLink);
-            updateLocal(fileName, result);
-        }
-        try {
-            JSONArray array = new JSONArray(result.toString());
-            JSONArray array1 = array.getJSONArray(1);
-            //   String in = array1.getJSONObject(0).getJSONObject("indicator").getString("value");
-
-            for (int i = 0; i < array1.length(); ++i) {
-                JSONObject currentObject = array1.getJSONObject(i);
-                if (!currentObject.getString("value").equals("null"))
-                    data.put(currentObject.getString("date").toString(), Double.parseDouble(currentObject.getString("value").toString()));
+        HashMap<String, Double> finalHashmap = new HashMap<>();
+        String newQuerriedData = Integer.toString(countryIndex)+"/"+indicator+"/"+startDate+"/"+endDate;
+        System.out.println(newQuerriedData);
+        if (isUpdated.contains(newQuerriedData)) {
+            System.out.println("TRYING TO GET DATA FROM CACHE ");
+            try{
+                finalHashmap = CacheData.getInstance().getData(countryIndex,indicator,startDate,endDate);
+                System.out.println("DATA RETRIEVED FROM CACHE");
+            }catch (Exception e){
+                System.out.println("DATA COULD NOT BE RETRIEVED FROM CACHE");
             }
-        } catch (Exception e) {
-            System.out.println("Can not build the result");
-        }
 
-        return data;
+        }
+        else {
+
+                System.out.println("TRYING TO GET DATA FROM API");
+                finalHashmap = APIData.getInstance().getData(countryIndex,indicator,startDate,endDate);
+                updateLocal(countryIndex,indicator,startDate,endDate,finalHashmap);
+                if(!finalHashmap.isEmpty())System.out.println("DATA RETRIEVED FROM THE API");
+                else{
+                    System.out.println("COULD NOT CONNECT, TRYING TO GET FROM CACHE");
+
+                        finalHashmap = CacheData.getInstance().getData(countryIndex,indicator,startDate,endDate);
+                        if(!finalHashmap.isEmpty())System.out.println("DATA RETRIEVED FROM CACHE AFTER RETRY");
+                        else System.out.println("DATA COULD NOT BE RETRIEVED NEITHER FROM CACHE");
+
+                }
+
+
+
+            }
+
+
+    return finalHashmap;
     }
 
     public void setCurrentCountries(int[] c) {
@@ -122,9 +169,7 @@ public class Model {
             displayedResult.clear();
             ArrayList<Integer> currentC = new ArrayList<>();
             currentQuerry.put(currentIndicator, currentC);
-
         }
-
         for (int i = 0; i < currentCountries.size(); ++i) {
             final int finalI = i;
             System.out.println(countries[i].getName());
@@ -142,8 +187,6 @@ public class Model {
 
                 }
             });
-
-
         }
         executor.shutdown();
         while (!executor.isTerminated()) {
