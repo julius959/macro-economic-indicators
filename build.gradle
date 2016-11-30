@@ -1,0 +1,16 @@
+group 'Team_Ecru'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile files('lib/org.json.jar')
+    compile files('lib/sqlite-jdbc-3.15.1.jar')
+}
