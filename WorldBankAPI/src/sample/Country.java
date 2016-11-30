@@ -23,6 +23,9 @@ public class Country {
         if(code=="deu") flagCode ="de";
         return "http://flagpedia.net/data/flags/mini/"+flagCode+".png";
     }
-
+    public String getValue(String indicator, String year){
+        //QUERY THE DATABASE AND RETRIEVE THE VALUE
+        return "";
+    }
 
 }
