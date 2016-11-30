@@ -1,6 +1,9 @@
+package news_feed;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import news_feed.NewsFeedPane;
 
 public class NewsFeedTest extends Application{
     @Override

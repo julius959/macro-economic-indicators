@@ -1,3 +1,4 @@
+package api_model;
 
 /**
  * Created by Vlad-minihp on 28/11/2016.
