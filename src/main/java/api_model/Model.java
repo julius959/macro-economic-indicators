@@ -1,4 +1,6 @@
+package api_model;
 
+import api_model.Country;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

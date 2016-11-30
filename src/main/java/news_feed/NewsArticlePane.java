@@ -1,3 +1,5 @@
+package news_feed;
+
 import javafx.application.HostServices;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
