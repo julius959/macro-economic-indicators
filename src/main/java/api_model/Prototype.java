@@ -1,4 +1,6 @@
+package api_model;
 
+import api_model.Model;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.BufferedReader;

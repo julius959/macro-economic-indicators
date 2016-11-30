@@ -1,3 +1,5 @@
+package news_feed;
+
 import java.util.Date;
 
 public class NewsArticle {
