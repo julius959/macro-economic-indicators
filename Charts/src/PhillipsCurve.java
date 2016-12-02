@@ -21,7 +21,7 @@ public class PhillipsCurve extends StackPane {
         xAxis.setLabel("Inflation");
         yAxis.setLabel("Unemployment");
         //creating the chart
-        lineChart = new javafx.scene.chart.LineChart<Number, Number>(xAxis, yAxis);
+        lineChart = new LineChart<Number, Number>(xAxis, yAxis);
         lineChart.setTitle("Phillips Curve");
         this.addData(data);
         this.getChildren().add(lineChart);
@@ -52,7 +52,6 @@ public class PhillipsCurve extends StackPane {
 
 
     private void addData(ArrayList<HashMap<Integer, Integer>> data) {
-
         for (HashMap<Integer, Integer> temp : data) {
             XYChart.Series series = new XYChart.Series();
             series.setName("Country"); // wrapper from Vlad
@@ -62,6 +61,5 @@ public class PhillipsCurve extends StackPane {
             }
             lineChart.getData().add(series);
         }
-
     }
 }
