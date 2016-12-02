@@ -4,7 +4,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import view.Main;
 
@@ -31,7 +30,8 @@ public class NewsFeedPane extends BorderPane {
         vbArticles.setAlignment(Pos.CENTER);
         vbArticles.setSpacing(10.0);
         ScrollPane spArticles = new ScrollPane(vbArticles);
-        spArticles.setMaxHeight(380);
+        spArticles.setId("articles-wrapper");
+        spArticles.setMaxHeight(400);
         spArticles.setFitToWidth(true);
         setCenter(spArticles);
 
@@ -44,6 +44,8 @@ public class NewsFeedPane extends BorderPane {
                 vbArticles.getChildren().add(new NewsArticlePane(na.getTitle(), na.getLink(), na.getDescription(), na.getPublishDate(), na.getImgURL(), app));
             }
         }
+
+        this.applyCss();
 
     }
 }

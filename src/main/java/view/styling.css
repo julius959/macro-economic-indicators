@@ -46,6 +46,7 @@
 .root {
     -fx-font-family: "Roboto";
     -fx-font-size: 16px;
+    -fx-background-color: #3e4249;
 }
 
 #countries-wrapper {
@@ -64,10 +65,10 @@
     -fx-min-width: 100px;
     -fx-max-width: 100px;
 }
-#pane-countries > .viewport {
+.scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
-#pane-countries {
+.scroll-pane {
     -fx-background-color: transparent;
     -fx-control-inner-background: transparent;
     -fx-background-insets: 0;
@@ -84,7 +85,28 @@
 .scroll-bar .thumb {
     -fx-background-color: #2c3138;
 }
+#article-title {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-padding: 0 0 2px 0;
+}
 
+#article-description {
+    -fx-font-size: 15px;
+    -fx-text-fill: white;
+    -fx-padding: 0 0 2px 0;
+}
+
+#article-date {
+    -fx-text-fill: lightgray;
+    -fx-font-size: 12px;
+}
+#article-info {
+    -fx-padding: 0 0 0 10px;
+}
+#article-wrapper {
+    -fx-padding: 10px;
+}
 
 
 
