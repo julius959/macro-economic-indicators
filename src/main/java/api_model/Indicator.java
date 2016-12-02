@@ -38,7 +38,7 @@ public class Indicator {
         this.subIndicatorsLabels = new ArrayList<>(Arrays.asList(labels));
     }
 
-    public String getLabelFromCode(String code){
+    public String getLabelFromCode(String code) {
         return subIndicatorsLabels.get(subIndicatorsCodes.indexOf(code));
     }
 

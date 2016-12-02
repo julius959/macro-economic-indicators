@@ -7,10 +7,7 @@ import org.json.JSONObject;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,8 +26,9 @@ public class Model {
 
     public static ArrayList<Indicator> indicators;
     public static String currentIndicator; //default indicator is GDP
-    public static String currentStartDate = "2006"; //default starting date
-    public static String currentEndDate = "2016"; //default ending date
+    private static int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    public static String currentEndDate = Integer.toString(currentYear); //default ending date
+    public static String currentStartDate = Integer.toString(currentYear - 11); //default starting date
     public static ArrayList<Integer> currentCountries = new ArrayList<>();
 
 
@@ -54,14 +52,14 @@ public class Model {
     }
 
     private void initLabels() {
-        Indicator gdb = new Indicator("GDB");
+        Indicator gdp = new Indicator("GDP");
         Indicator labour = new Indicator("Labour");
         Indicator prices = new Indicator("Prices");
         Indicator money = new Indicator("Money");
         Indicator trade = new Indicator("Trade");
 
-        gdb.setSubIndicatorsCodes(new String[]{"NY.GDP.MKTP.CD"});
-        gdb.setSubIndicatorsLabels(new String[]{"GDB"});
+        gdp.setSubIndicatorsCodes(new String[]{"NY.GDP.MKTP.CD"});
+        gdp.setSubIndicatorsLabels(new String[]{"GDP"});
 
         labour.setSubIndicatorsCodes(new String[]{"SL.EMP.TOTL.SP.ZS", "SL.UEM.TOTL.ZS"});
         labour.setSubIndicatorsLabels(new String[]{"Employment Rate", "Unemployment Rate"});
@@ -75,83 +73,84 @@ public class Model {
         trade.setSubIndicatorsCodes(new String[]{"NE.IMP.GNFS.ZS", "NE.EXP.GNFS.ZS"});
         trade.setSubIndicatorsLabels(new String[]{"Import", "Export"});
 
-        indicators = new ArrayList<>(Arrays.asList(gdb, labour, prices, money, trade));
+        indicators = new ArrayList<>(Arrays.asList(gdp, labour, prices, money, trade));
 
     }
-    private void createDB(){
+
+    private void createDB() {
+        long startTime = System.currentTimeMillis();
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:cachedDB.db");
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         System.out.println("Opened database successfully");
-
+        long endTime = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("Connecion to the databases done in  " + totalTime);
     }
-    private void createInitialTable(){
-        Statement querry =  null;
-        try{
+    private void createInitialTable() {
+        long startTime = System.currentTimeMillis();
+        Statement querry = null;
+        try {
             querry = c.createStatement();
-            String sql = "CREATE TABLE data " +
-                    "(country        INT(6)    NOT NULL, " +
-                    " indicator      TEXT    NOT NULL, " +
-                    " year        INT(6), " +
-                    " value         TEXT," +
-                    "PRIMARY KEY (country,indicator,year,value))";
-            querry.executeUpdate(sql);
+            for (int i = 0; i < indicators.size(); i++) {
+                for (int j = 0; j < indicators.get(i).getSubIndicatorsCodes().size(); ++j) {
+                    String sql = "CREATE TABLE " + eraseDots(indicators.get(i).getSubIndicatorsCodes().get(j)) +
+                            " (country        INT(6)    NOT NULL, " +
+                            " indicator      TEXT    NOT NULL, " +
+                            " year        INT(6), " +
+                            " value         TEXT," +
+                            "PRIMARY KEY (country,indicator,year,value))";
+                    querry.executeUpdate(sql);
+                }
+            }
             querry.close();
             c.close();
-        }catch (Exception e){
-            System.out.println("ERROR IN CREATING THE DB ");
+        } catch (Exception e) {
+            System.out.println("ERROR IN CREATING THE DB");
         }
         System.out.println("SUCCESSFULLY CREATED THE DB");
+
+
+        long endTime = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("TABLES CREATED IN " + totalTime);
     }
 
-    private void updateLocal(int countryIndex, String indicator, String startDate, String endDate,HashMap<String,Double> cachedData){ //First querry will update the local data
-        String checkedQuerry = Integer.toString(countryIndex)+"/"+indicator+"/"+startDate+"/"+endDate;
+    private void updateLocal(int countryIndex, String indicator, String startDate, String endDate, HashMap<String, Double> cachedData) { //First querry will update the local data
+        String checkedQuerry = Integer.toString(countryIndex) + "/" + indicator + "/" + startDate + "/" + endDate;
 
         if (!isUpdated.contains(checkedQuerry)) {
             isUpdated.add(checkedQuerry);
-            APIData.getInstance().saveLocally(countryIndex,indicator,cachedData);
+            APIData.getInstance().saveLocally(countryIndex, indicator, cachedData);
         }
     }
 
     public HashMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
         HashMap<String, Double> finalHashmap = new HashMap<>();
-        String newQuerriedData = Integer.toString(countryIndex)+"/"+indicator+"/"+startDate+"/"+endDate;
+        String newQuerriedData = Integer.toString(countryIndex) + "/" + indicator + "/" + startDate + "/" + endDate;
         System.out.println(newQuerriedData);
         if (isUpdated.contains(newQuerriedData)) {
             System.out.println("TRYING TO GET DATA FROM CACHE ");
-            try{
-                finalHashmap = CacheData.getInstance().getData(countryIndex,indicator,startDate,endDate);
-                System.out.println("DATA RETRIEVED FROM CACHE");
-            }catch (Exception e){
-                System.out.println("DATA COULD NOT BE RETRIEVED FROM CACHE");
+            finalHashmap = CacheData.getInstance().getData(countryIndex, indicator, startDate, endDate);
+            if (!finalHashmap.isEmpty()) System.out.println("DATA RETRIEVED FROM CACHE");
+            else System.out.println("DATA COULD NOT BE RETRIEVED FROM CACHE");
+        } else {
+            System.out.println("TRYING TO GET DATA FROM API");
+            finalHashmap = APIData.getInstance().getData(countryIndex, indicator, startDate, endDate);
+            updateLocal(countryIndex, indicator, startDate, endDate, finalHashmap);
+            if (!finalHashmap.isEmpty()) System.out.println("DATA RETRIEVED FROM THE API");
+            else {
+                System.out.println("COULD NOT CONNECT, TRYING TO GET FROM CACHE");
+                finalHashmap = CacheData.getInstance().getData(countryIndex, indicator, startDate, endDate);
+                if (!finalHashmap.isEmpty()) System.out.println("DATA RETRIEVED FROM CACHE AFTER RETRY");
+                else System.out.println("DATA COULD NOT BE RETRIEVED NEITHER FROM CACHE");
             }
-
         }
-        else {
-
-                System.out.println("TRYING TO GET DATA FROM API");
-                finalHashmap = APIData.getInstance().getData(countryIndex,indicator,startDate,endDate);
-                updateLocal(countryIndex,indicator,startDate,endDate,finalHashmap);
-                if(!finalHashmap.isEmpty())System.out.println("DATA RETRIEVED FROM THE API");
-                else{
-                    System.out.println("COULD NOT CONNECT, TRYING TO GET FROM CACHE");
-
-                        finalHashmap = CacheData.getInstance().getData(countryIndex,indicator,startDate,endDate);
-                        if(!finalHashmap.isEmpty())System.out.println("DATA RETRIEVED FROM CACHE AFTER RETRY");
-                        else System.out.println("DATA COULD NOT BE RETRIEVED NEITHER FROM CACHE");
-
-                }
-
-
-
-            }
-
-
-    return finalHashmap;
+        return finalHashmap;
     }
 
     public void setCurrentCountries(int[] c) {
@@ -195,6 +194,10 @@ public class Model {
         System.out.println("\nFinished all threads,");
         System.out.println("------------------------------------------");
         return displayedResult;
+    }
+
+    public String eraseDots(String word) {
+        return word.replaceAll("\\.", "");
     }
 
 

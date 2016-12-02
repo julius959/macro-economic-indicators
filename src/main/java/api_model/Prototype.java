@@ -3,6 +3,7 @@ package api_model;
 import api_model.Model;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,66 +19,63 @@ public class Prototype {
 
 
     public static void main(String[] args) {
-    //    System.out.println(getResponse(apiLink));
-   // System.out.println(Model.getInstance().getData(1,6,"2006","2016"));
+        //    System.out.println(getResponse(apiLink));
+        // System.out.println(Model.getInstance().getData(1,6,"2006","2016"));
         long startTime = System.currentTimeMillis();
-        int[] c = {0,1,2};
+        int[] c = {0, 1, 2};
         Model.getInstance().setCurrentCountries(c);
         Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
         Model.getInstance().currentStartDate = "2006";
         Model.getInstance().currentEndDate = "2016";
-        ArrayList res =  Model.getInstance().gatherData();
+        ArrayList res = Model.getInstance().gatherData();
 
        /* for(int i = 0; i<res.size();++i){
             System.out.println(res.get(i));
         }*/
-        System.out.println("NUMBER OF COUNTRIES DISPLAYED : "+res.size());
+        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res.size());
 
-        int[] c2 = {0,1,2,3};
+        int[] c2 = {0, 1, 2, 3};
         Model.getInstance().setCurrentCountries(c2);
         Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
         Model.getInstance().currentStartDate = "2006";
         Model.getInstance().currentEndDate = "2016";
-        ArrayList res2 =  Model.getInstance().gatherData();
+        ArrayList res2 = Model.getInstance().gatherData();
 
 
 
       /*  for(int i = 0; i<res2.size();++i){
             System.out.println(res2.get(i));
         }*/
-        System.out.println("NUMBER OF COUNTRIES DISPLAYED : "+res2.size());
+        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res2.size());
 
-        int[] c3 = {4,5};
+        int[] c3 = {4, 5};
         Model.getInstance().setCurrentCountries(c3);
         Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
         Model.getInstance().currentStartDate = "2006";
         Model.getInstance().currentEndDate = "2016";
-        ArrayList res3 =  Model.getInstance().gatherData();
+        ArrayList res3 = Model.getInstance().gatherData();
 
 /*
         for(int i = 0; i<res3.size();++i){
             System.out.println(res3.get(i));
         }*/
-        System.out.println("NUMBER OF COUNTRIES DISPLAYED : "+res3.size());
+        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res3.size());
 
 
-
-
-        int[] c4 = {0,1,2,3,4,5};
+        int[] c4 = {0, 1, 2, 3, 4, 5};
         Model.getInstance().setCurrentCountries(c4);
         Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
         Model.getInstance().currentStartDate = "2006";
         Model.getInstance().currentEndDate = "2016";
-        ArrayList res4 =  Model.getInstance().gatherData();
+        ArrayList res4 = Model.getInstance().gatherData();
 
 
-
-        int[] c5 = {0,1,2,3,4,5};
+        int[] c5 = {0, 1, 2, 3, 4, 5};
         Model.getInstance().setCurrentCountries(c4);
         Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
         Model.getInstance().currentStartDate = "2006";
         Model.getInstance().currentEndDate = "2016";
-        ArrayList res5 =  Model.getInstance().gatherData();
+        ArrayList res5 = Model.getInstance().gatherData();
 
 
 
@@ -85,11 +83,10 @@ public class Prototype {
             System.out.println(res4.get(i));
 
         }*/
-        System.out.println("NUMBER OF COUNTRIES DISPLAYED : "+res4.size());
+        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res4.size());
 
 
-
-        long endTime   = System.currentTimeMillis();
+        long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
         System.out.println(totalTime);
 

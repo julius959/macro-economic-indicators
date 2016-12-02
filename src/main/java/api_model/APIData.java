@@ -21,7 +21,8 @@ public class APIData {
     public static APIData instance = null;
     private String apiBody = "http://api.worldbank.org/";
 
-    private APIData() {}
+    private APIData() {
+    }
 
     public static APIData getInstance() {
         if (instance == null)
@@ -30,10 +31,11 @@ public class APIData {
     }
 
     public StringBuilder getResponse(String apiLink) {
-      //  System.out.println("RETRIEVED FROM API");
+        long startTime = System.currentTimeMillis();
+        //  System.out.println("RETRIEVED FROM API");
         StringBuilder sb = new StringBuilder();
         String finalLink = apiBody + apiLink;
-      //  System.out.println(finalLink);
+        //  System.out.println(finalLink);
         try {
             URL url = new URL(finalLink);
             System.out.println(finalLink);
@@ -46,17 +48,19 @@ public class APIData {
         } catch (Exception e) {
             System.out.println("Could not connect");
         }
+        long endTime = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("Getting response from server  " + totalTime);
         return sb;
     }
-    public HashMap<String,Double> getData(int countryIndex, String indicator, String startDate, String endDate){
-        HashMap<String,Double> data = new HashMap<>();
+
+    public HashMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
+        HashMap<String, Double> data = new HashMap<>();
         String generatedLink = "countries/" + Model.getInstance().countries[countryIndex].getCode() + "/indicators/" + indicator + "?date=" + startDate + ":" + endDate + "&per_page=10000&format=json";
         StringBuilder result = APIData.getInstance().getResponse(generatedLink);
         try {
             JSONArray array = new JSONArray(result.toString());
             JSONArray array1 = array.getJSONArray(1);
-            //   String in = array1.getJSONObject(0).getJSONObject("indicator").getString("value");
-
             for (int i = 0; i < array1.length(); ++i) {
                 JSONObject currentObject = array1.getJSONObject(i);
                 if (!currentObject.getString("value").equals("null"))
@@ -70,9 +74,11 @@ public class APIData {
 
 
     }
-    public void saveLocally(int countryIndex, String indicator,HashMap<String,Double> cachedData){
+
+    public void saveLocally(int countryIndex, String indicator, HashMap<String, Double> cachedData) {
+        long startTime = System.currentTimeMillis();
         Connection c = null;
-        Statement querry =null;
+        Statement querry = null;
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:cachedDB.db");
@@ -80,29 +86,31 @@ public class APIData {
             System.out.println("Opened database successfully");
 
             querry = c.createStatement();
-            for(int i=0;i<cachedData.size()-1;++i) {
+            for (int i = 0; i < cachedData.size() - 1; ++i) {
 
-                System.out.println(cachedData.size() +"  ADDING DATA INTO THE DB for "+Model.getInstance().countries[countryIndex].getName()+" " +Integer.parseInt(cachedData.keySet().toArray()[i].toString()));
+                System.out.println(cachedData.size() + "  ADDING DATA INTO THE DB for " + Model.getInstance().countries[countryIndex].getName() + " " + Integer.parseInt(cachedData.keySet().toArray()[i].toString()));
 
-              /*  String sql = "IF EXISTS (SELECT * FROM data WHERE year='"+Integer.parseInt(cachedData.keySet().toArray()[i].toString())+"' AND country = "+countryIndex+" AND indicator = '"+indicator+"') " +
-                        " BEGIN UPDATE data SET value ="+ cachedData.get(cachedData.keySet().toArray()[i].toString())+"  WHERE year="+Integer.parseInt(cachedData.keySet().toArray()[i].toString())+"; " +
-                        " END ELSE "+ */
-                 String sql = "INSERT OR REPLACE INTO data (country,indicator,year,value) " +
-                        "VALUES (" + countryIndex + ", '" + indicator + "', " + Integer.parseInt(cachedData.keySet().toArray()[i].toString())+",'" + cachedData.get(cachedData.keySet().toArray()[i]).toString() + "');";
-            //    System.out.println("OK");
+                String sql = "INSERT OR REPLACE INTO " + Model.getInstance().eraseDots(indicator) + " (country,indicator,year,value) " + //computeValues(countryIndex,indicator,cachedData);
+                        "VALUES (" + countryIndex + ", '" + indicator + "', " + Integer.parseInt(cachedData.keySet().toArray()[i].toString()) + ",'" + cachedData.get(cachedData.keySet().toArray()[i]).toString() + "');";
                 querry.executeUpdate(sql);
             }
-
             querry.close();
             c.commit();
             c.close();
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-           // System.exit(0);
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
         System.out.println("Records created successfully");
-
-
-
+        long endTime = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("Caching the current querry in   " + totalTime);
     }
+   /* private String computeValues(int countryIndex, String indicator,HashMap<String,Double> cachedData){
+        String values = "VALUES ";
+        for(int i=0;i<cachedData.size()-2;++i) {
+           values = values +    "(" + countryIndex + ", '" + indicator + "', " + Integer.parseInt(cachedData.keySet().toArray()[i].toString()) + ",'" + cachedData.get(cachedData.keySet().toArray()[i]).toString() + "'),";
+        }
+        values = values + "(" + countryIndex + ", '" + indicator + "', " + Integer.parseInt(cachedData.keySet().toArray()[cachedData.size()-1].toString()) + ",'" + cachedData.get(cachedData.keySet().toArray()[cachedData.size()-1]).toString() + "');";
+        return values;
+    }*/
 }
