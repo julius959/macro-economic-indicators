@@ -15,10 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.ImageViewBuilder;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import news_feed.NewsFeedPane;
@@ -31,7 +28,7 @@ import java.util.stream.Collectors;
 public class Main extends Application {
 
     private ScrollPane paneCountries;
-    private Pane proceedPane;
+    private StackPane proceedPane;
     private Pane graphIconPane;
     private Pane rssIconPane;
     private VBox countriesPlaceholder;
@@ -193,7 +190,7 @@ public class Main extends Application {
         indicatorsPlaceholder = (Accordion) scene.lookup("#indicators-wrapper");
         paneCountries = (ScrollPane) scene.lookup("#pane-countries");
         countriesPlaceholder = (VBox) paneCountries.getContent().lookup("#countries-wrapper");
-        proceedPane = (Pane) scene.lookup("#pane-proceed");
+        proceedPane = (StackPane) scene.lookup("#pane-proceed");
         topBar = (Pane) scene.lookup("#top-bar");
         proceedButton = (Button) scene.lookup("#proceed-button");
     }
@@ -269,6 +266,7 @@ public class Main extends Application {
         topBar.setStyle("-fx-background-color: #F55028");
         settingsPane.setStyle("-fx-background-color: #3e4249");
         graphIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
+        proceedButton.setAlignment(Pos.CENTER);
 
     }
 
