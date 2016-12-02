@@ -2,6 +2,8 @@ package news_feed;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import view.Main;
@@ -31,20 +33,10 @@ public class NewsArticlePane extends BorderPane {
         setBottom(hbDate);
 
         //Retrieves news articles image from url
-        /*ImageView imageView = ImageViewBuilder.create()
-                .image(new Image(imgURLIn))
-                .build();*/
-
-        //Resizes the image to have width of 100 while preserving the ratio and using
-        // higher quality filtering method; this ImageView is also cached to
-        // improve performance
-        /*imageView.setFitWidth(100);
-        imageView.setPreserveRatio(true);
-        imageView.setSmooth(true);
+        ImageView imageView = new ImageView(new Image(imgURLIn, 100, 100, true, true, true));
         imageView.setCache(true);
 
-        //Adds the articles image to the news entry
-        setLeft(imageView);*/
+        setLeft(imageView);
 
         //Action Listener for clicking on an article
         //Opens up article in web view

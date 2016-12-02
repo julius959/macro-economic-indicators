@@ -15,12 +15,6 @@ public class NewsFeedPane extends BorderPane {
     public NewsFeedPane(Main app) {
         super();
 
-        //Add title to news feed
-        Label lblTitle = new Label("Latest news from the BBC");
-        HBox hbTitle = new HBox(lblTitle);
-        hbTitle.setAlignment(Pos.CENTER);
-        setTop(hbTitle);
-
         //List of news article objects
         ArrayList<NewsArticle> alstNews = new ArrayList<>();
 
