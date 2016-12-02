@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane id="main-pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <top>
+        <Pane id="top-bar" minHeight="30.0" minWidth="200.0" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+    </top>
+    <left>
+       <VBox id="control-bar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="100.0" prefHeight="400.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+           <Pane id="icon-1-placeholder" minHeight="100.0" minWidth="100.0" />
+           <Pane id="icon-2-placeholder" prefHeight="100.0" prefWidth="100.0" />
+           <Pane prefHeight="100.0" prefWidth="100.0" />
+       </VBox>
+   </left>
+   <center>
+       <HBox id="graph-pane" prefHeight="100.0" prefWidth="250.0" BorderPane.alignment="CENTER">
+           <Pane id="pane-indicators" prefHeight="200.0" prefWidth="250.0">
+               <Accordion id="indicators-wrapper" prefWidth="250.0">
+                   <panes>
+                   </panes>
+               </Accordion>
+           </Pane>
+           <ScrollPane id="pane-countries" hbarPolicy="NEVER" hmax="0.0" prefWidth="250.0">
+               <VBox id="countries-wrapper" minHeight="200.0" prefWidth="250.0" />
+           </ScrollPane>
+           <Pane id="pane-proceed" prefHeight="250.0" prefWidth="250.0">
+               <Button id="proceed-button" layoutX="71.0" layoutY="187.0" mnemonicParsing="false" text="Show it!" />
+           </Pane>
+       </HBox>
+   </center>
+</BorderPane>
