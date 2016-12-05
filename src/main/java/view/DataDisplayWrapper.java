@@ -83,7 +83,7 @@ public class DataDisplayWrapper extends Stage {
         }
 
         tableButton.setOnMouseClicked(e -> {
-            this.setCenterPane(new TableViewPane(data.get(0)));
+            this.setCenterPane(spCountryTables);
         });
 
         toReturn.getChildren().add(tableButton);
