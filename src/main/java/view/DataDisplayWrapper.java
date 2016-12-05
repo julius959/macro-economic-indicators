@@ -94,7 +94,6 @@ public class DataDisplayWrapper extends Stage {
 
         toReturn.getChildren().add(tableButton);
 
-
         chartButton.setOnMouseClicked(e -> {
             this.setCenterPane(new BarChartPane(data));
             //chartButton.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");

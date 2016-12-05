@@ -24,8 +24,8 @@ public class BarChartPane extends StackPane {
         barChart = new BarChart<>(dateAxis, valueAxis);
 
         //Adds title and axis labels
-        barChart.setTitle("Bar Chart Title");
-        dateAxis.setLabel("Date");
+        barChart.setTitle(Model.getInstance().currentIndicator);
+        dateAxis.setLabel("Year");
         valueAxis.setLabel("Value");
 
         //Populate chart with given data
