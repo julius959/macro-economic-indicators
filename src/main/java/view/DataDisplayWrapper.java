@@ -6,8 +6,10 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import table_view.TableViewPane;
 
@@ -72,6 +74,9 @@ public class DataDisplayWrapper extends Stage {
         Button tableButton = new Button("Table");
         tableButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         tableButton.setPadding(new Insets(10));
+
+        VBox vbCountryTables = new VBox(10);
+        ScrollPane spCountryTables = new ScrollPane(vbCountryTables);
 
         tableButton.setOnMouseClicked(e -> {
             this.setCenterPane(new TableViewPane(data.get(0)));
