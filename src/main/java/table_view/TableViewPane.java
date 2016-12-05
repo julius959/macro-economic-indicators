@@ -41,8 +41,8 @@ public class TableViewPane extends StackPane {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         //Initialises table columns and adds them to the table
-        TableColumn<TableModelData, String> tbcolDate = new TableColumn<>("X");
-        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>("Y");
+        TableColumn<TableModelData, String> tbcolDate = new TableColumn<>("Year");
+        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>(Model.getInstance().currentIndicator);
         tbcolDate.setStyle("-fx-alignment: CENTER;");
         tbcolValue.setStyle("-fx-alignment: CENTER;");
         table.getColumns().addAll(tbcolDate, tbcolValue);
