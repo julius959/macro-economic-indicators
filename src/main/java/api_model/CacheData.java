@@ -28,9 +28,9 @@ public class CacheData {
         return instance;
     }
 
-    public TreeMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
+    public TreeMap<Integer, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
         long startTime = System.currentTimeMillis();
-        TreeMap<String, Double> cachedResult = new TreeMap<>();
+        TreeMap<Integer, Double> cachedResult = new TreeMap<>();
         System.out.println("CALLED GET CACHED DATA");
         Connection c = null;
         Statement stmt = null;
@@ -46,7 +46,7 @@ public class CacheData {
                 System.out.println("GETTING THE DATA FROM THE DB");
                 int year = rs.getInt("year");
                 String value = rs.getString("value");
-                cachedResult.put(Integer.toString(year), Double.parseDouble(value));
+                cachedResult.put(year, Double.parseDouble(value));
                 System.out.println("Year = " + year);
                 System.out.println("Value = " + value);
 

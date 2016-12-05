@@ -5,10 +5,7 @@ package api_model;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
@@ -57,8 +54,8 @@ public class APIData {
         return sb;
     }
 
-    public TreeMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
-        TreeMap<String, Double> data = new TreeMap<>();
+    public TreeMap<Integer, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
+        TreeMap<Integer, Double> data = new TreeMap<Integer,Double>();
         String generatedLink = "countries/" + Model.getInstance().countries[countryIndex].getCode() + "/indicators/" + indicator + "?date=" + startDate + ":" + endDate + "&per_page=10000&format=json";
         StringBuilder result = APIData.getInstance().getResponse(generatedLink);
         try {
@@ -66,19 +63,24 @@ public class APIData {
             JSONArray array1 = array.getJSONArray(1);
             for (int i = 0; i < array1.length(); ++i) {
                 JSONObject currentObject = array1.getJSONObject(i);
-                if (!currentObject.getString("value").equals("null"))
-                    data.put(currentObject.getString("date").toString(), Double.parseDouble(currentObject.getString("value").toString()));
+                System.out.println(array1);
+               try{
+                   data.put(Integer.parseInt(currentObject.getString("date")), Double.parseDouble(currentObject.getString("value").toString()));
+               }catch (Exception e){
+                   System.out.printf(currentObject.getString("date")+" has no values");
+               }
+
             }
         } catch (Exception e) {
             System.out.println("Can not build the result");
         }
-
+        System.out.println(data);
         return data;
 
 
     }
 
-    public void saveLocally(int countryIndex, String indicator, TreeMap<String, Double> cachedData) {
+    public void saveLocally(int countryIndex, String indicator, TreeMap<Integer, Double> cachedData) {
         long startTime = System.currentTimeMillis();
         Connection c = null;
         Statement querry = null;
@@ -89,10 +91,8 @@ public class APIData {
             System.out.println("Opened database successfully");
 
             querry = c.createStatement();
-            for (int i = 0; i < cachedData.size() - 1; ++i) {
-
+            for (int i = 0; i < cachedData.size(); ++i) {
                 System.out.println(cachedData.size() + "  ADDING DATA INTO THE DB for " + Model.getInstance().countries[countryIndex].getName() + " " + Integer.parseInt(cachedData.keySet().toArray()[i].toString()));
-
                 String sql = "INSERT OR REPLACE INTO " + Model.getInstance().eraseDots(indicator) + " (country,indicator,year,value) " + //computeValues(countryIndex,indicator,cachedData);
                         "VALUES (" + countryIndex + ", '" + indicator + "', " + Integer.parseInt(cachedData.keySet().toArray()[i].toString()) + ",'" + cachedData.get(cachedData.keySet().toArray()[i]).toString() + "');";
                 querry.executeUpdate(sql);
