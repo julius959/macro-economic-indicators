@@ -78,6 +78,10 @@ public class DataDisplayWrapper extends Stage {
         VBox vbCountryTables = new VBox(10);
         ScrollPane spCountryTables = new ScrollPane(vbCountryTables);
 
+        for (TreeMap<Integer, Number> countryData : data) {
+            vbCountryTables.getChildren().add(new TableViewPane(countryData));
+        }
+
         tableButton.setOnMouseClicked(e -> {
             this.setCenterPane(new TableViewPane(data.get(0)));
         });
