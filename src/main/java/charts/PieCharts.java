@@ -17,7 +17,7 @@ public class PieCharts extends StackPane {
     private PieChart pieChart;
     private ObservableList<PieChart.Data> pieChartData;
 
-    public PieCharts(ArrayList<HashMap<String, Integer>> data){
+    public PieCharts(ArrayList<TreeMap<String, Integer>> data){
 
         super();
         pieChart = new PieChart();
@@ -49,7 +49,7 @@ public class PieCharts extends StackPane {
         }
     }
 
-    private void addData(ArrayList<HashMap<String, Integer>> data){
+    private void addData(ArrayList<TreeMap<String, Integer>> data){
 
         pieChartData = FXCollections.observableArrayList();
 
