@@ -48,7 +48,7 @@ public class Main extends Application {
 
         rssPane = new NewsFeedPane(this);
 
-        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
         primaryStage.setTitle("Hello World");
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
@@ -198,7 +198,7 @@ public class Main extends Application {
     private void implementScreensSwitcher() {
 
         ImageView graphImage = new ImageView();
-        graphImage.setImage(new Image(getClass().getResourceAsStream("icon_statistics.png")));
+        graphImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("icon_statistics.png")));
         graphImage.setSmooth(true);
         graphImage.setCache(true);
         graphImage.setFitWidth(50);
@@ -209,7 +209,7 @@ public class Main extends Application {
         graphIconPane.getChildren().add(graphImage);
 
         ImageView rssImage = new ImageView();
-        rssImage.setImage(new Image(getClass().getResourceAsStream("icon_rss.png")));
+        rssImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("icon_rss.png")));
         rssImage.setSmooth(true);
         rssImage.setCache(true);
         rssImage.setFitHeight(50);
@@ -258,7 +258,7 @@ public class Main extends Application {
 
     private void stylePanes(Scene scene) {
 
-        scene.getStylesheets().add(this.getClass()
+        scene.getStylesheets().add(this.getClass().getClassLoader()
                 .getResource("styling.css").toExternalForm());
 
         topBar.getChildren().add(generateTitleText("Graph generator"));
