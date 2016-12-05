@@ -69,18 +69,16 @@ public class DataDisplayWrapper extends Stage {
 
         toReturn.getChildren().add(chartButton);
 
-        if (data.size() == 1) {
-            Button tableButton = new Button("Table");
-            tableButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
-            tableButton.setPadding(new Insets(10));
+        Button tableButton = new Button("Table");
+        tableButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
+        tableButton.setPadding(new Insets(10));
 
-            tableButton.setOnMouseClicked(e -> {
-                this.setCenterPane(new TableViewPane(data.get(0)));
-            });
+        tableButton.setOnMouseClicked(e -> {
+            this.setCenterPane(new TableViewPane(data.get(0)));
+        });
 
-            toReturn.getChildren().add(tableButton);
+        toReturn.getChildren().add(tableButton);
 
-        }
 
         chartButton.setOnMouseClicked(e -> {
             this.setCenterPane(new BarChartPane(data));
