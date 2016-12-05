@@ -1,8 +1,7 @@
 package api_model;
 
 import api_model.Model;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 
 import java.io.BufferedReader;
 import java.io.FileWriter;
@@ -55,6 +54,7 @@ public class Prototype {
         Model.getInstance().currentEndDate = "2016";
         ArrayList res3 = Model.getInstance().gatherData();
 
+
 /*
         for(int i = 0; i<res3.size();++i){
             System.out.println(res3.get(i));
@@ -83,7 +83,9 @@ public class Prototype {
             System.out.println(res4.get(i));
 
         }*/
-        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res4.size());
+        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res5.size());
+        System.out.println(res5);
+
 
 
         long endTime = System.currentTimeMillis();

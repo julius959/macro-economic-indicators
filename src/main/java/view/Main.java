@@ -105,7 +105,7 @@ public class Main extends Application {
 
         HBox toReturn = new HBox();
         ImageView imageView = ImageViewBuilder.create()
-                .image(new Image(country.getFlag()))
+                .image(new Image("http://flagpedia.net/data/flags/mini/gb.png"))
                 .build();
         imageView.setFitWidth(25);
         imageView.setFitHeight(15);

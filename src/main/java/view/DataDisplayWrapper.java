@@ -14,12 +14,14 @@ import table_view.TableViewPane;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * Created by loopiezlol on 05/12/2016.
  */
 public class DataDisplayWrapper extends Stage {
 
-    ArrayList<HashMap<String, Number>> data = new ArrayList<>();
+    ArrayList<TreeMap<String, Number>> data = new ArrayList<>();
     BorderPane mainPane;
 
     public DataDisplayWrapper() {
@@ -37,10 +39,10 @@ public class DataDisplayWrapper extends Stage {
     }
 
 
-    public void setData(ArrayList<HashMap<String, Double>> inData) {
+    public void setData(ArrayList<TreeMap<String, Double>> inData) {
         data.clear();
-        for (HashMap<String, Double> val : inData) {
-            HashMap<String, Number> toAdd = new HashMap<>();
+        for (TreeMap<String, Double> val : inData) {
+            TreeMap<String, Number> toAdd = new TreeMap<>();
             for(Map.Entry<String,Double> entry : val.entrySet()) {
                 toAdd.put(entry.getKey(), entry.getValue());
             }

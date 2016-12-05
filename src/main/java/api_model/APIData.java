@@ -1,5 +1,7 @@
 package api_model;
 
+
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,6 +15,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * Created by Vlad-minihp on 24/11/2016.
@@ -54,8 +57,8 @@ public class APIData {
         return sb;
     }
 
-    public HashMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
-        HashMap<String, Double> data = new HashMap<>();
+    public TreeMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
+        TreeMap<String, Double> data = new TreeMap<>();
         String generatedLink = "countries/" + Model.getInstance().countries[countryIndex].getCode() + "/indicators/" + indicator + "?date=" + startDate + ":" + endDate + "&per_page=10000&format=json";
         StringBuilder result = APIData.getInstance().getResponse(generatedLink);
         try {
@@ -75,7 +78,7 @@ public class APIData {
 
     }
 
-    public void saveLocally(int countryIndex, String indicator, HashMap<String, Double> cachedData) {
+    public void saveLocally(int countryIndex, String indicator, TreeMap<String, Double> cachedData) {
         long startTime = System.currentTimeMillis();
         Connection c = null;
         Statement querry = null;

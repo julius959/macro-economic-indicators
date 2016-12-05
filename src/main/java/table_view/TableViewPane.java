@@ -18,12 +18,13 @@ import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class TableViewPane extends StackPane {
     private TableView<TableModelData> table;
     private ObservableList<TableModelData> data = FXCollections.observableArrayList();
 
-    public TableViewPane(HashMap<String, Number> dataIn) {
+    public TableViewPane(TreeMap<String, Number> dataIn) {
         super();
 
         //Creates table title
@@ -84,7 +85,7 @@ public class TableViewPane extends StackPane {
         public void setY(String y) { this.y.set(y); }
     }
 
-    private void passData(HashMap<String, Number> dataIn) {
+    private void passData(TreeMap<String, Number> dataIn) {
 
         //Extract the dates from the data
         ArrayList<String> alstKeys = new ArrayList<>(dataIn.keySet());
