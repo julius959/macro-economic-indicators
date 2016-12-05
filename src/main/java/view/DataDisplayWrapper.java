@@ -2,6 +2,7 @@ package view;
 
 import api_model.Model;
 import bar_chart.BarChartPane;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -81,8 +82,8 @@ public class DataDisplayWrapper extends Stage {
         spCountryTables.setFitToWidth(true);
 
         //Create and add a table for each country in the data
-        for (TreeMap<Integer, Number> countryData : data) {
-            vbCountryTables.getChildren().add(new TableViewPane(countryData));
+        for (int i = 0; i < data.size(); ++i) {
+            vbCountryTables.getChildren().add(new TableViewPane(data.get(i), Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName()));
         }
 
         //Display tables in center of scene

@@ -1,5 +1,6 @@
 package table_view;
 
+import api_model.Model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,11 +25,11 @@ public class TableViewPane extends StackPane {
     private TableView<TableModelData> table;
     private ObservableList<TableModelData> data = FXCollections.observableArrayList();
 
-    public TableViewPane(TreeMap<Integer, Number> dataIn) {
+    public TableViewPane(TreeMap<Integer, Number> dataIn, String country) {
         super();
 
         //Creates table title
-        final Label lblTableTitle = new Label("Table Title");
+        final Label lblTableTitle = new Label(country);
         lblTableTitle.setFont(new Font("Arial", 20));
 
         HBox hbTableTitle = new HBox(lblTableTitle);
