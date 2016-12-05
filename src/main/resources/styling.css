@@ -1,0 +1,124 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url("Roboto-Medium.ttf");
+}
+
+.accordion .titled-pane > *.content {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent ;
+}
+
+.titled-pane > .title > .arrow-button > .arrow{
+   -fx-background-color: white;
+}
+
+.titled-pane > .title {
+    -fx-background-color: #2c3138;
+    -fx-color-label-visible: true;
+    -fx-min-height: 40px;
+}
+
+.titled-pane {
+    -fx-text-fill: white;
+}
+
+.radio-button {
+    -fx-text-fill: white;
+    -fx-border-width: 0px;
+}
+
+.radio-button .radio {
+    -fx-padding: 3px;
+}
+
+.radio-button .dot {
+    -fx-padding: 3px;
+}
+
+.radio-button::focused .dot {
+    -fx-background-color: #2c3138;
+}
+
+.check-box {
+    -fx-text-fill: white;
+}
+
+.root {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 16px;
+    -fx-background-color: #3e4249;
+}
+
+#countries-wrapper {
+    -fx-padding: 2px 0 0 2px;
+}
+#top-bar > *{
+    -fx-padding: 2px 0 2px 10px;
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, #000, 6, 0, 0,0);
+}
+#proceed-button {
+    -fx-background-color: #F55028;
+    -fx-text-fill: white;
+    -fx-min-height: 50px;
+    -fx-min-width: 100px;
+    -fx-max-width: 100px;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-control-inner-background: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.scroll-bar {
+    -fx-background-color: transparent;
+    -fx-control-inner-background: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #2c3138;
+}
+#article-title {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-padding: 0 0 2px 0;
+}
+
+#article-description {
+    -fx-font-size: 15px;
+    -fx-text-fill: white;
+    -fx-padding: 0 0 2px 0;
+}
+
+#article-date {
+    -fx-text-fill: lightgray;
+    -fx-font-size: 12px;
+}
+#article-info {
+    -fx-padding: 0 0 0 10px;
+}
+#article-wrapper {
+    -fx-padding: 10px;
+}
+
+/*#wrapper-top-bar {*/
+    /*-fx-pref-height: 40px;*/
+    /*-fx-background-color: #F55028;*/
+/*}*/
+
+/*#chart-button,*/
+/*#table-button {*/
+    /*-fx-text-fill: white;*/
+    /*-fx-background-color: transparent;*/
+/*}*/
+
+
+
+
