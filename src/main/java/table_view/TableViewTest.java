@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class TableViewTest extends Application {
 
@@ -12,7 +13,7 @@ public class TableViewTest extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Table View Test");
 
-        HashMap<String, Number> hm1 = new HashMap<>();
+        TreeMap<String, Number> hm1 = new TreeMap<>();
         hm1.put("2016", 130);
         hm1.put("2015", 115);
         hm1.put("2014", 100);

@@ -8,6 +8,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
+
 import javafx.scene.chart.PieChart;
 
 
@@ -19,7 +21,7 @@ public class PieCharts extends StackPane {
     private PieChart pieChart;
     private ObservableList<PieChart.Data> pieChartData;
 
-    public PieCharts(ArrayList<HashMap<String, Integer>> data){
+    public PieCharts(ArrayList<TreeMap<String, Integer>> data){
 
         super();
         pieChart = new PieChart();
@@ -51,11 +53,11 @@ public class PieCharts extends StackPane {
         }
     }
 
-    private void addData(ArrayList<HashMap<String, Integer>> data){
+    private void addData(ArrayList<TreeMap<String, Integer>> data){
 
         pieChartData = FXCollections.observableArrayList();
 
-        for(HashMap<String, Integer> temp : data){
+        for(TreeMap<String, Integer> temp : data){
             int average = 0;
             for(int value : temp.values()){
                 average += value;

@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * Created by Vlad-minihp on 24/11/2016.
@@ -27,9 +28,9 @@ public class CacheData {
         return instance;
     }
 
-    public HashMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
+    public TreeMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
         long startTime = System.currentTimeMillis();
-        HashMap<String, Double> cachedResult = new HashMap<>();
+        TreeMap<String, Double> cachedResult = new TreeMap<>();
         System.out.println("CALLED GET CACHED DATA");
         Connection c = null;
         Statement stmt = null;

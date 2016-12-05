@@ -9,13 +9,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
+
 import javafx.scene.chart.LineChart;
 
 public class LineCharts extends StackPane {
 
     private LineChart<String,Number> lineChart;
 
-    public LineCharts(ArrayList<HashMap<String, Integer>> data) {
+    public LineCharts(ArrayList<TreeMap<String, Integer>> data) {
 
         super();
 
@@ -78,11 +80,11 @@ public class LineCharts extends StackPane {
         }
     }
 
-    private void addData(ArrayList <HashMap<String,Integer>> data){
+    private void addData(ArrayList <TreeMap<String,Integer>> data){
 
         //populating the series with data
         int i = 0;
-        for (HashMap<String, Integer> temp : data) {
+        for (TreeMap<String, Integer> temp : data) {
             XYChart.Series series = new XYChart.Series();
             series.setName("Country" + Integer.toString(i++));
             for (String date : temp.keySet()) {
