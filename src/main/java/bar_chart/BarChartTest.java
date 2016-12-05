@@ -13,21 +13,21 @@ public class BarChartTest extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Bar Chart Test");
 
-        TreeMap<String, Number> hm1 = new TreeMap<>();
-        hm1.put("2016", 130);
-        hm1.put("2015", 115);
-        hm1.put("2014", 100);
-        hm1.put("2013", 120);
-        hm1.put("2012", 130);
+        TreeMap<Integer, Number> hm1 = new TreeMap<>();
+        hm1.put(2016, 130);
+        hm1.put(2015, 115);
+        hm1.put(2014, 100);
+        hm1.put(2013, 120);
+        hm1.put(2012, 130);
 
-        TreeMap<String, Number> hm2 = new TreeMap<>();
-        hm2.put("2016", 140);
-        hm2.put("2015", 145);
-        hm2.put("2014", 105);
-        hm2.put("2013", 120);
-        hm2.put("2012", 110);
+        TreeMap<Integer, Number> hm2 = new TreeMap<>();
+        hm2.put(2016, 140);
+        hm2.put(2015, 145);
+        hm2.put(2014, 105);
+        hm2.put(2013, 120);
+        hm2.put(2012, 110);
 
-        ArrayList<TreeMap<String, Number>> maps = new ArrayList<>();
+        ArrayList<TreeMap<Integer, Number>> maps = new ArrayList<>();
         maps.add(hm1);
         maps.add(hm2);
 

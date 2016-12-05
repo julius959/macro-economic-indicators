@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import news_feed.NewsFeedPane;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -104,9 +105,20 @@ public class Main extends Application {
         });
 
         HBox toReturn = new HBox();
-        ImageView imageView = ImageViewBuilder.create()
-                .image(new Image("http://flagpedia.net/data/flags/mini/gb.png"))
-                .build();
+
+        ImageView imageView = new ImageView();
+    try{
+        Image image = new Image(getClass().getClassLoader().getResourceAsStream(country.getFlag()));
+        imageView = ImageViewBuilder.create()
+            .image(image)
+            .build();
+    }catch(Exception e){
+        System.out.println("Could not load image");
+        imageView.setImage(null);
+        }
+
+
+
         imageView.setFitWidth(25);
         imageView.setFitHeight(15);
         imageView.setLayoutY(5);

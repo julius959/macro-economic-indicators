@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Team_Ecru-1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: org.json:json:20160810" level="project" />
   </component>
 </module>

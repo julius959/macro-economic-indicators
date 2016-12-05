@@ -31,7 +31,7 @@ public class Model {
     public static ArrayList<Integer> currentCountries = new ArrayList<>();
 
 
-    ArrayList<TreeMap<String, Double>> displayedResult = new ArrayList<>(); //FINAL RESULT FOR CHARTS
+    ArrayList<TreeMap<Integer, Double>> displayedResult = new ArrayList<>(); //FINAL RESULT FOR CHARTS
     ArrayList<Integer> displayedCountries = new ArrayList<>();
     TreeMap<String, ArrayList<Integer>> currentQuerry = new TreeMap<String, ArrayList<Integer>>(); //Current indicator code and countries that are querried
 
@@ -80,7 +80,7 @@ public class Model {
     private void createDB() {
         long startTime = System.currentTimeMillis();
         try {
-             Class.forName("org.sqlite.JDBC");
+            Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:cachedDB.db");
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -91,6 +91,7 @@ public class Model {
         long totalTime = endTime - startTime;
         System.out.println("Connecion to the databases done in  " + totalTime);
     }
+
     private void createInitialTable() {
         long startTime = System.currentTimeMillis();
         Statement querry = null;
@@ -120,7 +121,7 @@ public class Model {
         System.out.println("TABLES CREATED IN " + totalTime);
     }
 
-    private void updateLocal(int countryIndex, String indicator, String startDate, String endDate, TreeMap<String, Double> cachedData) { //First querry will update the local data
+    private void updateLocal(int countryIndex, String indicator, String startDate, String endDate, TreeMap<Integer, Double> cachedData) { //First querry will update the local data
         String checkedQuerry = Integer.toString(countryIndex) + "/" + indicator + "/" + startDate + "/" + endDate;
 
         if (!isUpdated.contains(checkedQuerry)) {
@@ -129,8 +130,8 @@ public class Model {
         }
     }
 
-    public TreeMap<String, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
-        TreeMap<String, Double> finalHashmap = new TreeMap<>();
+    public TreeMap<Integer, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
+        TreeMap<Integer, Double> finalHashmap = new TreeMap<>();
         String newQuerriedData = Integer.toString(countryIndex) + "/" + indicator + "/" + startDate + "/" + endDate;
         System.out.println(newQuerriedData);
         if (isUpdated.contains(newQuerriedData)) {
@@ -153,47 +154,32 @@ public class Model {
         return finalHashmap;
     }
 
-    public void setCurrentCountries(int[] c) {
-        currentCountries.clear();
-        for (int i = 0; i < c.length; ++i) {
-            currentCountries.add(c[i]);
-        }
+//    public void setCurrentCountries(int[] c) {
+//        currentCountries.clear();
+//        for (int i = 0; i < c.length; ++i) {
+//            currentCountries.add(c[i]);
+//        }
+//
+//    }
 
-    }
 
-
-    public ArrayList<TreeMap<String, Double>> gatherData() {
+    public ArrayList<TreeMap<Integer, Double>> gatherData() {
 
         ExecutorService executor = Executors.newFixedThreadPool(10);
+        displayedResult.clear();
 
-          if (!currentQuerry.containsKey(currentIndicator)) {
-             displayedResult.clear();
-             displayedCountries.clear();
-              ArrayList<Integer> currentC = new ArrayList<>();
-              currentQuerry.put(currentIndicator, currentC);
-    }
+        ArrayList<Integer> currentC = new ArrayList<>();
+        currentQuerry.put(currentIndicator, currentC);
+
         for (int i = 0; i < currentCountries.size(); ++i) {
             final int finalI = i;
             System.out.println(countries[i].getName());
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    if (!currentQuerry.get(currentIndicator).contains(finalI) ) {
-                       if(!currentQuerry.containsKey(currentIndicator)){
-                           displayedResult.add(getData(currentCountries.get(finalI), currentIndicator, currentStartDate, currentEndDate));
-                           displayedCountries.add(finalI);
-                           currentQuerry.get(currentIndicator).add(currentCountries.get(finalI));
-                           System.out.println(currentIndicator + " NEW QUERRY FOR  " + countries[finalI].getName());
-
-                       }
-
-
-                    } /*else if(currentQuerry.get(currentIndicator).contains(finalI) && !displayedCountries.contains(finalI)){
-                        System.out.println("Country "+countries[finalI].getName()+"has not been querried");
-                      //  displayedResult.remove(finalI);
-
-                    }*/else
-                        System.out.println(currentIndicator + "HAS ALREADY BEEN QUERRIED FOR " + countries[currentCountries.get(finalI)].getName());
+                    displayedResult.add(getData(currentCountries.get(finalI), currentIndicator, currentStartDate, currentEndDate));
+                    currentQuerry.get(currentIndicator).add(currentCountries.get(finalI));
+                    System.out.println(currentIndicator + " NEW QUERRY FOR  " + countries[finalI].getName());
 
 
                 }

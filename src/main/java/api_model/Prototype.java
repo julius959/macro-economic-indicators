@@ -21,71 +21,75 @@ public class Prototype {
         //    System.out.println(getResponse(apiLink));
         // System.out.println(Model.getInstance().getData(1,6,"2006","2016"));
         long startTime = System.currentTimeMillis();
-        int[] c = {0, 1, 2};
-        Model.getInstance().setCurrentCountries(c);
-        Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
-        Model.getInstance().currentStartDate = "2006";
-        Model.getInstance().currentEndDate = "2016";
-        ArrayList res = Model.getInstance().gatherData();
-
-       /* for(int i = 0; i<res.size();++i){
-            System.out.println(res.get(i));
-        }*/
-        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res.size());
-
-        int[] c2 = {0, 1, 2, 3};
-        Model.getInstance().setCurrentCountries(c2);
-        Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
-        Model.getInstance().currentStartDate = "2006";
-        Model.getInstance().currentEndDate = "2016";
-        ArrayList res2 = Model.getInstance().gatherData();
 
 
+        System.out.println(Model.getInstance().getData(0,"NY.GDP.MKTP.CD","2006","2015"));
 
-      /*  for(int i = 0; i<res2.size();++i){
-            System.out.println(res2.get(i));
-        }*/
-        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res2.size());
-
-        int[] c3 = {4, 5};
-        Model.getInstance().setCurrentCountries(c3);
-        Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
-        Model.getInstance().currentStartDate = "2006";
-        Model.getInstance().currentEndDate = "2016";
-        ArrayList res3 = Model.getInstance().gatherData();
-
-
-/*
-        for(int i = 0; i<res3.size();++i){
-            System.out.println(res3.get(i));
-        }*/
-        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res3.size());
-
-
-        int[] c4 = {0, 1, 2, 3, 4, 5};
-        Model.getInstance().setCurrentCountries(c4);
-        Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
-        Model.getInstance().currentStartDate = "2006";
-        Model.getInstance().currentEndDate = "2016";
-        ArrayList res4 = Model.getInstance().gatherData();
-
-
-        int[] c5 = {0, 1, 2, 3, 4, 5};
-        Model.getInstance().setCurrentCountries(c4);
-        Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
-        Model.getInstance().currentStartDate = "2006";
-        Model.getInstance().currentEndDate = "2016";
-        ArrayList res5 = Model.getInstance().gatherData();
-
-
-
-       /* for(int i = 0; i<res3.size();++i){
-            System.out.println(res4.get(i));
-
-        }*/
-        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res5.size());
-        System.out.println(res5);
-
+//        int[] c = {0, 1, 2};
+//        Model.getInstance().setCurrentCountries(c);
+//        Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
+//        Model.getInstance().currentStartDate = "2006";
+//        Model.getInstance().currentEndDate = "2016";
+//        ArrayList res = Model.getInstance().gatherData();
+//
+//       /* for(int i = 0; i<res.size();++i){
+//            System.out.println(res.get(i));
+//        }*/
+//        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res.size());
+//
+//        int[] c2 = {0, 1, 2, 3};
+//        Model.getInstance().setCurrentCountries(c2);
+//        Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
+//        Model.getInstance().currentStartDate = "2006";
+//        Model.getInstance().currentEndDate = "2016";
+//        ArrayList res2 = Model.getInstance().gatherData();
+//
+//
+//
+//      /*  for(int i = 0; i<res2.size();++i){
+//            System.out.println(res2.get(i));
+//        }*/
+//        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res2.size());
+//
+//        int[] c3 = {4, 5};
+//        Model.getInstance().setCurrentCountries(c3);
+//        Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
+//        Model.getInstance().currentStartDate = "2006";
+//        Model.getInstance().currentEndDate = "2016";
+//        ArrayList res3 = Model.getInstance().gatherData();
+//
+//
+///*
+//        for(int i = 0; i<res3.size();++i){
+//            System.out.println(res3.get(i));
+//        }*/
+//        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res3.size());
+//
+//
+//        int[] c4 = {0, 1, 2, 3, 4, 5};
+//        Model.getInstance().setCurrentCountries(c4);
+//        Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
+//        Model.getInstance().currentStartDate = "2006";
+//        Model.getInstance().currentEndDate = "2016";
+//        ArrayList res4 = Model.getInstance().gatherData();
+//
+//
+//        int[] c5 = {0, 1, 2, 3, 4, 5};
+//        Model.getInstance().setCurrentCountries(c4);
+//        Model.getInstance().currentIndicator = "NY.GDP.MKTP.CD";
+//        Model.getInstance().currentStartDate = "2006";
+//        Model.getInstance().currentEndDate = "2016";
+//        ArrayList res5 = Model.getInstance().gatherData();
+//
+//
+//
+//       /* for(int i = 0; i<res3.size();++i){
+//            System.out.println(res4.get(i));
+//
+//        }*/
+//        System.out.println("NUMBER OF COUNTRIES DISPLAYED : " + res5.size());
+//        System.out.println(res5);
+//
 
 
         long endTime = System.currentTimeMillis();

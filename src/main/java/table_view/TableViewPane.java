@@ -24,7 +24,7 @@ public class TableViewPane extends StackPane {
     private TableView<TableModelData> table;
     private ObservableList<TableModelData> data = FXCollections.observableArrayList();
 
-    public TableViewPane(TreeMap<String, Number> dataIn) {
+    public TableViewPane(TreeMap<Integer, Number> dataIn) {
         super();
 
         //Creates table title
@@ -71,8 +71,8 @@ public class TableViewPane extends StackPane {
         //x and y values for each data entry
         private final SimpleStringProperty x, y;
 
-        private TableModelData(String xIn, Number yIn) {
-            x = new SimpleStringProperty(xIn);
+        private TableModelData(Integer xIn, Number yIn) {
+            x = new SimpleStringProperty(String.valueOf(xIn));
             y = new SimpleStringProperty(String.valueOf(yIn));
         }
 
@@ -85,14 +85,14 @@ public class TableViewPane extends StackPane {
         public void setY(String y) { this.y.set(y); }
     }
 
-    private void passData(TreeMap<String, Number> dataIn) {
+    private void passData(TreeMap<Integer, Number> dataIn) {
 
         //Extract the dates from the data
-        ArrayList<String> alstKeys = new ArrayList<>(dataIn.keySet());
+        ArrayList<Integer> alstKeys = new ArrayList<>(dataIn.keySet());
         //Collections.reverse(alstKeys);
 
         //Add each data entry to the table
-        for (String sKey : alstKeys)
+        for (Integer sKey : alstKeys)
             data.add(new TableModelData(sKey, dataIn.get(sKey)));
     }
 }

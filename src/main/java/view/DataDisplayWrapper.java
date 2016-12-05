@@ -21,7 +21,7 @@ import java.util.TreeMap;
  */
 public class DataDisplayWrapper extends Stage {
 
-    ArrayList<TreeMap<String, Number>> data = new ArrayList<>();
+    ArrayList<TreeMap<Integer, Number>> data = new ArrayList<>();
     BorderPane mainPane;
 
     public DataDisplayWrapper() {
@@ -39,11 +39,11 @@ public class DataDisplayWrapper extends Stage {
     }
 
 
-    public void setData(ArrayList<TreeMap<String, Double>> inData) {
+    public void setData(ArrayList<TreeMap<Integer, Double>> inData) {
         data.clear();
-        for (TreeMap<String, Double> val : inData) {
-            TreeMap<String, Number> toAdd = new TreeMap<>();
-            for(Map.Entry<String,Double> entry : val.entrySet()) {
+        for (TreeMap<Integer, Double> val : inData) {
+            TreeMap<Integer, Number> toAdd = new TreeMap<>();
+            for(Map.Entry<Integer,Double> entry : val.entrySet()) {
                 toAdd.put(entry.getKey(), entry.getValue());
             }
             data.add(toAdd);

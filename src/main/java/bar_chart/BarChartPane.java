@@ -12,7 +12,7 @@ public class BarChartPane extends StackPane {
     //Bar Chart object of the Pane
     private BarChart<String, Number> barChart;
 
-    public BarChartPane(ArrayList<TreeMap<String, Number>> data) {
+    public BarChartPane(ArrayList<TreeMap<Integer, Number>> data) {
         super();
 
         //Creates x and y axis
@@ -34,18 +34,18 @@ public class BarChartPane extends StackPane {
         getChildren().add(barChart);
     }
 
-    private void passData(ArrayList<TreeMap<String, Number>> data) {
+    private void passData(ArrayList<TreeMap<Integer, Number>> data) {
         //Loop over data for every country
-        for (TreeMap<String, Number> hm : data) {
+        for (TreeMap<Integer, Number> hm : data) {
             //Create new series of data for each country
             XYChart.Series<String, Number> tempSeries = new XYChart.Series<>();
             //Get the date values
-            ArrayList<String> alstKeys = new ArrayList<>(hm.keySet());
+            ArrayList<Integer> alstKeys = new ArrayList<>(hm.keySet());
             Collections.reverse(alstKeys);
 
             //Add each data instance to the series of data
-            for (String sKey : alstKeys)
-                tempSeries.getData().add(new XYChart.Data<>(sKey, hm.get(sKey)));
+            for (Integer sKey : alstKeys)
+                tempSeries.getData().add(new XYChart.Data<>(Integer.toString(sKey), hm.get(sKey)));
 
             //Add the countries data to the chart
             barChart.getData().add(tempSeries);

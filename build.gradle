@@ -7,7 +7,7 @@ sourceCompatibility = 1.8
 
 task runMacroeconomics(type: Jar) {
     manifest {
-        attributes 'Main-Class': 'news_fee.NewsFeedTest'
+        attributes 'Main-Class': 'view.Main'
     }
     baseName = project.name
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
