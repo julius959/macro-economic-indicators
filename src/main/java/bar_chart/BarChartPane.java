@@ -41,7 +41,6 @@ public class BarChartPane extends StackPane {
             XYChart.Series<String, Number> tempSeries = new XYChart.Series<>();
             //Get the date values
             ArrayList<Integer> alstKeys = new ArrayList<>(hm.keySet());
-            Collections.reverse(alstKeys);
 
             //Add each data instance to the series of data
             for (Integer sKey : alstKeys)
