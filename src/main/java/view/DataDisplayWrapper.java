@@ -75,13 +75,17 @@ public class DataDisplayWrapper extends Stage {
         tableButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         tableButton.setPadding(new Insets(10));
 
+        //Creates scroll pane for all country tables
         VBox vbCountryTables = new VBox(10);
         ScrollPane spCountryTables = new ScrollPane(vbCountryTables);
+        spCountryTables.setFitToWidth(true);
 
+        //Create and add a table for each country in the data
         for (TreeMap<Integer, Number> countryData : data) {
             vbCountryTables.getChildren().add(new TableViewPane(countryData));
         }
 
+        //Display tables in center of scene
         tableButton.setOnMouseClicked(e -> {
             this.setCenterPane(spCountryTables);
         });
