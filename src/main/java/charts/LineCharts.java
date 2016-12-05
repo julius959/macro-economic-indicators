@@ -13,7 +13,7 @@ public class LineCharts extends StackPane {
 
     private LineChart<String,Number> lineChart;
 
-    public LineCharts(ArrayList<HashMap<String, Integer>> data) {
+    public LineCharts(ArrayList<TreeMap<String, Integer>> data) {
 
         super();
 
@@ -76,7 +76,7 @@ public class LineCharts extends StackPane {
         }
     }
 
-    private void addData(ArrayList <HashMap<String,Integer>> data){
+    private void addData(ArrayList <TreeMap<String,Integer>> data){
 
         //populating the series with data
         int i = 0;
