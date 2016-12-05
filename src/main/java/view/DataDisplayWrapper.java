@@ -83,7 +83,8 @@ public class DataDisplayWrapper extends Stage {
 
         //Create and add a table for each country in the data
         for (int i = 0; i < data.size(); ++i) {
-            vbCountryTables.getChildren().add(new TableViewPane(data.get(i), Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName()));
+            vbCountryTables.getChildren().add(new TableViewPane(data.get(i),
+                    Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName()));
         }
 
         //Display tables in center of scene
