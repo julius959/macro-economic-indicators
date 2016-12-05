@@ -63,7 +63,7 @@ public class DataDisplayWrapper extends Stage {
         Button chartButton = new Button("Bar chart");
         chartButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         chartButton.setPadding(new Insets(10));
-        chartButton.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
+        //chartButton.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
 
         toReturn.getChildren().add(chartButton);
 
