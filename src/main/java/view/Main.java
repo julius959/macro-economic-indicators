@@ -292,12 +292,15 @@ public class Main extends Application {
         proceedButton.setOnMouseClicked(e -> {
             String indicator = Model.currentIndicator;
             if(!openedStages.keySet().contains(Model.currentIndicator)) {
-                Stage stage = new Stage();
-                stage.show();
-                stage.setOnCloseRequest(e1 -> {
+                DataDisplayWrapper wrapper = new DataDisplayWrapper();
+                //wrapper.setData(Model.getInstance().gatherData());
+                //wrapper.setCenterPane();
+                wrapper.show();
+                wrapper.setOnCloseRequest(e1 -> {
                     openedStages.remove(indicator);
+                    wrapper.clearData();
                 });
-                openedStages.put(indicator, stage);
+                openedStages.put(indicator, wrapper);
             }
 
 
