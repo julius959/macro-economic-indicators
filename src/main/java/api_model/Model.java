@@ -3,6 +3,7 @@ package api_model;
 import api_model.Country;
 
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -25,15 +26,16 @@ public class Model {
 
     public static ArrayList<Indicator> indicators;
     public static String currentIndicator; //default indicator is GDP
+    public static Indicator currentObjectIndicator;
     private static int currentYear = Calendar.getInstance().get(Calendar.YEAR);
     public static String currentEndDate = Integer.toString(currentYear); //default ending date
     public static String currentStartDate = Integer.toString(currentYear - 11); //default starting date
     public static ArrayList<Integer> currentCountries = new ArrayList<>();
 
 
-    ArrayList<TreeMap<Integer, Double>> displayedResult = new ArrayList<>(); //FINAL RESULT FOR CHARTS
-    ArrayList<Integer> displayedCountries = new ArrayList<>();
-    TreeMap<String, ArrayList<Integer>> currentQuerry = new TreeMap<String, ArrayList<Integer>>(); //Current indicator code and countries that are querried
+//    ArrayList<TreeMap<Integer, BigDecimal>> displayedResult = new ArrayList<>(); //FINAL RESULT FOR CHARTS
+//    ArrayList<Integer> displayedCountries = new ArrayList<>();
+//    TreeMap<String, ArrayList<Integer>> currentQuerry = new TreeMap<String, ArrayList<Integer>>(); //Current indicator code and countries that are querried
 
 
     private ArrayList<String> isUpdated = new ArrayList<String>();
@@ -103,7 +105,7 @@ public class Model {
                             " (country        INT(6)    NOT NULL, " +
                             " indicator      TEXT    NOT NULL, " +
                             " year        INT(6), " +
-                            " value         TEXT," +
+                            " value         DECIMAL," +
                             "PRIMARY KEY (country,indicator,year,value))";
                     querry.executeUpdate(sql);
                 }
@@ -121,8 +123,8 @@ public class Model {
         System.out.println("TABLES CREATED IN " + totalTime);
     }
 
-    private void updateLocal(int countryIndex, String indicator, String startDate, String endDate, TreeMap<Integer, Double> cachedData) { //First querry will update the local data
-        String checkedQuerry = Integer.toString(countryIndex) + "/" + indicator + "/" + startDate + "/" + endDate;
+    private void updateLocal(int countryIndex, String indicator, String startDate, String endDate, TreeMap<Integer, BigDecimal> cachedData) { //First querry will update the local data
+        String checkedQuerry = Integer.toString(countryIndex) + "/" + indicator; //+ "/" + startDate + "/" + endDate;
 
         if (!isUpdated.contains(checkedQuerry)) {
             isUpdated.add(checkedQuerry);
@@ -130,9 +132,9 @@ public class Model {
         }
     }
 
-    public TreeMap<Integer, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
-        TreeMap<Integer, Double> finalHashmap = new TreeMap<>();
-        String newQuerriedData = Integer.toString(countryIndex) + "/" + indicator + "/" + startDate + "/" + endDate;
+    public TreeMap<Integer, BigDecimal> getData(int countryIndex, String indicator, String startDate, String endDate) {
+        TreeMap<Integer, BigDecimal> finalHashmap = new TreeMap<>();
+        String newQuerriedData = Integer.toString(countryIndex) + "/" + indicator;// + "/" + startDate + "/" + endDate;
         System.out.println(newQuerriedData);
         if (isUpdated.contains(newQuerriedData)) {
             System.out.println("TRYING TO GET DATA FROM CACHE ");
@@ -153,35 +155,19 @@ public class Model {
         }
         return finalHashmap;
     }
-
-//    public void setCurrentCountries(int[] c) {
-//        currentCountries.clear();
-//        for (int i = 0; i < c.length; ++i) {
-//            currentCountries.add(c[i]);
-//        }
-//
-//    }
-
-
-    public ArrayList<TreeMap<Integer, Double>> gatherData() {
-
+    public ArrayList<TreeMap<Integer, BigDecimal>> gatherData() {
+        long startTime = System.currentTimeMillis();
         ExecutorService executor = Executors.newFixedThreadPool(10);
-        displayedResult.clear();
-
-        ArrayList<Integer> currentC = new ArrayList<>();
-        currentQuerry.put(currentIndicator, currentC);
-
+      //  displayedResult.clear();
+        TreeMap<Integer,BigDecimal>[] res = new TreeMap[currentCountries.size()];
         for (int i = 0; i < currentCountries.size(); ++i) {
             final int finalI = i;
             System.out.println(countries[i].getName());
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    displayedResult.add(getData(currentCountries.get(finalI), currentIndicator, currentStartDate, currentEndDate));
-                    currentQuerry.get(currentIndicator).add(currentCountries.get(finalI));
-                    System.out.println(currentIndicator + " NEW QUERRY FOR  " + countries[finalI].getName());
-
-
+                   // displayedResult.add(getData(currentCountries.get(finalI), currentIndicator, currentStartDate, currentEndDate));
+                    res[finalI] = getData(currentCountries.get(finalI), currentIndicator, currentStartDate, currentEndDate);
                 }
             });
         }
@@ -190,7 +176,13 @@ public class Model {
         }
         System.out.println("\nFinished all threads,");
         System.out.println("------------------------------------------");
-        return displayedResult;
+        System.out.println("Operation done successfully");
+        long endTime = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("Gathering all the data for the current request in " + totalTime);
+        //return displayedResult;
+        ArrayList<TreeMap<Integer,BigDecimal>> result = new ArrayList<>(Arrays.asList(res));
+        return result;
     }
 
     public String eraseDots(String word) {

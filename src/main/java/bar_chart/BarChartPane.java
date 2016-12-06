@@ -1,5 +1,6 @@
 package bar_chart;
 
+import api_model.Model;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -23,7 +24,7 @@ public class BarChartPane extends StackPane {
         barChart = new BarChart<>(dateAxis, valueAxis);
 
         //Adds title and axis labels
-        barChart.setTitle("Bar Chart Title");
+        barChart.setTitle(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
         dateAxis.setLabel("Date");
         valueAxis.setLabel("Value");
 
