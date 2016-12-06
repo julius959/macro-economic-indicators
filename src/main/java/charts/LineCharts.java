@@ -1,3 +1,4 @@
+package charts;
 import javafx.event.EventHandler;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -6,8 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 import javafx.scene.chart.LineChart;
+
 
 public class LineCharts extends StackPane {
 
@@ -79,10 +81,9 @@ public class LineCharts extends StackPane {
     private void addData(ArrayList <TreeMap<String,Integer>> data){
 
         //populating the series with data
-        int i = 0;
-        for (HashMap<String, Integer> temp : data) {
+        for (TreeMap<String, Integer> temp : data) {
             XYChart.Series series = new XYChart.Series();
-            series.setName("Country" + Integer.toString(i++));
+            series.setName("Country"); // wrapper from vlad
             for (String date : temp.keySet()) {
                 series.getData().add(new XYChart.Data(date, temp.get(date)));
             }
