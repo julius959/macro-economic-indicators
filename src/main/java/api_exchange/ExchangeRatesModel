@@ -1,7 +1,5 @@
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import java.util.HashMap;
+package api_exchange;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -11,6 +9,7 @@ import java.util.Iterator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TreeMap;
 
 public class ExchangeRatesModel {
 
@@ -24,15 +23,15 @@ public class ExchangeRatesModel {
             URL url = new URL(finalLink);
             URLConnection urlConnection = url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            sb.append(bufferedReader.readLine());
+            stringbuilder.append(bufferedReader.readLine());
         } catch (Exception e) {
             System.out.println("Error");
         }
         return stringbuilder;
     }
 
-    public HashMap<String, Double> getData() {
-        HashMap<String, Double> exchangeRates = new HashMap<String, Double>();
+    public TreeMap<String, Double> getData() {
+        TreeMap<String, Double> exchangeRates = new TreeMap<>();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         String currentDate = sdf.format(cal.getTime());

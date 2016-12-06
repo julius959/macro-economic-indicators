@@ -1,3 +1,4 @@
+package charts;
 import javafx.event.EventHandler;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -7,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * Created by jacobklerfelt on 2016-11-28.
@@ -15,13 +17,13 @@ public class PhillipsCurve extends StackPane {
 
     private LineChart<Number,Number> lineChart;
 
-    public PhillipsCurve(ArrayList<HashMap<Integer, Integer>> data) {
+    public PhillipsCurve(ArrayList<TreeMap<Integer, Integer>> data) {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Inflation");
         yAxis.setLabel("Unemployment");
         //creating the chart
-        lineChart = new LineChart<Number, Number>(xAxis, yAxis);
+        lineChart = new LineChart<>(xAxis, yAxis);
         lineChart.setTitle("Phillips Curve");
         this.addData(data);
         this.getChildren().add(lineChart);
@@ -51,8 +53,8 @@ public class PhillipsCurve extends StackPane {
     }
 
 
-    private void addData(ArrayList<HashMap<Integer, Integer>> data) {
-        for (HashMap<Integer, Integer> temp : data) {
+    private void addData(ArrayList<TreeMap<Integer, Integer>> data) {
+        for (TreeMap<Integer, Integer> temp : data) {
             XYChart.Series series = new XYChart.Series();
             series.setName("Country"); // wrapper from Vlad
             for (Integer inflation : temp.keySet()) {

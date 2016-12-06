@@ -1,3 +1,5 @@
+package charts;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -5,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.HashMap;
 import javafx.scene.chart.PieChart;
 
@@ -53,7 +56,7 @@ public class PieCharts extends StackPane {
 
         pieChartData = FXCollections.observableArrayList();
 
-        for(HashMap<String, Integer> temp : data){
+        for(TreeMap<String, Integer> temp : data){
             int average = 0;
             for(int value : temp.values()){
                 average += value;
