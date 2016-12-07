@@ -1,5 +1,6 @@
 package bar_chart;
 
+import api_model.Model;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -12,7 +13,7 @@ public class BarChartPane extends StackPane {
     //Bar Chart object of the Pane
     private BarChart<String, Number> barChart;
 
-    public BarChartPane(ArrayList<HashMap<String, Number>> data) {
+    public BarChartPane(ArrayList<TreeMap<Integer, Number>> data) {
         super();
 
         //Creates x and y axis
@@ -23,9 +24,9 @@ public class BarChartPane extends StackPane {
         barChart = new BarChart<>(dateAxis, valueAxis);
 
         //Adds title and axis labels
-        barChart.setTitle("Bar Chart Title");
-        dateAxis.setLabel("Date");
-        valueAxis.setLabel("Value");
+        barChart.setTitle(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
+        dateAxis.setLabel("Year");
+        valueAxis.setLabel(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
 
         //Populate chart with given data
         passData(data);
@@ -34,18 +35,19 @@ public class BarChartPane extends StackPane {
         getChildren().add(barChart);
     }
 
-    private void passData(ArrayList<HashMap<String, Number>> data) {
+    private void passData(ArrayList<TreeMap<Integer, Number>> data) {
         //Loop over data for every country
-        for (HashMap<String, Number> hm : data) {
+        for (int i = 0; i < data.size(); ++i) {
             //Create new series of data for each country
             XYChart.Series<String, Number> tempSeries = new XYChart.Series<>();
+            //Add key to graph for country
+            tempSeries.setName(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName());
             //Get the date values
-            ArrayList<String> alstKeys = new ArrayList<>(hm.keySet());
-            Collections.reverse(alstKeys);
+            ArrayList<Integer> alstKeys = new ArrayList<>(data.get(i).keySet());
 
             //Add each data instance to the series of data
-            for (String sKey : alstKeys)
-                tempSeries.getData().add(new XYChart.Data<>(sKey, hm.get(sKey)));
+            for (Integer sKey : alstKeys)
+                tempSeries.getData().add(new XYChart.Data<>(Integer.toString(sKey), data.get(i).get(sKey)));
 
             //Add the countries data to the chart
             barChart.getData().add(tempSeries);

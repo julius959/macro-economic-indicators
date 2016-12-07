@@ -1,69 +1,58 @@
 package news_feed;
 
-import javafx.application.HostServices;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.ImageViewBuilder;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
+import view.Main;
 
 public class NewsArticlePane extends BorderPane {
 
-    public NewsArticlePane(String titleIn, String linkIn, String descriptionIn, String publishDateIn, String imgURLIn, NewsFeedTest app) {
+    public NewsArticlePane(String titleIn, String linkIn, String descriptionIn, String publishDateIn, String imgURLIn, Main app) {
         super();
-
-        //Temporary styling
-        setStyle("-fx-border-color: black");
+        this.setId("article-wrapper");
 
         //Creates labels containing title, description and publish date
         Label lblTitle = new Label(titleIn);
+        lblTitle.setId("article-title");
+        lblTitle.setStyle("-fx-effect: dropshadow(gaussian, #000, 5, 0, 0,0);");
+        lblTitle.setUnderline(true);
         Label lblDescription = new Label(descriptionIn);
+        lblDescription.setId("article-description");
+        lblDescription.setWrapText(true);
         Label lblDate = new Label(publishDateIn);
+        lblDate.setId("article-date");
 
         //Centre title and date labels
-        HBox hbTitle = new HBox(lblTitle);
-        hbTitle.setAlignment(Pos.CENTER);
-        HBox hbDate = new HBox(lblDate);
-        hbDate.setAlignment(Pos.CENTER);
+//        HBox hbTitle = new HBox(lblTitle);
+//        hbTitle.setAlignment(Pos.CENTER_LEFT);
+//        HBox hbDate = new HBox(lblDate);
+//        hbDate.setAlignment(Pos.CENTER_LEFT);
 
         //Add labels to container
-        setTop(hbTitle);
-        setCenter(lblDescription);
-        setBottom(hbDate);
+        //setTop(hbTitle);
+        VBox article = new VBox();
+        article.setId("article-info");
+        article.getChildren().addAll(lblTitle, lblDescription, lblDate);
+        setCenter(article);
+        //setBottom(hbDate);
 
         //Retrieves news articles image from url
-        /*ImageView imageView = ImageViewBuilder.create()
-                .image(new Image(imgURLIn))
-                .build();*/
-
-        //Resizes the image to have width of 100 while preserving the ratio and using
-        // higher quality filtering method; this ImageView is also cached to
-        // improve performance
-        /*imageView.setFitWidth(100);
-        imageView.setPreserveRatio(true);
-        imageView.setSmooth(true);
+        ImageView imageView = new ImageView(new Image(imgURLIn, 140, 140, true, true, true));
         imageView.setCache(true);
+        imageView.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
+        imageView.setId("article-image");
 
-        //Adds the articles image to the news entry
-        setLeft(imageView);*/
+        setLeft(imageView);
+
+        this.applyCss();
 
         //Action Listener for clicking on an article
         //Opens up article in web view
-        setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //Creates web view for article
-                app.showLink(linkIn);
-            }
+        setOnMouseClicked(event -> {
+            //Creates web view for article
+            app.showLink(linkIn);
         });
     }
 }

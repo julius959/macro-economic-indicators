@@ -1,14 +1,22 @@
 package charts;
 
+import api_model.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.HashMap;
+import java.util.TreeMap;
+
 import javafx.scene.chart.PieChart;
 
 
@@ -19,50 +27,44 @@ public class PieCharts extends StackPane {
 
     private PieChart pieChart;
     private ObservableList<PieChart.Data> pieChartData;
+    private double totalValues;
 
-    public PieCharts(ArrayList<TreeMap<String, Integer>> data){
+    public PieCharts(ArrayList<TreeMap<Integer, Number>> data) {
 
         super();
+        totalValues = 0;
         pieChart = new PieChart();
-        pieChart.setTitle(""); // waiting for info from Vlad about where to get this info - wrapper.
+        String pieChartTitle = Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
+        pieChart.setTitle(pieChartTitle);
+   //     BigDecimal bd = new BigDecimal(2);
+
+
         this.addData(data);
         this.getChildren().add(pieChart);
-        pieChart.setLabelsVisible(true);
         for (final PieChart.Data dataInPie : pieChart.getData()) {
             dataInPie.getNode().setOnMouseEntered(new EventHandler<MouseEvent>() {
-
                 @Override
                 public void handle(MouseEvent event) {
-                    Label caption = new Label("");
-                    caption.setStyle("-fx-font: 35 arial;");
-                    caption.setStyle("-fx-background-color: #FFFFFF");
-                    caption.setTranslateX(event.getSceneX());
-                    caption.setTranslateY(event.getSceneY());
-                    caption.setText(String.valueOf(dataInPie.getName()) + " - " +  dataInPie.getPieValue() + "%");
-                    getChildren().add(caption);
-
-                }
-            });
-            dataInPie.getNode().setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    getChildren().remove(getChildren().size()-1);
+                    BigDecimal nodeValue = new BigDecimal(dataInPie.getPieValue());
+                //    nodeValue = nodeValue.setScale(3, RoundingMode.HALF_DOWN);
+                    Tooltip.install(dataInPie.getNode(), new Tooltip("Country: " + dataInPie.getName() + "\n" + pieChartTitle + ": " + nodeValue + "\nPercentage: " + Math.round(((dataInPie.getPieValue()/totalValues)*100)) + "%"));
                 }
             });
         }
     }
 
-    private void addData(ArrayList<TreeMap<String, Integer>> data){
+    private void addData(ArrayList<TreeMap<Integer, Number>> data){
 
         pieChartData = FXCollections.observableArrayList();
 
-        for(TreeMap<String, Integer> temp : data){
-            int average = 0;
-            for(int value : temp.values()){
-                average += value;
+        for(int i = 0; i < data.size(); i++){
+            double average = 0;
+            for(Number value : data.get(i).values()){
+                average += value.doubleValue();
             }
-            // get country from wrapper provided by Vlad - leaving for now
-            pieChartData.add(new PieChart.Data("Country", average/temp.size()));
+            double valueToInsert = average/data.get(i).size();
+            totalValues += valueToInsert;
+            pieChartData.add(new PieChart.Data(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName(), valueToInsert));
         }
         pieChart.getData().addAll(pieChartData);
     }
