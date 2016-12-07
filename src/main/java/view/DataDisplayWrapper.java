@@ -40,6 +40,9 @@ public class DataDisplayWrapper extends Stage {
         mainPane.setTop(generateTopBar());
         this.setScene(scene);
 
+        //Prevents resizing stage to smaller than initial size
+        setMinHeight(500);
+        setMinWidth(800);
     }
 
 
