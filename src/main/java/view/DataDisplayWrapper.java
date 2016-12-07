@@ -2,7 +2,8 @@ package view;
 
 import api_model.Model;
 import bar_chart.BarChartPane;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import charts.LineCharts;
+import charts.PieCharts;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -13,10 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import table_view.TableViewPane;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -68,17 +67,35 @@ public class DataDisplayWrapper extends Stage {
 
     public HBox generateTopBar() {
         HBox toReturn = new HBox();
+
         toReturn.setStyle(" -fx-pref-height: 40px; -fx-background-color: #F55028;");
-        Button chartButton = new Button("Bar chart");
+
+        Button chartButton = new Button("Bar charts");
         chartButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         chartButton.setPadding(new Insets(10));
         //chartButton.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
 
-        toReturn.getChildren().add(chartButton);
-
         Button tableButton = new Button("Table");
         tableButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         tableButton.setPadding(new Insets(10));
+
+        Button lineButton = new Button("Linechart");
+        lineButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
+        lineButton.setPadding(new Insets(10));
+
+        toReturn.getChildren().add(chartButton);
+        toReturn.getChildren().add(lineButton);
+        toReturn.getChildren().add(tableButton);
+
+        if(data.size() > 1) {
+            Button pieButton = new Button("Piechart");
+            pieButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
+            pieButton.setPadding(new Insets(10));
+            toReturn.getChildren().add(pieButton);
+            pieButton.setOnMouseClicked(e ->{
+                this.setCenterPane(new PieCharts(data));
+            });
+        }
 
         //Creates scroll pane for all country tables
         VBox vbCountryTables = new VBox(10);
@@ -90,18 +107,17 @@ public class DataDisplayWrapper extends Stage {
             vbCountryTables.getChildren().add(new TableViewPane(data.get(i),
                     Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName()));
         }
-
         //Display tables in center of scene
         tableButton.setOnMouseClicked(e -> {
             this.setCenterPane(spCountryTables);
         });
 
-        toReturn.getChildren().add(tableButton);
+        lineButton.setOnMouseClicked(e ->{
+            this.setCenterPane(new LineCharts(data));
+        });
 
         chartButton.setOnMouseClicked(e -> {
             this.setCenterPane(new BarChartPane(data));
-            //chartButton.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
-            //chartButton.setEffect(new DropShadow("gaussian", "#000", 10, 0, 0, 0));
         });
 
 
