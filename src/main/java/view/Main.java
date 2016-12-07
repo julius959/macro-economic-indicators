@@ -39,7 +39,7 @@ public class Main extends Application {
     private VBox controlBar;
     private Pane topBar;
     private Button proceedButton;
-    private Pane rssPane;
+    private ScrollPane rssPane;
     private HashMap<String, Stage> openedStages = new HashMap<>();
 
 
