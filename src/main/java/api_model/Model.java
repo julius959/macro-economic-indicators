@@ -31,6 +31,7 @@ public class Model {
     public static String currentEndDate = Integer.toString(currentYear); //default ending date
     public static String currentStartDate = Integer.toString(currentYear - 11); //default starting date
     public static ArrayList<Integer> currentCountries = new ArrayList<>();
+    public static String currency = "$";
 
 
 //    ArrayList<TreeMap<Integer, BigDecimal>> displayedResult = new ArrayList<>(); //FINAL RESULT FOR CHARTS
@@ -54,26 +55,26 @@ public class Model {
     }
 
     private void initLabels() {
-        Indicator gdp = new Indicator("GDP");
-        Indicator labour = new Indicator("Labour");
-        Indicator prices = new Indicator("Prices");
-        Indicator money = new Indicator("Money");
-        Indicator trade = new Indicator("Trade");
+        Indicator gdp = new Indicator("GDP","(USD Billion)");
+        Indicator labour = new Indicator("Labour","(% of total labor force)");
+        Indicator prices = new Indicator("Prices","(annual %)");
+        Indicator money = new Indicator("Money","(%)");
+        Indicator trade = new Indicator("Trade","(%)");
 
         gdp.setSubIndicatorsCodes(new String[]{"NY.GDP.MKTP.CD"});
         gdp.setSubIndicatorsLabels(new String[]{"GDP"});
 
         labour.setSubIndicatorsCodes(new String[]{"SL.EMP.TOTL.SP.ZS", "SL.UEM.TOTL.ZS"});
-        labour.setSubIndicatorsLabels(new String[]{"Employment Rate", "Unemployment Rate"});
+        labour.setSubIndicatorsLabels(new String[]{"Total Employment", "Total Unemployment"});
 
-        prices.setSubIndicatorsCodes(new String[]{"FP.CPI.TOTL.ZG"});
-        prices.setSubIndicatorsLabels(new String[]{"Inflation & Consumer Prices"});
+        prices.setSubIndicatorsCodes(new String[]{"FP.CPI.TOTL.ZG","FP.CPI.TOTL"});
+        prices.setSubIndicatorsLabels(new String[]{"Inflation","Consumer Prices"});
 
         money.setSubIndicatorsCodes(new String[]{"FR.INR.RINR"});
-        money.setSubIndicatorsLabels(new String[]{"Interest Rate"});
+        money.setSubIndicatorsLabels(new String[]{"Real interest rate"});
 
         trade.setSubIndicatorsCodes(new String[]{"NE.IMP.GNFS.ZS", "NE.EXP.GNFS.ZS"});
-        trade.setSubIndicatorsLabels(new String[]{"Import", "Export"});
+        trade.setSubIndicatorsLabels(new String[]{"Imports of goods and services", "Exports of goods and services"});
 
         indicators = new ArrayList<>(Arrays.asList(gdp, labour, prices, money, trade));
 
