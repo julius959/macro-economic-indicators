@@ -33,7 +33,7 @@ public class DataDisplayWrapper extends Stage {
 //        this.data = inData.stream().map( => {
 //                return new HashMap<String, Number>()
 //        });
-
+        this.setTitle(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
         mainPane = new BorderPane();
         Scene scene = new Scene(mainPane, 800, 500);
         this.setData(Model.getInstance().gatherData());

@@ -5,11 +5,13 @@ import java.util.Arrays;
 
 public class Indicator {
     private String name;
+    private String unit;
     private ArrayList<String> subIndicatorsCodes;
     private ArrayList<String> subIndicatorsLabels;
 
-    public Indicator(String name) {
+    public Indicator(String name,String unit) {
         this.name = name;
+        this.unit = unit;
         this.subIndicatorsCodes = new ArrayList<>();
         this.subIndicatorsLabels = new ArrayList<>();
     }
@@ -45,4 +47,9 @@ public class Indicator {
     public String getCodeFromLabel(String label) {
         return subIndicatorsCodes.get(subIndicatorsLabels.indexOf(label));
     }
+
+    public String getUnit(){
+        return unit;
+    }
+
 }
