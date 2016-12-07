@@ -32,13 +32,16 @@ public class DataDisplayWrapper extends Stage {
 //        this.data = inData.stream().map( => {
 //                return new HashMap<String, Number>()
 //        });
-
+        this.setTitle(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
         mainPane = new BorderPane();
         Scene scene = new Scene(mainPane, 800, 500);
         this.setData(Model.getInstance().gatherData());
         mainPane.setTop(generateTopBar());
         this.setScene(scene);
 
+        //Prevents resizing stage to smaller than initial size
+        setMinHeight(500);
+        setMinWidth(800);
     }
 
 

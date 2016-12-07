@@ -39,7 +39,7 @@ public class Main extends Application {
     private VBox controlBar;
     private Pane topBar;
     private Button proceedButton;
-    private Pane rssPane;
+    private ScrollPane rssPane;
     private HashMap<String, Stage> openedStages = new HashMap<>();
 
 
@@ -60,6 +60,9 @@ public class Main extends Application {
         populateGraphsFilters();
         implementAdditionalPanes();
 
+        //Prevents resizing stage to smaller than initial size
+        primaryStage.setMinHeight(primaryStage.getHeight());
+        primaryStage.setMinWidth(primaryStage.getWidth());
     }
 
     public static void main(String[] args) {
