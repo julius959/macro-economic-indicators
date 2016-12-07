@@ -5,6 +5,7 @@ import jdk.nashorn.internal.parser.JSONParser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -28,9 +29,9 @@ public class CacheData {
         return instance;
     }
 
-    public TreeMap<Integer, Double> getData(int countryIndex, String indicator, String startDate, String endDate) {
+    public TreeMap<Integer, BigDecimal> getData(int countryIndex, String indicator, String startDate, String endDate) {
         long startTime = System.currentTimeMillis();
-        TreeMap<Integer, Double> cachedResult = new TreeMap<>();
+        TreeMap<Integer, BigDecimal> cachedResult = new TreeMap<>();
         System.out.println("CALLED GET CACHED DATA");
         Connection c = null;
         Statement stmt = null;
@@ -45,11 +46,10 @@ public class CacheData {
             while (rs.next()) {
                 System.out.println("GETTING THE DATA FROM THE DB");
                 int year = rs.getInt("year");
-                String value = rs.getString("value");
-                cachedResult.put(year, Double.parseDouble(value));
+                BigDecimal value = rs.getBigDecimal("value");
+                cachedResult.put(year, value);
                 System.out.println("Year = " + year);
                 System.out.println("Value = " + value);
-
                 System.out.println();
             }
             rs.close();
