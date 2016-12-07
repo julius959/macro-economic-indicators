@@ -1,13 +1,17 @@
 package bar_chart;
 
 import api_model.Model;
+import javafx.application.Platform;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
 
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BarChartPane extends StackPane {
     //Bar Chart object of the Pane
@@ -31,13 +35,17 @@ public class BarChartPane extends StackPane {
         valueAxis.setLabel(Model.getInstance().currentObjectIndicator.getUnit());
 
         //Populate chart with given data
-        passData(data);
 
+        passData(data);
         //Add chart to container
         getChildren().add(barChart);
+
+
     }
 
-    private void passData(ArrayList<TreeMap<Integer, Number>> data) {
+
+    public void passData(ArrayList<TreeMap<Integer, Number>> data) {
+
         //Loop over data for every country
         for (int i = 0; i < data.size(); ++i) {
             //Create new series of data for each country
@@ -46,13 +54,16 @@ public class BarChartPane extends StackPane {
             tempSeries.setName(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName());
             //Get the date values
             ArrayList<Integer> alstKeys = new ArrayList<>(data.get(i).keySet());
-
+            System.out.println("values " + tempSeries);
             //Add each data instance to the series of data
             for (Integer sKey : alstKeys)
                 tempSeries.getData().add(new XYChart.Data<>(Integer.toString(sKey), data.get(i).get(sKey)));
 
             //Add the countries data to the chart
             barChart.getData().add(tempSeries);
+            barChart.setAnimated(false);
+
         }
+        System.out.println(barChart.getData());
     }
 }
