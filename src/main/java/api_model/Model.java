@@ -144,8 +144,10 @@ public class Model {
         } else {
             System.out.println("TRYING TO GET DATA FROM API");
             finalHashmap = APIData.getInstance().getData(countryIndex, indicator, startDate, endDate);
-            updateLocal(countryIndex, indicator, startDate, endDate, finalHashmap);
-            if (!finalHashmap.isEmpty()) System.out.println("DATA RETRIEVED FROM THE API");
+            if (!finalHashmap.isEmpty()) {
+                updateLocal(countryIndex, indicator, startDate, endDate, finalHashmap);
+                System.out.println("DATA RETRIEVED FROM THE API");
+            }
             else {
                 System.out.println("COULD NOT CONNECT, TRYING TO GET FROM CACHE");
                 finalHashmap = CacheData.getInstance().getData(countryIndex, indicator, startDate, endDate);

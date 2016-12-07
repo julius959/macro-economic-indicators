@@ -25,7 +25,7 @@ public class Country {
         Image flagImage = null;
         try{
             System.out.println("Trying to get the flag from local storage");
-           flagImage = new Image(getClass().getClassLoader().getResourceAsStream(getLocalFlag()));
+            flagImage = new Image(getClass().getClassLoader().getResourceAsStream(getLocalFlag()));
             System.out.println("Successfully retrieved the flag from local storage");
         }catch (Exception e){
             try{
