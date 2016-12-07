@@ -1,5 +1,6 @@
 package charts;
 
+import api_model.Model;
 import javafx.event.EventHandler;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -7,8 +8,11 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.HashMap;
+import javafx.scene.control.Tooltip;
 import java.util.TreeMap;
 
 import javafx.scene.chart.LineChart;
@@ -16,17 +20,20 @@ import javafx.scene.chart.LineChart;
 public class LineCharts extends StackPane {
 
     private LineChart<String,Number> lineChart;
+    private String chartName;
 
-    public LineCharts(ArrayList<TreeMap<String, Integer>> data) {
+    public LineCharts(ArrayList<TreeMap<Integer, Number>> data) {
 
         super();
 
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Date");
-        xAxis.setLabel("Values");
+
         lineChart = new LineChart<String, Number>(xAxis, yAxis);
-        lineChart.setTitle("");
+        chartName = Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
+        lineChart.setTitle(chartName);
+        xAxis.setLabel("Date");
+        yAxis.setLabel(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
         this.addData(data);
         this.getChildren().add(lineChart);
         for(final XYChart.Series<String, Number> series : lineChart.getData()) {
@@ -34,61 +41,47 @@ public class LineCharts extends StackPane {
                 node.getNode().setOnMouseEntered(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        String toOutput = String.valueOf(node.getYValue());
-                        if (lineChart.getTitle().equals("GDP")){
+                        String dateToDisplay = node.getXValue();
+                        BigDecimal valueToDisplay = new BigDecimal(node.getYValue().doubleValue());
+                     //   valueToDisplay = valueToDisplay.setScale(3, RoundingMode.HALF_DOWN);
+                        if (lineChart.getTitle().equals("GDP")) {
+                            int nodeIndex = series.getData().indexOf(node);
 
-                            int nodeIndex = lineChart.getData().indexOf(node);
-                            if(nodeIndex != 0 && nodeIndex != (lineChart.getData().size() - 1)){
-                                int valueBefore = series.getData().get(nodeIndex - 1).getYValue().intValue();
-                                int valueAfter = series.getData().get(nodeIndex + 1).getYValue().intValue();
-                                int value = node.getYValue().intValue();
+
+                            if (nodeIndex > 0 && nodeIndex < series.getData().size() - 1) {
+                                double valueBefore = series.getData().get(nodeIndex - 1).getYValue().doubleValue();
+                                double valueAfter = series.getData().get(nodeIndex + 1).getYValue().doubleValue();
+                                double value = node.getYValue().doubleValue();
 
                                 if (valueBefore < value && value > valueAfter) {
-                                    toOutput = "Expansion Peak -" + node.getYValue();
+                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay) + "\nEconomic Cycle: Expansion Peak"));
                                 } else if (valueBefore > value && valueAfter > value) {
-                                    toOutput = "Low Peak -" + node.getYValue();
+                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay) + "\nEconomic Cycle: Low Peak"));
                                 } else if (valueBefore < value && valueAfter > value) {
-                                    toOutput = "Economic Recovery -" + node.getYValue();
+                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay) + "\nEconomic Cycle: Economic Recovery"));
                                 } else if (value < valueBefore && valueAfter < value) {
-                                    toOutput = "Economic Contraction -" + node.getYValue();
+                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay) + "\nEconomic Cycle: Economic Contraction"));
                                 }
+                            } else {
+                                Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay)));
                             }
-                            else{
-                                if(nodeIndex == 0){
-                                    toOutput = "Starting point -" + node.getYValue();
-                                }
-                                else{
-                                    toOutput = "End point -" + node.getYValue();
-                                }
-                            }
+                        } else {
+                            Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay)));
                         }
-                        Label caption = new Label(toOutput);
-                        caption.setStyle("-fx-font: 35 arial;");
-                        caption.setStyle("-fx-background-color: #FFFFFF");
-                        caption.setTranslateX(event.getSceneX());
-                        caption.setTranslateY(event.getSceneY());
-                        getChildren().add(caption);
-                    }
-                });
-                node.getNode().setOnMouseExited(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        getChildren().remove(getChildren().size() - 1);
                     }
                 });
             }
         }
     }
 
-    private void addData(ArrayList <TreeMap<String,Integer>> data){
+    private void addData(ArrayList <TreeMap<Integer,Number>> data){
 
         //populating the series with data
-        int i = 0;
-        for (TreeMap<String, Integer> temp : data) {
+        for (int i = 0; i < data.size(); i++) {
             XYChart.Series series = new XYChart.Series();
-            series.setName("Country" + Integer.toString(i++));
-            for (String date : temp.keySet()) {
-                series.getData().add(new XYChart.Data(date, temp.get(date)));
+            series.setName(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName());
+            for (Integer date : data.get(i).keySet()) {
+                series.getData().add(new XYChart.Data(String.valueOf(date), data.get(i).get(date)));
             }
             lineChart.getData().add(series);
         }
