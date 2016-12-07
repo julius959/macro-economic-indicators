@@ -2,12 +2,15 @@ package view;
 
 import api_model.Model;
 import bar_chart.BarChartPane;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import table_view.TableViewPane;
 
@@ -70,18 +73,27 @@ public class DataDisplayWrapper extends Stage {
 
         toReturn.getChildren().add(chartButton);
 
-        if (data.size() == 1) {
-            Button tableButton = new Button("Table");
-            tableButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
-            tableButton.setPadding(new Insets(10));
+        Button tableButton = new Button("Table");
+        tableButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
+        tableButton.setPadding(new Insets(10));
 
-            tableButton.setOnMouseClicked(e -> {
-                this.setCenterPane(new TableViewPane(data.get(0)));
-            });
+        //Creates scroll pane for all country tables
+        VBox vbCountryTables = new VBox(10);
+        ScrollPane spCountryTables = new ScrollPane(vbCountryTables);
+        spCountryTables.setFitToWidth(true);
 
-            toReturn.getChildren().add(tableButton);
-
+        //Create and add a table for each country in the data
+        for (int i = 0; i < data.size(); ++i) {
+            vbCountryTables.getChildren().add(new TableViewPane(data.get(i),
+                    Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName()));
         }
+
+        //Display tables in center of scene
+        tableButton.setOnMouseClicked(e -> {
+            this.setCenterPane(spCountryTables);
+        });
+
+        toReturn.getChildren().add(tableButton);
 
         chartButton.setOnMouseClicked(e -> {
             this.setCenterPane(new BarChartPane(data));

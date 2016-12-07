@@ -24,9 +24,9 @@ public class BarChartPane extends StackPane {
         barChart = new BarChart<>(dateAxis, valueAxis);
 
         //Adds title and axis labels
-        barChart.setTitle(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
-        dateAxis.setLabel("Date");
-        valueAxis.setLabel("Value");
+        barChart.setTitle(Model.getInstance().currentIndicator);
+        dateAxis.setLabel("Year");
+        valueAxis.setLabel(Model.getInstance().currentIndicator);
 
         //Populate chart with given data
         passData(data);
@@ -37,16 +37,17 @@ public class BarChartPane extends StackPane {
 
     private void passData(ArrayList<TreeMap<Integer, Number>> data) {
         //Loop over data for every country
-        for (TreeMap<Integer, Number> hm : data) {
+        for (int i = 0; i < data.size(); ++i) {
             //Create new series of data for each country
             XYChart.Series<String, Number> tempSeries = new XYChart.Series<>();
+            //Add key to graph for country
+            tempSeries.setName(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName());
             //Get the date values
-            ArrayList<Integer> alstKeys = new ArrayList<>(hm.keySet());
-            Collections.reverse(alstKeys);
+            ArrayList<Integer> alstKeys = new ArrayList<>(data.get(i).keySet());
 
             //Add each data instance to the series of data
             for (Integer sKey : alstKeys)
-                tempSeries.getData().add(new XYChart.Data<>(Integer.toString(sKey), hm.get(sKey)));
+                tempSeries.getData().add(new XYChart.Data<>(Integer.toString(sKey), data.get(i).get(sKey)));
 
             //Add the countries data to the chart
             barChart.getData().add(tempSeries);

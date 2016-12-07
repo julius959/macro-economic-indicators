@@ -25,11 +25,11 @@ public class TableViewPane extends StackPane {
     private TableView<TableModelData> table;
     private ObservableList<TableModelData> data = FXCollections.observableArrayList();
 
-    public TableViewPane(TreeMap<Integer, Number> dataIn) {
+    public TableViewPane(TreeMap<Integer, Number> dataIn, String country) {
         super();
 
         //Creates table title
-        final Label lblTableTitle = new Label(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
+        final Label lblTableTitle = new Label(country);
         lblTableTitle.setFont(new Font("Arial", 20));
 
         HBox hbTableTitle = new HBox(lblTableTitle);
@@ -41,8 +41,8 @@ public class TableViewPane extends StackPane {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         //Initialises table columns and adds them to the table
-        TableColumn<TableModelData, String> tbcolDate = new TableColumn<>("X");
-        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>("Y");
+        TableColumn<TableModelData, String> tbcolDate = new TableColumn<>("Year");
+        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>(Model.getInstance().currentIndicator);
         tbcolDate.setStyle("-fx-alignment: CENTER;");
         tbcolValue.setStyle("-fx-alignment: CENTER;");
         table.getColumns().addAll(tbcolDate, tbcolValue);
