@@ -1,5 +1,6 @@
 package table_view;
 
+import api_model.Model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,16 +19,17 @@ import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class TableViewPane extends StackPane {
     private TableView<TableModelData> table;
     private ObservableList<TableModelData> data = FXCollections.observableArrayList();
 
-    public TableViewPane(HashMap<String, Number> dataIn) {
+    public TableViewPane(TreeMap<Integer, Number> dataIn, String country) {
         super();
 
         //Creates table title
-        final Label lblTableTitle = new Label("Table Title");
+        final Label lblTableTitle = new Label(country);
         lblTableTitle.setFont(new Font("Arial", 20));
 
         HBox hbTableTitle = new HBox(lblTableTitle);
@@ -39,8 +41,8 @@ public class TableViewPane extends StackPane {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         //Initialises table columns and adds them to the table
-        TableColumn<TableModelData, String> tbcolDate = new TableColumn<>("X");
-        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>("Y");
+        TableColumn<TableModelData, String> tbcolDate = new TableColumn<>("Year");
+        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
         tbcolDate.setStyle("-fx-alignment: CENTER;");
         tbcolValue.setStyle("-fx-alignment: CENTER;");
         table.getColumns().addAll(tbcolDate, tbcolValue);
@@ -70,8 +72,8 @@ public class TableViewPane extends StackPane {
         //x and y values for each data entry
         private final SimpleStringProperty x, y;
 
-        private TableModelData(String xIn, Number yIn) {
-            x = new SimpleStringProperty(xIn);
+        private TableModelData(Integer xIn, Number yIn) {
+            x = new SimpleStringProperty(String.valueOf(xIn));
             y = new SimpleStringProperty(String.valueOf(yIn));
         }
 
@@ -84,14 +86,14 @@ public class TableViewPane extends StackPane {
         public void setY(String y) { this.y.set(y); }
     }
 
-    private void passData(HashMap<String, Number> dataIn) {
+    private void passData(TreeMap<Integer, Number> dataIn) {
 
         //Extract the dates from the data
-        ArrayList<String> alstKeys = new ArrayList<>(dataIn.keySet());
+        ArrayList<Integer> alstKeys = new ArrayList<>(dataIn.keySet());
         //Collections.reverse(alstKeys);
 
         //Add each data entry to the table
-        for (String sKey : alstKeys)
+        for (Integer sKey : alstKeys)
             data.add(new TableModelData(sKey, dataIn.get(sKey)));
     }
 }
