@@ -40,7 +40,7 @@ public class Main extends Application {
     private Pane topBar;
     private Button proceedButton;
     private Pane rssPane;
-    private HashMap<String, Stage> openedStages =  new HashMap<>();
+    private HashMap<String, Stage> openedStages = new HashMap<>();
 
 
     @Override
@@ -77,20 +77,20 @@ public class Main extends Application {
         cb.setOnMouseClicked(event -> {
             Integer index = Arrays.asList(Model.countries).indexOf(country);
             if (cb.isSelected()) {
-               // add to it
-                if(!Model.currentCountries.contains(index)){
+                // add to it
+                if (!Model.currentCountries.contains(index)) {
                     Model.currentCountries.add(index);
                 }
 
             } else {
                 // remove from it
-                if(Model.currentCountries.contains(index)) {
+                if (Model.currentCountries.contains(index)) {
                     Model.currentCountries.remove(index);
                 }
 
             }
 
-            if (howManyChecked(countriesPlaceholder) > 0 ) {
+            if (howManyChecked(countriesPlaceholder) > 0) {
                 if (!proceedPane.isVisible()) {
                     proceedPane.setVisible(true);
                     getAnimationFor(proceedPane, true).playFromStart();
@@ -107,17 +107,11 @@ public class Main extends Application {
         HBox toReturn = new HBox();
 
         ImageView imageView = new ImageView();
-    try{
-        Image image = new Image(getClass().getClassLoader().getResourceAsStream(country.getFlag()));
+
+        Image image = country.loadFlag();
         imageView = ImageViewBuilder.create()
-            .image(image)
-            .build();
-    }catch(Exception e){
-        System.out.println("Could not load image");
-        imageView.setImage(null);
-        }
-
-
+                .image(image)
+                .build();
 
         imageView.setFitWidth(25);
         imageView.setFitHeight(15);
@@ -150,7 +144,8 @@ public class Main extends Application {
             optionButton.setOnMouseClicked(event -> {
                 System.out.println(indicator.getCodeFromLabel(option));
                 Model.currentIndicator = indicator.getCodeFromLabel(option);
-                if(howManyChecked(countriesPlaceholder) == 0){
+                Model.currentObjectIndicator = indicator;
+                if (howManyChecked(countriesPlaceholder) == 0) {
                     paneCountries.setVisible(true);
                     getAnimationFor(paneCountries, true).playFromStart();
 
@@ -183,7 +178,7 @@ public class Main extends Application {
 
     private int howManyChecked(VBox placeholder) {
         int count = 0;
-        for(Node node : placeholder.getChildren()) {
+        for (Node node : placeholder.getChildren()) {
             HBox checkboxPlaceholder = (HBox) node;
             CheckBox checkBox = (CheckBox) checkboxPlaceholder.getChildren().get(1);
             if (checkBox.isSelected()) {
@@ -253,7 +248,6 @@ public class Main extends Application {
             }
 
 
-
         });
     }
 
@@ -290,7 +284,8 @@ public class Main extends Application {
 
     private FadeTransition getAnimationFor(Node node, boolean b) {
         FadeTransition ft = new FadeTransition(Duration.seconds(1), node);
-        if (b) { ft.setFromValue(0);
+        if (b) {
+            ft.setFromValue(0);
             ft.setToValue(1);
         } else {
             ft.setFromValue(1);
@@ -303,7 +298,7 @@ public class Main extends Application {
     private void implementAdditionalPanes() {
         proceedButton.setOnMouseClicked(e -> {
             String indicator = Model.currentIndicator;
-            if(!openedStages.keySet().contains(Model.currentIndicator)) {
+            if (!openedStages.keySet().contains(Model.currentIndicator)) {
                 DataDisplayWrapper wrapper = new DataDisplayWrapper();
                 //wrapper.setData(Model.getInstance().gatherData());
                 //wrapper.setCenterPane();
@@ -322,7 +317,6 @@ public class Main extends Application {
     public void showLink(String url) {
         getHostServices().showDocument(url);
     }
-
 
 
 }

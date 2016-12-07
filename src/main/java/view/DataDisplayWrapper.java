@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import table_view.TableViewPane;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,11 +43,11 @@ public class DataDisplayWrapper extends Stage {
     }
 
 
-    public void setData(ArrayList<TreeMap<Integer, Double>> inData) {
+    public void setData(ArrayList<TreeMap<Integer, BigDecimal>> inData) {
         data.clear();
-        for (TreeMap<Integer, Double> val : inData) {
+        for (TreeMap<Integer, BigDecimal> val : inData) {
             TreeMap<Integer, Number> toAdd = new TreeMap<>();
-            for(Map.Entry<Integer,Double> entry : val.entrySet()) {
+            for(Map.Entry<Integer,BigDecimal> entry : val.entrySet()) {
                 toAdd.put(entry.getKey(), entry.getValue());
             }
             data.add(toAdd);
