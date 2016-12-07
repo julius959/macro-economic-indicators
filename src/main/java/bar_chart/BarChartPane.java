@@ -20,13 +20,15 @@ public class BarChartPane extends StackPane {
         CategoryAxis dateAxis = new CategoryAxis();
         NumberAxis valueAxis = new NumberAxis();
 
+
         //Initialises empty bar chart
         barChart = new BarChart<>(dateAxis, valueAxis);
 
         //Adds title and axis labels
+
         barChart.setTitle(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
         dateAxis.setLabel("Year");
-        valueAxis.setLabel(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
+        valueAxis.setLabel(Model.getInstance().currentObjectIndicator.getUnit());
 
         //Populate chart with given data
         passData(data);
