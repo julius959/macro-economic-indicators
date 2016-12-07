@@ -1,30 +1,18 @@
 package news_feed;
 
-import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.web.WebEvent;
-import javafx.scene.web.WebView;
-import news_feed.NewsArticle;
-import news_feed.NewsFeed;
+import view.Main;
 
 import java.util.ArrayList;
 
 public class NewsFeedPane extends BorderPane {
 
-    public NewsFeedPane(NewsFeedTest app) {
+    public NewsFeedPane(Main app) {
         super();
-
-        //Add title to news feed
-        Label lblTitle = new Label("Latest news from the BBC");
-        HBox hbTitle = new HBox(lblTitle);
-        hbTitle.setAlignment(Pos.CENTER);
-        setTop(hbTitle);
 
         //List of news article objects
         ArrayList<NewsArticle> alstNews = new ArrayList<>();
@@ -42,7 +30,8 @@ public class NewsFeedPane extends BorderPane {
         vbArticles.setAlignment(Pos.CENTER);
         vbArticles.setSpacing(10.0);
         ScrollPane spArticles = new ScrollPane(vbArticles);
-        spArticles.setFitToHeight(true);
+        spArticles.setId("articles-wrapper");
+        spArticles.setMaxHeight(400);
         spArticles.setFitToWidth(true);
         setCenter(spArticles);
 
@@ -55,6 +44,8 @@ public class NewsFeedPane extends BorderPane {
                 vbArticles.getChildren().add(new NewsArticlePane(na.getTitle(), na.getLink(), na.getDescription(), na.getPublishDate(), na.getImgURL(), app));
             }
         }
+
+        this.applyCss();
 
     }
 }

@@ -5,14 +5,24 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
+task runMacroeconomics(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'view.Main'
+    }
+    baseName = project.name
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 repositories {
     mavenCentral()
 }
 
+
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    compile files('lib/org.json.jar')
-    compile files('lib/sqlite-jdbc-3.15.1.jar')
-    compile files('lib/rome-1.0.jar')
-    compile files('lib/jdom-1.1.3.jar')
+    compile group: 'org.json', name: 'json', version: '20160810'
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.15.1'
+    compile group: 'rome', name: 'rome', version: '1.0'
 }

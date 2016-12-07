@@ -1,4 +1,5 @@
 package charts;
+
 import javafx.event.EventHandler;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -23,7 +24,7 @@ public class PhillipsCurve extends StackPane {
         xAxis.setLabel("Inflation");
         yAxis.setLabel("Unemployment");
         //creating the chart
-        lineChart = new LineChart<>(xAxis, yAxis);
+        lineChart = new LineChart<Number, Number>(xAxis, yAxis);
         lineChart.setTitle("Phillips Curve");
         this.addData(data);
         this.getChildren().add(lineChart);
