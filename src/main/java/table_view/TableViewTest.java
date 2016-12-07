@@ -20,7 +20,7 @@ public class TableViewTest extends Application {
         hm1.put(2013, 120);
         hm1.put(2012, 130);
 
-        Scene primaryScene = new Scene(new TableViewPane(hm1));
+        Scene primaryScene = new Scene(new TableViewPane(hm1, "Test"));
         primaryStage.setScene(primaryScene);
         primaryStage.show();
     }
