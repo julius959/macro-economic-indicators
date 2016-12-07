@@ -68,7 +68,7 @@ public class APIData {
                 try {
                     BigDecimal value = currentObject.getBigDecimal("value");
                     System.out.println("VALUES ARE " + value);
-                    data.put(Integer.parseInt(currentObject.getString("date")), value);
+                    data.put(Integer.parseInt(currentObject.getString("date")), approximateValues(value,indicator)); // CONVERT INTO POUNDS
                 } catch (Exception e) {
                     System.out.printf(currentObject.getString("date") + " has no values");
                 }
@@ -81,6 +81,10 @@ public class APIData {
         return data;
 
 
+    }
+    private BigDecimal approximateValues(BigDecimal value,String indicator){
+        if(indicator=="NY.GDP.MKTP.CD")  return  value.divideToIntegralValue(BigDecimal.valueOf(1000000000));
+        return value;
     }
 
     public void saveLocally(int countryIndex, String indicator, TreeMap<Integer, BigDecimal> cachedData) {
