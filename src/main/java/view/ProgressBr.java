@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -26,15 +27,17 @@ public class ProgressBr extends ProgressIndicator {
         dialogStage = new Stage();
         dialogStage.initStyle(StageStyle.UTILITY);
         dialogStage.setResizable(false);
-        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+
+
+
 
         // PROGRESS BAR
-        final Label label = new Label();
-        label.setText("alerto");
         dialogStage.setMinHeight(150);
         dialogStage.setMinWidth(150);
         //   pb.setProgress(-1F);
         pin.setProgress(-1F);
+        pin.setStyle(" -fx-progress-color: rgb(49,52,59)");
 
         final HBox hb = new HBox();
         hb.setSpacing(5);
