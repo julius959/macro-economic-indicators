@@ -23,6 +23,7 @@ import news_feed.NewsFeedPane;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Main extends Application {
@@ -40,6 +41,7 @@ public class Main extends Application {
     private Button proceedButton;
     private ScrollPane rssPane;
     private HashMap<String, DataDisplayWrapper> openedStages = new HashMap<>();
+    private ArrayList<RadioButton> buttons = new ArrayList<>();
 
 
     @Override
@@ -166,13 +168,13 @@ public class Main extends Application {
 
     }
 
-    private static RadioButton generateIndicatorOption(String text, boolean active) {
+    private RadioButton generateIndicatorOption(String text, boolean active) {
         RadioButton button = new RadioButton(text);
         button.setPadding(new Insets(5));
         button.setMnemonicParsing(false);
 
         if (!active) button.setDisable(true);
-
+        buttons.add(button);
         return button;
     }
 
@@ -308,15 +310,42 @@ public class Main extends Application {
                 wrapper.setOnCloseRequest(e1 -> {
                     openedStages.remove(indicator);
                     wrapper.clearData();
+                    unselectRadioButton(indicator);
                 });
                 openedStages.put(indicator, wrapper);
             } else if (!openedStages.get(indicator).getInCountries().equals(Model.currentCountries)) {
                 //openedStages.get(indicator).setInCountries(Model.currentCountries);
                 openedStages.get(indicator).startThread();
+                openedStages.get(indicator).toFront();
             }
 
         });
     }
+
+    private void unselectRadioButton(String indicator) {
+        System.out.println(buttons);
+        System.out.println(indicator);
+        buttons.forEach(button -> {
+            if(Objects.equals(button.getText(), getIndicatorLabelFromCode(indicator))){
+                button.setSelected(false);
+            }
+        });
+    }
+
+    public String getIndicatorLabelFromCode(String code) {
+        String toReturn = "";
+        for(Indicator indicator : Model.indicators) {
+            String[] codes = indicator.getSubIndicatorsCodes().toArray(new String[indicator.getSubIndicatorsCodes().size()]);
+            String[] labels =  indicator.getSubIndicatorsLabels().toArray(new String[indicator.getSubIndicatorsLabels().size()]);
+            for(int i = 0 ;i < codes.length; i++){
+                if(codes[i].equals(code)) {
+                    toReturn = labels[i];
+                }
+            }
+        }
+        return toReturn;
+    }
+
 
 
     public void showLink(String url) {
