@@ -50,7 +50,7 @@ public class PieCharts extends StackPane {
                 @Override
                 public void handle(MouseEvent event) {
                     BigDecimal nodeValue = new BigDecimal(dataInPie.getPieValue());
-                    //    nodeValue = nodeValue.setScale(3, RoundingMode.HALF_DOWN);
+                        nodeValue = nodeValue.setScale(3, RoundingMode.HALF_DOWN);
                     Tooltip.install(dataInPie.getNode(), new Tooltip("Country: " + dataInPie.getName() + "\n" + pieChartTitle + ": " + nodeValue + "\nPercentage: " + Math.round(((dataInPie.getPieValue() / totalValues) * 100)) + "%"));
                 }
             });
