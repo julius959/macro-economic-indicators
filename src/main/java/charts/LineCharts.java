@@ -11,6 +11,7 @@ import javafx.scene.layout.StackPane;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javafx.scene.control.Tooltip;
 import java.util.TreeMap;
@@ -43,7 +44,7 @@ public class LineCharts extends StackPane {
                     public void handle(MouseEvent event) {
                         String dateToDisplay = node.getXValue();
                         BigDecimal valueToDisplay = new BigDecimal(node.getYValue().doubleValue());
-                     //   valueToDisplay = valueToDisplay.setScale(3, RoundingMode.HALF_DOWN);
+                        DecimalFormat yValFormat = new DecimalFormat(".###");
                         if (lineChart.getTitle().equals("GDP")) {
                             int nodeIndex = series.getData().indexOf(node);
 
@@ -66,7 +67,7 @@ public class LineCharts extends StackPane {
                                 Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay)));
                             }
                         } else {
-                            Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay)));
+                            Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay)));
                         }
                     }
                 });

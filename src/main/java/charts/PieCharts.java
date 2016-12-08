@@ -38,7 +38,7 @@ public class PieCharts extends StackPane {
         super();
         totalValues = 0;
         pieChart = new PieChart();
-        String pieChartTitle = Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
+        String pieChartTitle = "Average " + Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
         pieChart.setTitle(pieChartTitle);
         //     BigDecimal bd = new BigDecimal(2);
 
@@ -50,8 +50,8 @@ public class PieCharts extends StackPane {
                 @Override
                 public void handle(MouseEvent event) {
                     BigDecimal nodeValue = new BigDecimal(dataInPie.getPieValue());
-                    //    nodeValue = nodeValue.setScale(3, RoundingMode.HALF_DOWN);
-                    Tooltip.install(dataInPie.getNode(), new Tooltip("Country: " + dataInPie.getName() + "\n" + pieChartTitle + ": " + nodeValue + "\nPercentage: " + Math.round(((dataInPie.getPieValue() / totalValues) * 100)) + "%"));
+                    DecimalFormat yValFormat = new DecimalFormat(".###");
+                    Tooltip.install(dataInPie.getNode(), new Tooltip("Country: " + dataInPie.getName() + "\n" + pieChartTitle + ": " + yValFormat.format(nodeValue) + "\nPercentage: " + Math.round(((dataInPie.getPieValue() / totalValues) * 100)) + "%"));
                 }
             });
         }
