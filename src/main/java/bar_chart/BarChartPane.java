@@ -2,16 +2,19 @@ package bar_chart;
 
 import api_model.Model;
 import javafx.application.Platform;
+import javafx.geometry.Bounds;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
 
+
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javafx.scene.input.MouseEvent;
 
 public class BarChartPane extends StackPane {
     //Bar Chart object of the Pane
@@ -38,6 +41,7 @@ public class BarChartPane extends StackPane {
 
         passData(data);
         //Add chart to container
+
         getChildren().add(barChart);
 
 
@@ -61,7 +65,7 @@ public class BarChartPane extends StackPane {
 
             //Add the countries data to the chart
             barChart.getData().add(tempSeries);
-            barChart.setAnimated(false);
+
 
         }
         System.out.println(barChart.getData());
