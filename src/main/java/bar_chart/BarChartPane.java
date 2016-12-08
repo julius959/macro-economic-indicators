@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -53,6 +54,7 @@ public class BarChartPane extends StackPane {
 
         String chartTitle = Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
 
+        DecimalFormat yValFormat = new DecimalFormat(".###");
         //Loop over data for every country
         for (int i = 0; i < data.size(); ++i) {
             //Create new series of data for each country
@@ -73,25 +75,11 @@ public class BarChartPane extends StackPane {
             for (final XYChart.Data<String, Number> node : tempSeries.getData()) {
                 Tooltip.install(node.getNode(),
                         new Tooltip("Country: " + country + "\nDate: " + node.getXValue() +
-                        "\n" + chartTitle + ": " + String.valueOf(node.getYValue())));
+                        "\n" + chartTitle + ": " + yValFormat.format(node.getYValue())));
             }
 
         }
         System.out.println(barChart.getData());
-
-        /*for(final XYChart.Series<String, Number> series : barChart.getData()) {
-            for (final XYChart.Data<String, Number> node : series.getData()) {
-                node.getNode().setOnMouseEntered(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-
-                        Tooltip.install(node.getNode(), new Tooltip("Date: " + node.getXValue() +
-                                "\n" + chartTitle + ": " + String.valueOf(node.getYValue())
-                                + "\n + Country: " + country2));
-                    }
-                });
-            }
-        }*/
 
     }
 }
