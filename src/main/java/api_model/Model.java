@@ -1,6 +1,6 @@
 package api_model;
 
-import api_model.Country;
+import view.ProgressBr;
 
 
 import java.math.BigDecimal;
@@ -16,7 +16,6 @@ import java.util.concurrent.Executors;
  */
 public class Model {
     public static Connection c = null;
-
     public static Country[] countries = {new Country("USA", "usa"), new Country("UK", "gb"), new Country("France", "fr"), new Country("Germany", "deu"),
             new Country("Italy", "it"), new Country("Spain", "es"), new Country("Australia", "au"), new Country("Argentina", "ar"),
             new Country("Brazil", "br"), new Country("Canada", "ca"), new Country("China", "cn"),
@@ -32,11 +31,6 @@ public class Model {
     public static String currentStartDate = Integer.toString(currentYear - 11); //default starting date
     public static ArrayList<Integer> currentCountries = new ArrayList<>();
     public static String currency = "$";
-
-
-//    ArrayList<TreeMap<Integer, BigDecimal>> displayedResult = new ArrayList<>(); //FINAL RESULT FOR CHARTS
-//    ArrayList<Integer> displayedCountries = new ArrayList<>();
-//    TreeMap<String, ArrayList<Integer>> currentQuerry = new TreeMap<String, ArrayList<Integer>>(); //Current indicator code and countries that are querried
 
 
     private ArrayList<String> isUpdated = new ArrayList<String>();
@@ -55,11 +49,11 @@ public class Model {
     }
 
     private void initLabels() {
-        Indicator gdp = new Indicator("GDP","(USD Billion)");
-        Indicator labour = new Indicator("Labour","(% of total labor force)");
-        Indicator prices = new Indicator("Prices","(annual %)");
-        Indicator money = new Indicator("Money","(%)");
-        Indicator trade = new Indicator("Trade","(%)");
+        Indicator gdp = new Indicator("GDP", "(USD Billion)");
+        Indicator labour = new Indicator("Labour", "(% of total labor force)");
+        Indicator prices = new Indicator("Prices", "(annual %)");
+        Indicator money = new Indicator("Money", "(%)");
+        Indicator trade = new Indicator("Trade", "(%)");
 
         gdp.setSubIndicatorsCodes(new String[]{"NY.GDP.MKTP.CD"});
         gdp.setSubIndicatorsLabels(new String[]{"GDP"});
@@ -67,8 +61,8 @@ public class Model {
         labour.setSubIndicatorsCodes(new String[]{"SL.EMP.TOTL.SP.ZS", "SL.UEM.TOTL.ZS"});
         labour.setSubIndicatorsLabels(new String[]{"Total Employment", "Total Unemployment"});
 
-        prices.setSubIndicatorsCodes(new String[]{"FP.CPI.TOTL.ZG","FP.CPI.TOTL"});
-        prices.setSubIndicatorsLabels(new String[]{"Inflation","Consumer Prices"});
+        prices.setSubIndicatorsCodes(new String[]{"FP.CPI.TOTL.ZG", "FP.CPI.TOTL"});
+        prices.setSubIndicatorsLabels(new String[]{"Inflation", "Consumer Prices"});
 
         money.setSubIndicatorsCodes(new String[]{"FR.INR.RINR"});
         money.setSubIndicatorsLabels(new String[]{"Real interest rate"});
@@ -148,8 +142,7 @@ public class Model {
             if (!finalHashmap.isEmpty()) {
                 updateLocal(countryIndex, indicator, startDate, endDate, finalHashmap);
                 System.out.println("DATA RETRIEVED FROM THE API");
-            }
-            else {
+            } else {
                 System.out.println("COULD NOT CONNECT, TRYING TO GET FROM CACHE");
                 finalHashmap = CacheData.getInstance().getData(countryIndex, indicator, startDate, endDate);
                 if (!finalHashmap.isEmpty()) System.out.println("DATA RETRIEVED FROM CACHE AFTER RETRY");
@@ -158,25 +151,40 @@ public class Model {
         }
         return finalHashmap;
     }
+
     public ArrayList<TreeMap<Integer, BigDecimal>> gatherData() {
+
+
+        //  ProgressBr pb = new ProgressBr();
+
         long startTime = System.currentTimeMillis();
         ExecutorService executor = Executors.newFixedThreadPool(10);
-      //  displayedResult.clear();
-        TreeMap<Integer,BigDecimal>[] res = new TreeMap[currentCountries.size()];
+        //  displayedResult.clear();
+        TreeMap<Integer, BigDecimal>[] res = new TreeMap[currentCountries.size()];
+
+
         for (int i = 0; i < currentCountries.size(); ++i) {
             final int finalI = i;
             System.out.println(countries[i].getName());
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                   // displayedResult.add(getData(currentCountries.get(finalI), currentIndicator, currentStartDate, currentEndDate));
+
+                    // displayedResult.add(getData(currentCountries.get(finalI), currentIndicator, currentStartDate, currentEndDate));
                     res[finalI] = getData(currentCountries.get(finalI), currentIndicator, currentStartDate, currentEndDate);
+
                 }
+
             });
+            //   pBar.setProgress(i);
+
         }
+        //pBar.activateProgressBar((Task)executor);
+
         executor.shutdown();
         while (!executor.isTerminated()) {
         }
+        //    pBar.getDialogStage().close();
         System.out.println("\nFinished all threads,");
         System.out.println("------------------------------------------");
         System.out.println("Operation done successfully");
@@ -184,7 +192,7 @@ public class Model {
         long totalTime = endTime - startTime;
         System.out.println("Gathering all the data for the current request in " + totalTime);
         //return displayedResult;
-        ArrayList<TreeMap<Integer,BigDecimal>> result = new ArrayList<>(Arrays.asList(res));
+        ArrayList<TreeMap<Integer, BigDecimal>> result = new ArrayList<>(Arrays.asList(res));
         return result;
     }
 
