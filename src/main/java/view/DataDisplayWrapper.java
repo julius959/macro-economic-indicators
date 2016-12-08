@@ -4,14 +4,11 @@ import api_model.Model;
 import bar_chart.BarChartPane;
 import charts.LineCharts;
 import charts.PieCharts;
-import com.sun.javafx.tk.Toolkit;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -32,14 +29,17 @@ public class DataDisplayWrapper extends Stage {
     ArrayList<TreeMap<Integer, Number>> data = new ArrayList<>();
     BorderPane mainPane;
     ScrollPane spCountryTables;
+    ArrayList<Integer> inCountries = new ArrayList<>();
+    Thread displayingDataThread;
+    BarChartPane bp;
+    VBox vbCountryTables;
+    ProgressBr bar;
 
     public DataDisplayWrapper() {
         super();
-//        this.data = inData.stream().map( => {
-//                return new HashMap<String, Number>()
-//        });
+        inCountries = new ArrayList<>(Model.currentCountries);
 
-        ProgressBr bar = new ProgressBr();
+        bar = new ProgressBr();
 
 
         this.setTitle(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
@@ -47,19 +47,41 @@ public class DataDisplayWrapper extends Stage {
         Scene scene = new Scene(mainPane, 800, 500);
 
         //Creates scroll pane for all country tables
-        VBox vbCountryTables = new VBox(10);
+        vbCountryTables = new VBox(10);
         spCountryTables = new ScrollPane(vbCountryTables);
         spCountryTables.setFitToWidth(true);
 
 
-        BarChartPane bp = new BarChartPane(data);
+        bp = new BarChartPane(data);
         this.setCenterPane(bp);
 
-        Task<ArrayList<TreeMap<Integer, Number>>> task = new Task<ArrayList<TreeMap<Integer, Number>>>() {
+        startThread();
+        mainPane.setTop(generateTopBar());
+        this.setScene(scene);
+
+        //Prevents resizing stage to smaller than initial size
+        setMinHeight(500);
+        setMinWidth(800);
+    }
+
+    public void startThread() {
+        if (displayingDataThread != null) {
+            displayingDataThread.stop();
+        }
+        inCountries = new ArrayList<>(Model.currentCountries);
+        Task task = newTask();
+        bar.activateProgressBar(task);
+        bar.getDialogStage().show();
+
+        displayingDataThread = new Thread(task);
+        displayingDataThread.start();
+    }
+
+    private Task<ArrayList<TreeMap<Integer, Number>>> newTask() {
+        return new Task<ArrayList<TreeMap<Integer, Number>>>() {
 
             @Override
             protected ArrayList<TreeMap<Integer, Number>> call() throws Exception {
-
                 ArrayList<TreeMap<Integer, Number>> res = setData(Model.getInstance().gatherData());
 
                 return res;
@@ -87,24 +109,10 @@ public class DataDisplayWrapper extends Stage {
                 }
             }
         };
-        bar.activateProgressBar(task);
-        bar.getDialogStage().show();
-
-        Thread displayingDataThread = new Thread(task);
-        displayingDataThread.start();
-
-
-        mainPane.setTop(generateTopBar());
-        this.setScene(scene);
-
-        //Prevents resizing stage to smaller than initial size
-        setMinHeight(500);
-        setMinWidth(800);
     }
 
-
     public ArrayList setData(ArrayList<TreeMap<Integer, BigDecimal>> inData) {
-
+        data.clear();
         for (TreeMap<Integer, BigDecimal> val : inData) {
             TreeMap<Integer, Number> toAdd = new TreeMap<>();
             for (Map.Entry<Integer, BigDecimal> entry : val.entrySet()) {
@@ -115,19 +123,6 @@ public class DataDisplayWrapper extends Stage {
         return data;
         // this.setCenterPane(new BarChartPane(data));
     }
-
-
-//    public void setData(ArrayList<TreeMap<Integer, BigDecimal>> inData) {
-//        data.clear();
-//        for (TreeMap<Integer, BigDecimal> val : inData) {
-//            TreeMap<Integer, Number> toAdd = new TreeMap<>();
-//            for(Map.Entry<Integer,BigDecimal> entry : val.entrySet()) {
-//                toAdd.put(entry.getKey(), entry.getValue());
-//            }
-//            data.add(toAdd);
-//        }
-//        this.setCenterPane(new BarChartPane(data));
-//    }
 
     public void setCenterPane(Node node) {
         mainPane.setCenter(node);
@@ -186,4 +181,9 @@ public class DataDisplayWrapper extends Stage {
 
         return toReturn;
     }
+
+    public ArrayList<Integer> getInCountries() {
+        return inCountries;
+    }
+
 }

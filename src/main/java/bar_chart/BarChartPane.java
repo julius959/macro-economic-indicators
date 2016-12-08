@@ -11,13 +11,9 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 
-
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import javafx.scene.input.MouseEvent;
+import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class BarChartPane extends StackPane {
     //Bar Chart object of the Pane
@@ -51,6 +47,7 @@ public class BarChartPane extends StackPane {
 
 
     public void passData(ArrayList<TreeMap<Integer, Number>> data) {
+        barChart.getData().clear();
 
         String chartTitle = Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
 
