@@ -6,21 +6,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
-import javafx.scene.control.Label;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.TreeMap;
-import java.util.HashMap;
-import java.util.TreeMap;
-
-import javafx.scene.chart.PieChart;
-import javafx.util.Duration;
 
 
 /**
@@ -103,7 +97,7 @@ public class PieCharts extends StackPane {
     }
 
     private void addData(ArrayList<TreeMap<Integer, Number>> data) {
-
+        pieChart.getData().clear();
         pieChartData = FXCollections.observableArrayList();
 
         for (int i = 0; i < data.size(); i++) {

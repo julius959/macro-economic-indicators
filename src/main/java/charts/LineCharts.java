@@ -3,19 +3,16 @@ package charts;
 import api_model.Model;
 import javafx.event.EventHandler;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
-import javafx.scene.control.Tooltip;
 import java.util.TreeMap;
-
-import javafx.scene.chart.LineChart;
 
 public class LineCharts extends StackPane {
 
@@ -75,7 +72,7 @@ public class LineCharts extends StackPane {
     }
 
     private void addData(ArrayList <TreeMap<Integer,Number>> data){
-
+        lineChart.getData().clear();
         //populating the series with data
         for (int i = 0; i < data.size(); i++) {
             XYChart.Series series = new XYChart.Series();
