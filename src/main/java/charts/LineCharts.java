@@ -33,7 +33,7 @@ public class LineCharts extends StackPane {
         chartName = Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
         lineChart.setTitle(chartName);
         xAxis.setLabel("Date");
-        yAxis.setLabel(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
+        yAxis.setLabel(Model.getInstance().currentObjectIndicator.getUnit());
         this.addData(data);
         this.getChildren().add(lineChart);
         for(final XYChart.Series<String, Number> series : lineChart.getData()) {
