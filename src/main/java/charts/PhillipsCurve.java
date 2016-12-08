@@ -7,8 +7,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 /**
@@ -55,6 +55,7 @@ public class PhillipsCurve extends StackPane {
 
 
     private void addData(ArrayList<TreeMap<Integer, Integer>> data) {
+        lineChart.getData().clear();
         for (TreeMap<Integer, Integer> temp : data) {
             XYChart.Series series = new XYChart.Series();
             series.setName("Country"); // wrapper from Vlad

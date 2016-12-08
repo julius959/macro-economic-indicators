@@ -6,7 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -17,8 +16,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 public class TableViewPane extends StackPane {
@@ -87,7 +84,7 @@ public class TableViewPane extends StackPane {
     }
 
     private void passData(TreeMap<Integer, Number> dataIn) {
-
+        data.clear();
         //Extract the dates from the data
         ArrayList<Integer> alstKeys = new ArrayList<>(dataIn.keySet());
         //Collections.reverse(alstKeys);
