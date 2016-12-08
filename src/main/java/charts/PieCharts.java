@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
