@@ -3,20 +3,19 @@ package charts;
 import api_model.Model;
 import javafx.event.EventHandler;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import javafx.scene.control.Tooltip;
-import java.util.TreeMap;
 
-import javafx.scene.chart.LineChart;
+import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class LineCharts extends StackPane {
 
@@ -55,16 +54,16 @@ public class LineCharts extends StackPane {
                                 double value = node.getYValue().doubleValue();
 
                                 if (valueBefore < value && value > valueAfter) {
-                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay) + "\nEconomic Cycle: Expansion Peak"));
+                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay) + "\nEconomic Cycle: Expansion Peak"));
                                 } else if (valueBefore > value && valueAfter > value) {
-                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay) + "\nEconomic Cycle: Low Peak"));
+                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay) + "\nEconomic Cycle: Low Peak"));
                                 } else if (valueBefore < value && valueAfter > value) {
-                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay) + "\nEconomic Cycle: Economic Recovery"));
+                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay) + "\nEconomic Cycle: Economic Recovery"));
                                 } else if (value < valueBefore && valueAfter < value) {
-                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay) + "\nEconomic Cycle: Economic Contraction"));
+                                    Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay) + "\nEconomic Cycle: Economic Contraction"));
                                 }
                             } else {
-                                Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + String.valueOf(valueToDisplay)));
+                                Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay)));
                             }
                         } else {
                             Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay)));
@@ -76,7 +75,7 @@ public class LineCharts extends StackPane {
     }
 
     private void addData(ArrayList <TreeMap<Integer,Number>> data){
-
+        lineChart.getData().clear();
         //populating the series with data
         for (int i = 0; i < data.size(); i++) {
             XYChart.Series series = new XYChart.Series();
