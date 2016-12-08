@@ -1,20 +1,14 @@
 package bar_chart;
 
 import api_model.Model;
-import javafx.application.Platform;
-import javafx.geometry.Bounds;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
 
-
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import javafx.scene.input.MouseEvent;
+import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class BarChartPane extends StackPane {
     //Bar Chart object of the Pane
@@ -49,7 +43,7 @@ public class BarChartPane extends StackPane {
 
 
     public void passData(ArrayList<TreeMap<Integer, Number>> data) {
-
+        barChart.getData().clear();
         //Loop over data for every country
         for (int i = 0; i < data.size(); ++i) {
             //Create new series of data for each country
