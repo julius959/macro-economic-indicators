@@ -50,7 +50,7 @@ public class ExchangeRatesModel{
                 if(jsonObjectYesterday.has(k.toString())){
                     Double yesterdaysRate = jsonObjectYesterday.getDouble(k.toString());
                            if(rate - yesterdaysRate < 0){
-                        exchangeRates.put(k.toString(), String.valueOf(rate - (2*rate)) + " (Yesterdays rate: " + yesterdaysRate + ")");
+                        exchangeRates.put(k.toString(), String.valueOf(rate - (2*rate)));
                     }
                     else{
                         exchangeRates.put(k.toString(), String.valueOf(rate));
