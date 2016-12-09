@@ -8,8 +8,9 @@ public class Indicator {
     private String unit;
     private ArrayList<String> subIndicatorsCodes;
     private ArrayList<String> subIndicatorsLabels;
+    private ArrayList<String> subIndicatorUnits;
 
-    public Indicator(String name,String unit) {
+    public Indicator(String name) {
         this.name = name;
         this.unit = unit;
         this.subIndicatorsCodes = new ArrayList<>();
@@ -31,7 +32,15 @@ public class Indicator {
     public void setSubIndicatorsCodes(String[] codes) {
         this.subIndicatorsCodes = new ArrayList<String>(Arrays.asList(codes));
     }
-
+    public void setSubIndicatorUnits(String[] units){
+        this.subIndicatorUnits = new ArrayList<>(Arrays.asList(units));
+    }
+    public ArrayList<String> getSubIndicatorUnits(){
+        return subIndicatorUnits;
+    }
+    public String getSubIndicatorCodeFromCode(String code){
+        return subIndicatorUnits.get(subIndicatorsCodes.indexOf(code));
+    }
     public ArrayList<String> getSubIndicatorsLabels() {
         return subIndicatorsLabels;
     }
