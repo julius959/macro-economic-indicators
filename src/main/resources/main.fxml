@@ -12,6 +12,7 @@
        <VBox id="control-bar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="100.0" prefHeight="400.0" prefWidth="100.0" BorderPane.alignment="CENTER">
            <Pane id="icon-1-placeholder" minHeight="100.0" minWidth="100.0" />
            <Pane id="icon-2-placeholder" prefHeight="100.0" prefWidth="100.0" />
+           <Pane id="icon-3-placeholder" prefHeight="100.0" prefWidth="100.0" />
            <Pane prefHeight="100.0" prefWidth="100.0" />
        </VBox>
    </left>
