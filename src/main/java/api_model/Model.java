@@ -39,6 +39,7 @@ public class Model {
     private ArrayList<String> isUpdated = new ArrayList<String>();
     private  HashMap<String,TimeRange> checked = new HashMap<>();
     public static Model instance = null;
+    public boolean emptyData = false;
 
     private Model() {
         initLabels();
@@ -164,22 +165,25 @@ public class Model {
 
     private void updateLocal(int countryIndex, String indicator, String startDate, String endDate, TreeMap<Integer, BigDecimal> cachedData) { //First querry will update the local data
         String checkedQuerry = Integer.toString(countryIndex) + "/" + indicator; //+ "/" + startDate + "/" + endDate;
-
-
-        if (!isUpdated.contains(checkedQuerry)) {
-            isUpdated.add(checkedQuerry);
-            checked.put(checkedQuerry,new TimeRange());
-            APIData.getInstance().saveLocally(countryIndex, indicator, cachedData);
-        }else if(isUpdated.contains(checkedQuerry)) {
-            if( Integer.parseInt(checked.get(checkedQuerry).getStartYear())>Integer.parseInt(startDate)){
-                checked.get(checkedQuerry).setStartYear(startDate);
-                APIData.getInstance().saveLocally(countryIndex,indicator,cachedData);}
-            if(Integer.parseInt(checked.get(checkedQuerry).getEndYear())<Integer.parseInt(endDate)){
-                checked.get(checkedQuerry).setEndYear(endDate);
-                APIData.getInstance().saveLocally(countryIndex,indicator,cachedData);
-                System.out.println("UPDATE LOCAL");
+        if( !cachedData.isEmpty()){
+            System.out.println("SAVING IN THE DB");
+            if (!isUpdated.contains(checkedQuerry)) {
+                isUpdated.add(checkedQuerry);
+                checked.put(checkedQuerry,new TimeRange());
+                APIData.getInstance().saveLocally(countryIndex, indicator, cachedData);
+            }else if(isUpdated.contains(checkedQuerry)) {
+                if( Integer.parseInt(checked.get(checkedQuerry).getStartYear())>Integer.parseInt(startDate)){
+                    checked.get(checkedQuerry).setStartYear(startDate);
+                    APIData.getInstance().saveLocally(countryIndex,indicator,cachedData);}
+                if(Integer.parseInt(checked.get(checkedQuerry).getEndYear())<Integer.parseInt(endDate)){
+                    checked.get(checkedQuerry).setEndYear(endDate);
+                    APIData.getInstance().saveLocally(countryIndex,indicator,cachedData);
+                    System.out.println("UPDATE LOCAL");
+                }
             }
         }
+
+
         }
 
 
@@ -198,15 +202,20 @@ public class Model {
         if (isCached(newQuerriedData,startDate,endDate)) {
             System.out.println("TRYING TO GET DATA FROM CACHE ");
             finalHashmap = CacheData.getInstance().getData(countryIndex, indicator, startDate, endDate);
-            if (!finalHashmap.isEmpty()) System.out.println("DATA RETRIEVED FROM CACHE");
+            if (!finalHashmap.isEmpty()) {
+                System.out.println("DATA RETRIEVED FROM CACHE");
+                emptyData = false;
+            }
             else System.out.println("DATA COULD NOT BE RETRIEVED FROM CACHE");
         } else {
             System.out.println("TRYING TO GET DATA FROM API");
             finalHashmap = APIData.getInstance().getData(countryIndex, indicator, startDate, endDate);
             if (!finalHashmap.isEmpty()) {
+                emptyData = false;
                 updateLocal(countryIndex, indicator, startDate, endDate, finalHashmap);
                 System.out.println("DATA RETRIEVED FROM THE API");
             } else {
+                emptyData = true;
                 System.out.println("COULD NOT CONNECT, TRYING TO GET FROM CACHE");
                 finalHashmap = CacheData.getInstance().getData(countryIndex, indicator, startDate, endDate);
                 if (!finalHashmap.isEmpty()) System.out.println("DATA RETRIEVED FROM CACHE AFTER RETRY");
