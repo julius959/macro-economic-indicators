@@ -59,6 +59,9 @@ public class APIData {
         TreeMap<Integer, BigDecimal> data = new TreeMap<Integer, BigDecimal>();
         String generatedLink = "countries/" + Model.getInstance().countries[countryIndex].getCode() + "/indicators/" + indicator + "?date=" + startDate + ":" + endDate + "&per_page=10000&format=json";
         StringBuilder result = APIData.getInstance().getResponse(generatedLink);
+        if(Integer.parseInt(startDate)<=Integer.parseInt(endDate)){
+
+
         try {
             JSONArray array = new JSONArray(result.toString());
             JSONArray array1 = array.getJSONArray(1);
@@ -76,6 +79,7 @@ public class APIData {
             }
         } catch (Exception e) {
             System.out.println("Can not build the result");
+        }
         }
         System.out.println(data);
         return data;
