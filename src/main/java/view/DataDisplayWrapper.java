@@ -172,9 +172,15 @@ public class DataDisplayWrapper extends Stage {
                 System.out.println("START YEAR "+Model.timeRanges.get(Model.currentIndicator).getStartYear());
                 System.out.println(startSpinner.getValue());
                 startThread();
-                if(startSpinner.getValue()>=endSpinner.getValue());
+
+//                if(endSpinner.getValue()-startSpinner.getValue()>14) endSpinner.setDisable(true);
+//                else endSpinner.setDisable(false);
+            //    startSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1960, endSpinner.getValue(), startSpinner.getValue(),1));
+
             }
         });
+
+
         endSpinner.valueProperty().addListener(new ChangeListener<Integer>() {
             @Override
             public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
@@ -182,6 +188,9 @@ public class DataDisplayWrapper extends Stage {
                  System.out.println("END YEAR "+Model.timeRanges.get(Model.currentIndicator).getEndYear());
                 System.out.println(endSpinner.getValue());
                 startThread();
+           //     endSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(startSpinner.getValue()+1, Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getStartYear()), endSpinner.getValue(),1));
+//                if(endSpinner.getValue()-startSpinner.getValue()>14) endSpinner.setDisable(true);
+//                else endSpinner.setDisable(false);
             }
         });
 
@@ -224,6 +233,7 @@ public class DataDisplayWrapper extends Stage {
 
         return toReturn;
     }
+
 
     public ArrayList<Integer> getInCountries() {
         return inCountries;
