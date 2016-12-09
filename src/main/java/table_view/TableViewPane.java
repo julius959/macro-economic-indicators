@@ -6,7 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -16,9 +15,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 public class TableViewPane extends StackPane {
@@ -42,7 +40,7 @@ public class TableViewPane extends StackPane {
 
         //Initialises table columns and adds them to the table
         TableColumn<TableModelData, String> tbcolDate = new TableColumn<>("Year");
-        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator)+" "+Model.getInstance().currentObjectIndicator.getUnit());
+        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator)+" "+Model.getInstance().currentObjectIndicator.getSubIndicatorCodeFromCode(Model.currentIndicator));
         tbcolDate.setStyle("-fx-alignment: CENTER;");
         tbcolValue.setStyle("-fx-alignment: CENTER;");
         table.getColumns().addAll(tbcolDate, tbcolValue);
@@ -87,13 +85,15 @@ public class TableViewPane extends StackPane {
     }
 
     private void passData(TreeMap<Integer, Number> dataIn) {
-
+        data.clear();
         //Extract the dates from the data
         ArrayList<Integer> alstKeys = new ArrayList<>(dataIn.keySet());
         //Collections.reverse(alstKeys);
 
+        DecimalFormat yValFormat = new DecimalFormat(".###");
+
         //Add each data entry to the table
         for (Integer sKey : alstKeys)
-            data.add(new TableModelData(sKey, dataIn.get(sKey)));
+            data.add(new TableModelData(sKey, Double.valueOf(yValFormat.format(dataIn.get(sKey)))));
     }
 }

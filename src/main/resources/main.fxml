@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.*?>
-<BorderPane id="main-pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane id="main-pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="880.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <Pane id="top-bar" minHeight="30.0" minWidth="200.0" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
     </top>
@@ -24,8 +24,8 @@
                    </panes>
                </Accordion>
            </Pane>
-           <ScrollPane id="pane-countries" hbarPolicy="NEVER" hmax="0.0" prefWidth="250.0">
-               <VBox id="countries-wrapper" minHeight="200.0" prefWidth="250.0" />
+           <ScrollPane id="pane-countries" hbarPolicy="NEVER" hmax="0.0" prefWidth="280.0">
+               <VBox id="countries-wrapper" minHeight="200.0" prefWidth="280.0" />
            </ScrollPane>
            <StackPane id="pane-proceed" prefHeight="250.0" prefWidth="250.0">
                <Button id="proceed-button" mnemonicParsing="false" text="Show it!" />
