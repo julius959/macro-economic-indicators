@@ -146,7 +146,7 @@ public class DataDisplayWrapper extends Stage {
 
         toReturn.setStyle(" -fx-pref-height: 40px; -fx-background-color: #F55028;");
 
-        Button chartButton = new Button("Bar charts");
+        Button chartButton = new Button("Bar Chart");
         chartButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         chartButton.setPadding(new Insets(10));
         //chartButton.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
@@ -155,7 +155,7 @@ public class DataDisplayWrapper extends Stage {
         tableButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         tableButton.setPadding(new Insets(10));
 
-        Button lineButton = new Button("Linechart");
+        Button lineButton = new Button("Line Chart");
         lineButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         lineButton.setPadding(new Insets(10));
         System.out.println(Model.timeRanges.get(Model.currentIndicator).getStartYear()+" "+Model.timeRanges.get(Model.currentIndicator).getEndYear());
@@ -173,10 +173,6 @@ public class DataDisplayWrapper extends Stage {
                 System.out.println(startSpinner.getValue());
                 startThread();
 
-//                if(endSpinner.getValue()-startSpinner.getValue()>14) endSpinner.setDisable(true);
-//                else endSpinner.setDisable(false);
-            //    startSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1960, endSpinner.getValue(), startSpinner.getValue(),1));
-
             }
         });
 
@@ -188,9 +184,6 @@ public class DataDisplayWrapper extends Stage {
                  System.out.println("END YEAR "+Model.timeRanges.get(Model.currentIndicator).getEndYear());
                 System.out.println(endSpinner.getValue());
                 startThread();
-           //     endSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(startSpinner.getValue()+1, Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getStartYear()), endSpinner.getValue(),1));
-//                if(endSpinner.getValue()-startSpinner.getValue()>14) endSpinner.setDisable(true);
-//                else endSpinner.setDisable(false);
             }
         });
 
@@ -202,7 +195,7 @@ public class DataDisplayWrapper extends Stage {
 
 
         if (Model.currentCountries.size() > 1) {
-            Button pieButton = new Button("Piechart");
+            Button pieButton = new Button("Pie Chart");
             pieButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
             pieButton.setPadding(new Insets(10));
             toReturn.getChildren().add(pieButton);
