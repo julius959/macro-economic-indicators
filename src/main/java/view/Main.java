@@ -41,7 +41,7 @@ public class Main extends Application {
     private Pane topBar;
     private Button proceedButton;
     private ScrollPane rssPane;
-    private HashMap<String, Stage> openedStages = new HashMap<>();
+    private HashMap<String, DataDisplayWrapper> openedStages = new HashMap<>();
 
 
     @Override
@@ -65,6 +65,8 @@ public class Main extends Application {
         //Prevents resizing stage to smaller than initial size
         primaryStage.setMinHeight(primaryStage.getHeight());
         primaryStage.setMinWidth(primaryStage.getWidth());
+
+
     }
 
     public static void main(String[] args) {
@@ -329,19 +331,20 @@ public class Main extends Application {
             String indicator = Model.currentIndicator;
             if (!openedStages.keySet().contains(Model.currentIndicator)) {
                 DataDisplayWrapper wrapper = new DataDisplayWrapper();
-                //wrapper.setData(Model.getInstance().gatherData());
-                //wrapper.setCenterPane();
                 wrapper.show();
                 wrapper.setOnCloseRequest(e1 -> {
                     openedStages.remove(indicator);
                     wrapper.clearData();
                 });
                 openedStages.put(indicator, wrapper);
+            } else if (!openedStages.get(indicator).getInCountries().equals(Model.currentCountries)) {
+                //openedStages.get(indicator).setInCountries(Model.currentCountries);
+                openedStages.get(indicator).startThread();
             }
-
 
         });
     }
+
 
     public void showLink(String url) {
         getHostServices().showDocument(url);
