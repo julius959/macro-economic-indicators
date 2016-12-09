@@ -4,18 +4,22 @@ import api_model.Model;
 import bar_chart.BarChartPane;
 import charts.LineCharts;
 import charts.PieCharts;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import table_view.TableViewPane;
 
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Map;
@@ -32,11 +36,13 @@ public class DataDisplayWrapper extends Stage {
     ArrayList<Integer> inCountries = new ArrayList<>();
     Thread displayingDataThread;
     BarChartPane bp;
+
     VBox vbCountryTables;
     ProgressBr bar;
 
     public DataDisplayWrapper() {
         super();
+
         inCountries = new ArrayList<>(Model.currentCountries);
 
         bar = new ProgressBr();
@@ -63,6 +69,7 @@ public class DataDisplayWrapper extends Stage {
         setMinHeight(500);
         setMinWidth(800);
     }
+
 
     public void startThread() {
         if (displayingDataThread != null) {
@@ -99,6 +106,8 @@ public class DataDisplayWrapper extends Stage {
             protected void succeeded() {
                 super.succeeded();
                 System.out.println(data.size());
+
+
                 bp.passData(getValue());
                 setCenterPane(bp);
                 bar.getDialogStage().close();
@@ -149,10 +158,39 @@ public class DataDisplayWrapper extends Stage {
         Button lineButton = new Button("Linechart");
         lineButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         lineButton.setPadding(new Insets(10));
+        System.out.println(Model.timeRanges.get(Model.currentIndicator).getStartYear()+" "+Model.timeRanges.get(Model.currentIndicator).getEndYear());
+        Spinner<Integer> startSpinner = new Spinner<>(1960, Model.getInstance().currentYear - 1 , Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getStartYear()),1);
+        Spinner<Integer> endSpinner = new Spinner(1960, Model.getInstance().currentYear - 1, Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getEndYear())-1,1);
+//        startSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1960,Model.getInstance().currentYear-1,Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getStartYear())));
+//        endSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1960,Model.getInstance().currentYear-1,Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getEndYear())));
+
+
+        startSpinner.valueProperty().addListener(new ChangeListener<Integer>() {
+            @Override
+            public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
+                Model.getInstance().timeRanges.get(Model.getInstance().currentIndicator).setStartYear(Integer.toString((int) startSpinner.getValue()));
+                System.out.println("START YEAR "+Model.timeRanges.get(Model.currentIndicator).getStartYear());
+                System.out.println(startSpinner.getValue());
+                startThread();
+                if(startSpinner.getValue()>=endSpinner.getValue());
+            }
+        });
+        endSpinner.valueProperty().addListener(new ChangeListener<Integer>() {
+            @Override
+            public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
+                Model.getInstance().timeRanges.get(Model.getInstance().currentIndicator).setEndYear(Integer.toString((int) endSpinner.getValue()));
+                 System.out.println("END YEAR "+Model.timeRanges.get(Model.currentIndicator).getEndYear());
+                System.out.println(endSpinner.getValue());
+                startThread();
+            }
+        });
+
 
         toReturn.getChildren().add(chartButton);
         toReturn.getChildren().add(lineButton);
         toReturn.getChildren().add(tableButton);
+
+
 
         if (Model.currentCountries.size() > 1) {
             Button pieButton = new Button("Piechart");
@@ -160,10 +198,15 @@ public class DataDisplayWrapper extends Stage {
             pieButton.setPadding(new Insets(10));
             toReturn.getChildren().add(pieButton);
             pieButton.setOnMouseClicked(e -> {
+
                 this.setCenterPane(new PieCharts(data));
             });
         }
 
+
+
+        toReturn.getChildren().add(startSpinner);
+        toReturn.getChildren().add(endSpinner);
 
         //Display tables in center of scene
         tableButton.setOnMouseClicked(e -> {
