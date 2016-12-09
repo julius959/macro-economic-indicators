@@ -67,8 +67,11 @@ public class PieCharts extends StackPane {
         this.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene == null) {
                 anim.stop();
-                if (tt != null) tt.stop();
-                System.out.println("Animation thread stopped!!!");
+                if (tt != null) {
+                    tt.stop();
+                    System.out.println("Animation thread stopped!!!");
+                }
+
             } else {
 
             }
