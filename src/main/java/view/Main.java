@@ -1,5 +1,6 @@
 package view;
 
+import api_exchange.*;
 import api_model.Country;
 import api_model.Indicator;
 import api_model.Model;
@@ -19,7 +20,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import news_feed.NewsFeedPane;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,6 +31,8 @@ public class Main extends Application {
     private StackPane proceedPane;
     private Pane graphIconPane;
     private Pane rssIconPane;
+    private Pane exchangeIconPane;
+    private ScrollPane exchangeRatesPane;
     private VBox countriesPlaceholder;
     private BorderPane mainPane;
     private HBox settingsPane;
@@ -46,6 +48,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Model.getInstance();
 
+        exchangeRatesPane = new ExchangeRatesPane(this);
         rssPane = new NewsFeedPane(this);
 
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
@@ -204,6 +207,7 @@ public class Main extends Application {
         proceedPane = (StackPane) scene.lookup("#pane-proceed");
         topBar = (Pane) scene.lookup("#top-bar");
         proceedButton = (Button) scene.lookup("#proceed-button");
+        exchangeIconPane = (Pane) scene.lookup("#icon-3-placeholder");
     }
 
     private void implementScreensSwitcher() {
@@ -228,15 +232,37 @@ public class Main extends Application {
         rssImage.setLayoutX(25);
         rssIconPane.getChildren().add(rssImage);
 
+        ImageView exchangeImage = new ImageView();
+        exchangeImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("exchange-rates.png")));
+        exchangeImage.setSmooth(true);
+        exchangeImage.setCache(true);
+        exchangeImage.setFitHeight(50);
+        exchangeImage.setFitWidth(50);
+        exchangeImage.setLayoutX(25);
+        exchangeIconPane.getChildren().add(exchangeImage);
+
+        exchangeIconPane.setOnMouseClicked( event -> {
+                if(mainPane.getCenter() != exchangeRatesPane){
+                    mainPane.getChildren().remove(mainPane.getCenter());
+                    exchangeIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
+                    graphIconPane.setStyle("");
+                    rssIconPane.setStyle("");
+                    mainPane.setCenter(exchangeRatesPane);
+                    topBar.getChildren().clear();
+                    topBar.getChildren().add(generateTitleText("Exchange rates"));
+                }
+        });
+
         rssIconPane.setOnMouseClicked(event -> {
             if (mainPane.getCenter() != rssPane) {
                 mainPane.getChildren().remove(mainPane.getCenter());
                 getAnimationFor(rssPane, true).playFromStart();
                 rssIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
                 graphIconPane.setStyle("");
+                exchangeIconPane.setStyle("");
                 mainPane.setCenter(rssPane);
                 topBar.getChildren().clear();
-                topBar.getChildren().add(generateTitleText("Rss feed"));
+                topBar.getChildren().add(generateTitleText("RSS News feed"));
             }
         });
 
@@ -246,6 +272,7 @@ public class Main extends Application {
                 mainPane.setCenter(settingsPane);
                 graphIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
                 rssIconPane.setStyle("");
+                exchangeIconPane.setStyle("");
                 getAnimationFor(settingsPane, true).playFromStart();
                 topBar.getChildren().clear();
                 topBar.getChildren().add(generateTitleText("Graph generator"));

@@ -9,16 +9,14 @@ import java.util.Iterator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.TreeMap;
+import java.util.HashMap;
 
-public class ExchangeRatesModel {
+public class ExchangeRatesModel{
 
-
-    private StringBuilder getExchangeRates(String date) {
+    private static  StringBuilder getExchangeRates(String date) {
 
         StringBuilder stringbuilder = new StringBuilder();
         String finalLink = "http://api.fixer.io/" + date + "?base=GBP";
-
         try {
             URL url = new URL(finalLink);
             URLConnection urlConnection = url.openConnection();
@@ -30,16 +28,17 @@ public class ExchangeRatesModel {
         return stringbuilder;
     }
 
-    public TreeMap<String, Double> getData() {
-        TreeMap<String, Double> exchangeRates = new TreeMap<>();
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    public static HashMap<String, String> getData() {
+        HashMap<String, String> exchangeRates = new HashMap<>();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
-        String currentDate = sdf.format(cal.getTime());
-        cal.add(Calendar.DATE, -100);
-        String yesterdaysDate = sdf.format(cal.getTime());
+        String currentDate = dateFormat.format(cal.getTime());
+        cal.add(Calendar.DATE, -2);
+        String yesterdaysDate = dateFormat.format(cal.getTime());
 
-        StringBuilder srToday = this.getExchangeRates(currentDate);
-        StringBuilder srYesterday = this.getExchangeRates(yesterdaysDate);
+        StringBuilder srToday = getExchangeRates(currentDate);
+        StringBuilder srYesterday = getExchangeRates(yesterdaysDate);
+
 
         try {
             JSONObject jsonObjectToday = new JSONObject(srToday.toString()).getJSONObject("rates");
@@ -47,21 +46,20 @@ public class ExchangeRatesModel {
             Iterator it = jsonObjectToday.keys();
             while (it.hasNext()) {
                 Object k = it.next();
-                Double rate =  Double.parseDouble(jsonObjectToday.getString(k.toString()));
+                Double rate =  jsonObjectToday.getDouble(k.toString());
                 if(jsonObjectYesterday.has(k.toString())){
-                    Double yesterdaysRate = Double.parseDouble(jsonObjectYesterday.getString(k.toString()));
-                    if(rate - yesterdaysRate < 0){
-                        exchangeRates.put(k.toString(), rate - (2*rate));
+                    Double yesterdaysRate = jsonObjectYesterday.getDouble(k.toString());
+                           if(rate - yesterdaysRate < 0){
+                        exchangeRates.put(k.toString(), String.valueOf(rate - (2*rate)));
                     }
                     else{
-                        exchangeRates.put(k.toString(), rate);
+                        exchangeRates.put(k.toString(), String.valueOf(rate));
                     }
                 }
             }
         } catch (Exception e) {
             System.out.println("Error");
         }
-        //System.out.println(exchangeRates);
         return exchangeRates;
     }
 }
