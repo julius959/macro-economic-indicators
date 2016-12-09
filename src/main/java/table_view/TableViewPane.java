@@ -15,6 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -89,8 +90,10 @@ public class TableViewPane extends StackPane {
         ArrayList<Integer> alstKeys = new ArrayList<>(dataIn.keySet());
         //Collections.reverse(alstKeys);
 
+        DecimalFormat yValFormat = new DecimalFormat(".###");
+
         //Add each data entry to the table
         for (Integer sKey : alstKeys)
-            data.add(new TableModelData(sKey, dataIn.get(sKey)));
+            data.add(new TableModelData(sKey, Double.valueOf(yValFormat.format(dataIn.get(sKey)))));
     }
 }
