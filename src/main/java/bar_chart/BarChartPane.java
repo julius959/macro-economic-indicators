@@ -68,6 +68,7 @@ public class BarChartPane extends StackPane {
 
             //Add the countries data to the chart
             barChart.getData().add(tempSeries);
+            barChart.setAnimated(false);
 
             for (final XYChart.Data<String, Number> node : tempSeries.getData()) {
                 Tooltip.install(node.getNode(),
