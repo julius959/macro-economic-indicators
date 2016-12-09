@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -40,7 +41,7 @@ public class LineCharts extends StackPane {
                     public void handle(MouseEvent event) {
                         String dateToDisplay = node.getXValue();
                         BigDecimal valueToDisplay = new BigDecimal(node.getYValue().doubleValue());
-                     //   valueToDisplay = valueToDisplay.setScale(3, RoundingMode.HALF_DOWN);
+                        valueToDisplay = valueToDisplay.setScale(3, RoundingMode.HALF_DOWN);
                         if (lineChart.getTitle().equals("GDP")) {
                             int nodeIndex = series.getData().indexOf(node);
 

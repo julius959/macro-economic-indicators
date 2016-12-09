@@ -59,6 +59,7 @@ public class BarChartPane extends StackPane {
 
             //Add the countries data to the chart
             barChart.getData().add(tempSeries);
+            barChart.setAnimated(false);
 
 
         }
