@@ -32,7 +32,7 @@ public class Main extends Application {
     private Pane graphIconPane;
     private Pane rssIconPane;
     private Pane exchangeIconPane;
-    private Pane exchangeRatesPane;
+    private ScrollPane exchangeRatesPane;
     private VBox countriesPlaceholder;
     private BorderPane mainPane;
     private HBox settingsPane;

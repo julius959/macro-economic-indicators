@@ -3,6 +3,7 @@ package api_exchange;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import view.Main;
 
-public class ExchangeRatesPane extends StackPane{
+public class ExchangeRatesPane extends ScrollPane {
 
     HashMap<String, String> data;
 
@@ -29,6 +30,13 @@ public class ExchangeRatesPane extends StackPane{
         for(String dataInMap : data.keySet()) {
             temp.add(new TableData(dataInMap, data.get(dataInMap)));
         }
+
+        final VBox vbox = new VBox();
+        vbox.getChildren().add(myTable);
+        setContent(vbox);
+
+        setFitToWidth(true);
+        setPrefViewportHeight(300);
 
         ObservableList<TableData> myTableData = FXCollections.observableArrayList();
         myTableData.addAll(temp);
@@ -84,9 +92,7 @@ public class ExchangeRatesPane extends StackPane{
                 };
             }
         });
-        final VBox vbox = new VBox();
-        vbox.getChildren().addAll(myTable);
-        getChildren().add(vbox);
+
     }
 
     public static class TableData {
