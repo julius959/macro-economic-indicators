@@ -26,14 +26,17 @@ public class Model {
     public static ArrayList<Indicator> indicators;
     public static String currentIndicator; //default indicator is GDP
     public static Indicator currentObjectIndicator;
-    private static int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    public static int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    public int startYear = currentYear - 11;
     public static ArrayList<Integer> currentCountries = new ArrayList<>();
     public static String currency = "$";
+
 
     public static HashMap<String,TimeRange> timeRanges = new HashMap<>();
 
 
     private ArrayList<String> isUpdated = new ArrayList<String>();
+   private  HashMap<String,TimeRange> checked = new HashMap<>();
     public static Model instance = null;
 
     private Model() {
@@ -132,17 +135,37 @@ public class Model {
     private void updateLocal(int countryIndex, String indicator, String startDate, String endDate, TreeMap<Integer, BigDecimal> cachedData) { //First querry will update the local data
         String checkedQuerry = Integer.toString(countryIndex) + "/" + indicator; //+ "/" + startDate + "/" + endDate;
 
+
         if (!isUpdated.contains(checkedQuerry)) {
             isUpdated.add(checkedQuerry);
+            checked.put(checkedQuerry,new TimeRange());
             APIData.getInstance().saveLocally(countryIndex, indicator, cachedData);
+        }else if(isUpdated.contains(checkedQuerry)) {
+            if( Integer.parseInt(checked.get(checkedQuerry).getStartYear())>Integer.parseInt(startDate)){
+                checked.get(checkedQuerry).setStartYear(startDate);
+                APIData.getInstance().saveLocally(countryIndex,indicator,cachedData);}
+            if(Integer.parseInt(checked.get(checkedQuerry).getEndYear())<Integer.parseInt(endDate)){
+                checked.get(checkedQuerry).setEndYear(endDate);
+                APIData.getInstance().saveLocally(countryIndex,indicator,cachedData);
+                System.out.println("UPDATE LOCAL");
+            }
         }
+        }
+
+
+    private boolean isCached(String querry,String startDate,String endDate){
+        if(isUpdated.contains(querry)){
+            if(Integer.parseInt(checked.get(querry).getStartYear())<=Integer.parseInt(startDate) && Integer.parseInt(checked.get(querry).getEndYear())>=Integer.parseInt(endDate) && Integer.parseInt(checked.get(querry).getStartYear())<=Integer.parseInt(endDate) &&
+                    Integer.parseInt(checked.get(querry).getEndYear())>=Integer.parseInt(startDate)) return true;
+        }
+        return false;
     }
 
     public TreeMap<Integer, BigDecimal> getData(int countryIndex, String indicator, String startDate, String endDate) {
         TreeMap<Integer, BigDecimal> finalHashmap = new TreeMap<>();
         String newQuerriedData = Integer.toString(countryIndex) + "/" + indicator;// + "/" + startDate + "/" + endDate;
         System.out.println(newQuerriedData);
-        if (isUpdated.contains(newQuerriedData)) {
+        if (isCached(newQuerriedData,startDate,endDate)) {
             System.out.println("TRYING TO GET DATA FROM CACHE ");
             finalHashmap = CacheData.getInstance().getData(countryIndex, indicator, startDate, endDate);
             if (!finalHashmap.isEmpty()) System.out.println("DATA RETRIEVED FROM CACHE");
