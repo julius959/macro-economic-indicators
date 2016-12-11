@@ -14,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.ImageViewBuilder;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -134,12 +133,10 @@ public class Main extends Application {
 
         HBox toReturn = new HBox();
 
-        ImageView imageView = new ImageView();
 
         Image image = country.loadFlag();
-        imageView = ImageViewBuilder.create()
-                .image(image)
-                .build();
+
+        ImageView imageView = new ImageView(image);
 
         imageView.setFitWidth(25);
         imageView.setFitHeight(15);

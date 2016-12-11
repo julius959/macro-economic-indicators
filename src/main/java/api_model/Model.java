@@ -1,7 +1,5 @@
 package api_model;
 
-import view.ProgressBr;
-
 
 import java.math.BigDecimal;
 import java.sql.Connection;
