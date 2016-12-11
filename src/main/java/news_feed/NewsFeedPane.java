@@ -1,21 +1,22 @@
 package news_feed;
 
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import view.Main;
-
-import javax.swing.event.ChangeListener;
 import java.util.ArrayList;
 
+/**
+ * Class that visually represents the NewsFeed instance.
+ * Contains a list of NewsArticlePane's - one for each News entry
+ */
 public class NewsFeedPane extends ScrollPane {
 
+    /**
+     * Constructor for a NewsFeedPane
+     * @param app The reference to the JavaFX application - needed for opening link in web browser
+     */
     public NewsFeedPane(Main app) {
         super();
 
@@ -27,32 +28,34 @@ public class NewsFeedPane extends ScrollPane {
         vbArticles.setAlignment(Pos.CENTER);
         vbArticles.setSpacing(10.0);
 
+        //Sets vbox container as content for the scroll pane
         setContent(vbArticles);
 
         //Retrieve news
         try {
             alstNews = NewsFeed.getNews();
         } catch (Exception e) {
+            //If there's issues connecting to the RSS feed
             vbArticles.getChildren().add(new Label("Failed to retrieve News. " +
                     "Please ensure you have an active Internet connection"));
         }
 
+        //Set styling via CSS
         setId("articles-wrapper");
-        setFitToWidth(true);
+        this.applyCss();
 
+        //Ensures news feed is resizable
+        setFitToWidth(true);
         setPrefViewportHeight(300);
 
-        //Creates web view only once - reduce memory usage
-        //Avoids creating a new one every time an article is opened
-
-        //Add each news article title to the scroll pane
+        //If any news articles exist
         if (alstNews.size() > 0) {
+            //Add each news article title to the scroll pane
             for (NewsArticle na : alstNews) {
                 vbArticles.getChildren().add(new NewsArticlePane(na, app));
             }
         }
 
-        this.applyCss();
     }
 
-    }
+}
