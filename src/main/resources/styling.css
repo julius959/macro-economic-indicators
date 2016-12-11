@@ -108,16 +108,12 @@
     -fx-padding: 10px;
 }
 
-/*#wrapper-top-bar {*/
-    /*-fx-pref-height: 40px;*/
-    /*-fx-background-color: #F55028;*/
-/*}*/
-
-/*#chart-button,*/
-/*#table-button {*/
-    /*-fx-text-fill: white;*/
-    /*-fx-background-color: transparent;*/
-/*}*/
+#proceed-info {
+    -fx-alignment: top-center;
+    -fx-text-fill: white;
+    -fx-color-label-visible: true;
+    -fx-padding: 60px 20px 20px 20px;
+}
 
 
 
