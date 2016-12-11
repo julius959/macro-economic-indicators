@@ -19,7 +19,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import news_feed.NewsFeedPane;
@@ -47,8 +46,8 @@ public class Main extends Application {
     private ScrollPane rssPane;
     private HashMap<String, DataDisplayWrapper> openedStages = new HashMap<>();
     private ArrayList<RadioButton> buttons = new ArrayList<>();
-    private Text currentIndicatorLabel = new Text();
-    private Text currentCountriesLabel = new Text();
+    private Label currentIndicatorLabel = new Label();
+    private Label currentCountriesLabel = new Label();
 
 
     @Override
@@ -90,13 +89,24 @@ public class Main extends Application {
         cb.setPadding(new Insets(5));
 
         cb.setOnMouseClicked(event -> {
-            if (Model.currentCountries.size() < 8) {
                 Integer index = Arrays.asList(Model.countries).indexOf(country);
                 if (cb.isSelected()) {
-                    // add to it
-                    if (!Model.currentCountries.contains(index)) {
-                        Model.currentCountries.add(index);
+
+                    if (Model.currentCountries.size() < 8) {
+                        if (!Model.currentCountries.contains(index)) {
+                            Model.currentCountries.add(index);
+                        }
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Too many countries");
+                        alert.setHeaderText("Sorry, but you can't chose more than 8 countries at the same time");
+                        alert.setContentText("We have implemented this limitation as to make sure data " +
+                                "visualisation is still keeps its informative purpose");
+
+                        alert.showAndWait();
+                        cb.setSelected(false);
                     }
+
 
                 } else {
                     // remove from it
@@ -120,18 +130,7 @@ public class Main extends Application {
                 }
 
                 updateLabel(currentCountriesLabel, currentCountriesToString());
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Too many countries");
-                alert.setHeaderText("Sorry, but you can't chose more than 8 countries at the same time");
-                alert.setContentText("We have implemented this limitation as to make sure data " +
-                        "visualisation is still keeps its informative purpose");
-
-                alert.showAndWait();
-                cb.setSelected(false);
-            }
-
-        });
+            });
 
         HBox toReturn = new HBox();
 
@@ -305,6 +304,10 @@ public class Main extends Application {
         settingsPane.setStyle("-fx-background-color: #3e4249");
         graphIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
         proceedButton.setAlignment(Pos.CENTER);
+        currentIndicatorLabel.setStyle("-fx-text-fill: #F55028; -fx-font-size: 18px");
+        currentCountriesLabel.setWrapText(true);
+        currentCountriesLabel.setStyle("-fx-text-fill: #F55028; -fx-font-size: 18px");
+        currentIndicatorLabel.setWrapText(true);
 
     }
 
@@ -378,12 +381,15 @@ public class Main extends Application {
 
     private void populateProceedInformation() {
 
-        Text ci = new Text("Current indicator: ");
-        Text cc = new Text("Current countries: ");
+        Label ci = new Label("Selected indicator: ");
+        ci.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
+        Label cc = new Label("Selected countries: ");
+        cc.setStyle("-fx-text-fill: white; -fx-font-size: 20px; ");
+        cc.setPadding(new Insets(20, 0, 0, 0));
         proceedInfo.getChildren().addAll(ci, currentIndicatorLabel, cc, currentCountriesLabel);
     }
 
-    private void updateLabel(Text target, String text) {
+    private void updateLabel(Label target, String text) {
         target.setText(text);
     }
 
