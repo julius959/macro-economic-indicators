@@ -16,7 +16,8 @@ public class NewsArticlePane extends BorderPane {
         //Creates labels containing title, description and publish date
         Label lblTitle = new Label(titleIn);
         lblTitle.setId("article-title");
-        lblTitle.setStyle("-fx-effect: dropshadow(gaussian, #000, 5, 0, 0,0);");
+        //lblTitle.setStyle("-fx-effect: dropshadow(gaussian, #000, 5, 0, 0,0);");
+        lblTitle.setStyle("-fx-text-fill: #F55028");
         lblTitle.setUnderline(true);
         Label lblDescription = new Label(descriptionIn);
         lblDescription.setId("article-description");
@@ -41,7 +42,7 @@ public class NewsArticlePane extends BorderPane {
         //Retrieves news articles image from url
         ImageView imageView = new ImageView(new Image(imgURLIn, 140, 140, true, true, true));
         imageView.setCache(true);
-        imageView.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
+        //imageView.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
         imageView.setId("article-image");
 
         setLeft(imageView);

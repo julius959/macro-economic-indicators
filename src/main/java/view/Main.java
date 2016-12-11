@@ -42,7 +42,7 @@ public class Main extends Application {
     private HBox settingsPane;
     private Accordion indicatorsPlaceholder;
     private VBox controlBar;
-    private Pane topBar;
+    private BorderPane topBar;
     private Button proceedButton;
     private ScrollPane rssPane;
     private HashMap<String, DataDisplayWrapper> openedStages = new HashMap<>();
@@ -58,7 +58,7 @@ public class Main extends Application {
         rssPane = new NewsFeedPane(this);
 
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Macro Economic Helper");
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         getReferences(scene);
@@ -68,6 +68,7 @@ public class Main extends Application {
         populateGraphsFilters();
         implementAdditionalPanes();
         populateProceedInformation();
+        implementCloseAll();
 
         //Prevents resizing stage to smaller than initial size
         primaryStage.setMinHeight(primaryStage.getHeight());
@@ -227,7 +228,7 @@ public class Main extends Application {
         paneCountries = (ScrollPane) scene.lookup("#pane-countries");
         countriesPlaceholder = (VBox) paneCountries.getContent().lookup("#countries-wrapper");
         proceedPane = (BorderPane) scene.lookup("#pane-proceed");
-        topBar = (Pane) scene.lookup("#top-bar");
+        topBar = (BorderPane) scene.lookup("#top-bar");
         proceedButton = (Button) scene.lookup("#proceed-button");
         proceedInfo = (VBox) scene.lookup("#proceed-info");
     }
@@ -261,8 +262,8 @@ public class Main extends Application {
                 rssIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
                 graphIconPane.setStyle("");
                 mainPane.setCenter(rssPane);
-                topBar.getChildren().clear();
-                topBar.getChildren().add(generateTitleText("Rss feed"));
+                //topBar.getChildren().clear();
+                topBar.setLeft(generateTitleText("Rss feed"));
             }
         });
 
@@ -273,8 +274,8 @@ public class Main extends Application {
                 graphIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
                 rssIconPane.setStyle("");
                 getAnimationFor(settingsPane, true).playFromStart();
-                topBar.getChildren().clear();
-                topBar.getChildren().add(generateTitleText("Graph generator"));
+                //topBar.getChildren().clear();
+                topBar.setLeft(generateTitleText("Graph generator"));
             }
 
 
@@ -297,9 +298,10 @@ public class Main extends Application {
         scene.getStylesheets().add(this.getClass().getClassLoader()
                 .getResource("styling.css").toExternalForm());
 
-        topBar.getChildren().add(generateTitleText("Graph generator"));
+        topBar.setLeft(generateTitleText("Graph generator"));
         controlBar.setStyle("-fx-background-color: #2c3138");
         topBar.setStyle("-fx-background-color: #F55028");
+        topBar.setPadding(new Insets(10));
         settingsPane.setStyle("-fx-background-color: #3e4249");
         graphIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
         proceedButton.setAlignment(Pos.CENTER);
@@ -309,6 +311,7 @@ public class Main extends Application {
     private static Label generateTitleText(String text) {
         Label textElement = new Label(text);
         textElement.setPadding(new Insets(0));
+        textElement.setAlignment(Pos.CENTER_LEFT);
         return textElement;
     }
 
@@ -394,4 +397,29 @@ public class Main extends Application {
         }
         return toReturn;
     }
+
+    private void implementCloseAll() {
+        Button button = new Button("Close all windows");
+        button.setStyle("-fx-background-color: transparent; " +
+                "-fx-text-fill: white;");
+        button.setOnMouseClicked(e -> {
+            if (openedStages.size() > 0) {
+                openedStages.entrySet().forEach(entry -> {
+                    entry.getValue().close();
+                });
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("No opened window");
+                alert.setHeaderText("Sorry, but there are no opened windows");
+                alert.setContentText("To generate a new window please make sure you chose both" +
+                        " the Indicator and countries wanted and finally press the Show it button");
+
+                alert.showAndWait();
+            }
+        });
+
+        topBar.setRight(button);
+    }
 }
+
+
