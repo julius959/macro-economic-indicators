@@ -40,7 +40,7 @@ public class TableViewPane extends StackPane {
 
         //Initialises table columns and adds them to the table
         TableColumn<TableModelData, String> tbcolDate = new TableColumn<>("Year");
-        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator)+" "+Model.getInstance().currentObjectIndicator.getSubIndicatorCodeFromCode(Model.currentIndicator));
+        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator)+" "+Model.getInstance().currentObjectIndicator.getSubIndicatorUnitFromCode(Model.currentIndicator));
         tbcolDate.setStyle("-fx-alignment: CENTER;");
         tbcolValue.setStyle("-fx-alignment: CENTER;");
         table.getColumns().addAll(tbcolDate, tbcolValue);
