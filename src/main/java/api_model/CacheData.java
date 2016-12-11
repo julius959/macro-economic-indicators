@@ -1,56 +1,58 @@
 package api_model;
 
-import jdk.nashorn.internal.parser.JSONParser;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.DoubleSummaryStatistics;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 /**
- * Created by Vlad-minihp on 24/11/2016.
+ * @author Vlad Niculescu
+ * Created by Vlad Niculescu on 24/11/2016.
  */
 public class CacheData {
+    /**
+     * The static instance of the current class that has to be created only once.
+     */
     public static CacheData instance = null;
-
-    private CacheData() {
-    }
-
+    /**
+     * Private constructor so it can not be instantiated from outside.
+     */
+    private CacheData() {}
+    /**
+     * Method that creates an instance of the current class if there isn't one existing yet. Otherwise return the current instance of the class.
+     * @return Returns the current instance of this class
+     */
     public static CacheData getInstance() {
         if (instance == null)
             instance = new CacheData();
         return instance;
     }
+    /**
+     * Method that retrieves the data from the local stored SQL Database.
+     * @param countryIndex Index of the country in the array stored in the Model class
+     * @param indicator Indicator string used to select the table from which the data needs to be retrieved
+     * @param startDate Start date string used to query the data from the database
+     * @param endDate End date string used to query the data from the database
+     * @return Returns a TreeMap that has an year Integer as a key and the corresponding value.
+     */
 
     public TreeMap<Integer, BigDecimal> getData(int countryIndex, String indicator, String startDate, String endDate) {
-        long startTime = System.currentTimeMillis();
         TreeMap<Integer, BigDecimal> cachedResult = new TreeMap<>();
-        System.out.println("CALLED GET CACHED DATA");
         Connection c = null;
         Statement stmt = null;
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:cachedDB.db");
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
-            System.out.println("GETTING FROM CACHE FOR " + Model.getInstance().countries[countryIndex].getName());
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT year,value FROM " + Model.getInstance().eraseDots(indicator) + " WHERE year>= " + startDate + " AND year<=" + endDate + " AND country=" + countryIndex + " AND indicator='" + indicator + "';");
             while (rs.next()) {
-                System.out.println("GETTING THE DATA FROM THE DB");
                 int year = rs.getInt("year");
                 BigDecimal value = rs.getBigDecimal("value");
                 cachedResult.put(year, value);
-                System.out.println("Year = " + year);
-                System.out.println("Value = " + value);
-                System.out.println();
             }
             rs.close();
             stmt.close();
@@ -59,10 +61,6 @@ public class CacheData {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
-        long endTime = System.currentTimeMillis();
-        long totalTime = endTime - startTime;
-        System.out.println("Getting data from cache in  " + totalTime);
         return cachedResult;
     }
 
