@@ -48,7 +48,7 @@ public class NewsFeedPane extends ScrollPane {
         //Add each news article title to the scroll pane
         if (alstNews.size() > 0) {
             for (NewsArticle na : alstNews) {
-                vbArticles.getChildren().add(new NewsArticlePane(na.getTitle(), na.getLink(), na.getDescription(), na.getPublishDate(), na.getImgURL(), app));
+                vbArticles.getChildren().add(new NewsArticlePane(na, app));
             }
         }
 
