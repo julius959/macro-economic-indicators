@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -33,13 +34,18 @@ public class DataDisplayWrapper extends Stage {
     Thread displayingDataThread;
     BarChartPane bp;
     VBox vbCountryTables;
-    ProgressBr bar;
+    //ProgressBr bar;
+    ProgressIndicator pi;
 
     public DataDisplayWrapper() {
         super();
         inCountries = new ArrayList<>(Model.currentCountries);
 
-        bar = new ProgressBr();
+        //bar = new ProgressBr();
+        pi = new ProgressIndicator(-1);
+        pi.setMaxWidth(100);
+        pi.setMaxHeight(100);
+        //pi.setPadding(new Insets(100));
 
 
         this.setTitle(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
@@ -70,8 +76,10 @@ public class DataDisplayWrapper extends Stage {
         }
         inCountries = new ArrayList<>(Model.currentCountries);
         Task task = newTask();
-        bar.activateProgressBar(task);
-        bar.getDialogStage().show();
+        //bar.activateProgressBar(task);
+        pi.progressProperty().bind(task.progressProperty());
+        //bar.getDialogStage().show();
+        this.setCenterPane(pi);
 
         displayingDataThread = new Thread(task);
         displayingDataThread.start();
@@ -100,8 +108,9 @@ public class DataDisplayWrapper extends Stage {
                 super.succeeded();
                 System.out.println(data.size());
                 bp.passData(getValue());
+                //pi.setProgress(1);
                 setCenterPane(bp);
-                bar.getDialogStage().close();
+                //bar.getDialogStage().close();
                 //Create and add a table for each country in the data
                 for (int i = 0; i < data.size(); ++i) {
                     vbCountryTables.getChildren().add(new TableViewPane(data.get(i),
