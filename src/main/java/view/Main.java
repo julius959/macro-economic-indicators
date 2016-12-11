@@ -314,7 +314,6 @@ public class Main extends Application {
                 });
                 openedStages.put(indicator, wrapper);
             } else if (!openedStages.get(indicator).getInCountries().equals(Model.currentCountries)) {
-                //openedStages.get(indicator).setInCountries(Model.currentCountries);
                 openedStages.get(indicator).startThread();
                 openedStages.get(indicator).toFront();
             }
