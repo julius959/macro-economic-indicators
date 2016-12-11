@@ -7,52 +7,54 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import view.Main;
 
+/**
+ * Class that represents the visual representation - as a Pane - for a NewsArticle instance
+ */
 public class NewsArticlePane extends BorderPane {
 
-    public NewsArticlePane(String titleIn, String linkIn, String descriptionIn, String publishDateIn, String imgURLIn, Main app) {
+    public NewsArticlePane(NewsArticle article, Main app) {
         super();
         this.setId("article-wrapper");
 
-        //Creates labels containing title, description and publish date
-        Label lblTitle = new Label(titleIn);
+        //Creates and styles label containing title
+        Label lblTitle = new Label(article.getTitle());
         lblTitle.setId("article-title");
         lblTitle.setStyle("-fx-effect: dropshadow(gaussian, #000, 5, 0, 0,0);");
         lblTitle.setUnderline(true);
-        Label lblDescription = new Label(descriptionIn);
+
+        //Creates and styles label containing description
+        Label lblDescription = new Label(article.getDescription());
         lblDescription.setId("article-description");
         lblDescription.setWrapText(true);
-        Label lblDate = new Label(publishDateIn);
+
+        //Creates and styles label containing date
+        Label lblDate = new Label(article.getPublishDate());
         lblDate.setId("article-date");
 
-        //Centre title and date labels
-//        HBox hbTitle = new HBox(lblTitle);
-//        hbTitle.setAlignment(Pos.CENTER_LEFT);
-//        HBox hbDate = new HBox(lblDate);
-//        hbDate.setAlignment(Pos.CENTER_LEFT);
+        //Adds title, description and date labels to container
+        VBox vbArticle = new VBox();
+        vbArticle.setId("article-info");
+        vbArticle.getChildren().addAll(lblTitle, lblDescription, lblDate);
+        //Add container of labels to centre of pane
+        setCenter(vbArticle);
 
-        //Add labels to container
-        //setTop(hbTitle);
-        VBox article = new VBox();
-        article.setId("article-info");
-        article.getChildren().addAll(lblTitle, lblDescription, lblDate);
-        setCenter(article);
-        //setBottom(hbDate);
-
-        //Retrieves news articles image from url
-        ImageView imageView = new ImageView(new Image(imgURLIn, 140, 140, true, true, true));
+        //Retrieves news articles image from url, resizes image to reduce memory usage
+        //Stores retrieved image in an image view
+        ImageView imageView = new ImageView(new Image(article.getImgURL(), 140, 140, true, true, true));
         imageView.setCache(true);
         imageView.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
         imageView.setId("article-image");
-
+        //Adds image to the left slot in border pane
         setLeft(imageView);
 
+        //Apply CSS styling to pane
         this.applyCss();
 
         //Action Listener for clicking on an article
-        //Opens up article in web view
+        //Opens up article in the user's default browser
         setOnMouseClicked(event -> {
-            //Creates web view for article
-            app.showLink(linkIn);
+            //Displays article in default browser
+            app.showLink(article.getLink());
         });
     }
 }
