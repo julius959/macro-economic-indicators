@@ -11,6 +11,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+/**
+ * Represents a Pane containing a BarChart populated by given data of a query
+ */
 public class BarChartPane extends StackPane {
     //Bar Chart object of the Pane
     private BarChart<String, Number> barChart;
