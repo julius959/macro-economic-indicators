@@ -26,9 +26,14 @@
            <ScrollPane id="pane-countries" hbarPolicy="NEVER" hmax="0.0" prefWidth="250.0">
                <VBox id="countries-wrapper" minHeight="200.0" prefWidth="250.0" />
            </ScrollPane>
-           <StackPane id="pane-proceed" prefHeight="250.0" prefWidth="250.0">
-               <Button id="proceed-button" mnemonicParsing="false" text="Show it!" />
-           </StackPane>
+           <BorderPane id="pane-proceed" prefHeight="250.0" prefWidth="250.0">
+               <top>
+                   <VBox id="proceed-info" prefWidth="250.0"/>
+               </top>
+               <center>
+                   <Button id="proceed-button" mnemonicParsing="false" text="Show it!" />
+               </center>
+           </BorderPane>
        </HBox>
    </center>
 </BorderPane>
