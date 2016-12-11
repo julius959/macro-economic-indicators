@@ -240,7 +240,6 @@ public class Model {
     public TreeMap<Integer, BigDecimal> getData(int countryIndex, String indicator, String startDate, String endDate) {
         TreeMap<Integer, BigDecimal> finalHashmap = new TreeMap<>();
         String newQuerriedData = Integer.toString(countryIndex) + "/" + indicator;// + "/" + startDate + "/" + endDate;
-        System.out.println(newQuerriedData);
         if (isCached(newQuerriedData,startDate,endDate)) {
             finalHashmap = CacheData.getInstance().getData(countryIndex, indicator, startDate, endDate);
             if (!finalHashmap.isEmpty()) emptyData = false;
@@ -269,7 +268,6 @@ public class Model {
         TreeMap<Integer, BigDecimal>[] res = new TreeMap[currentCountries.size()];
         for (int i = 0; i < currentCountries.size(); ++i) {
             final int finalI = i;
-            System.out.println(countries[i].getName());
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
