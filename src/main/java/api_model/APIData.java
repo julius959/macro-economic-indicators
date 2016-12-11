@@ -50,7 +50,6 @@ public class APIData {
         String finalLink = apiBody + apiLink;
         try {
             URL url = new URL(finalLink);
-            System.out.println(finalLink);
             URLConnection urlConnection = url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String inputLine;
@@ -82,13 +81,10 @@ public class APIData {
             JSONArray array1 = array.getJSONArray(1);
             for (int i = 0; i < array1.length(); ++i) {
                 JSONObject currentObject = array1.getJSONObject(i);
-                System.out.println(array1);
                 try {
                     BigDecimal value = currentObject.getBigDecimal("value");
                     data.put(Integer.parseInt(currentObject.getString("date")), approximateValues(value,indicator)); // CONVERT INTO POUNDS
-                } catch (Exception e) {
-                    System.out.printf(currentObject.getString("date") + " has no values");
-                }
+                } catch (Exception e) {}
             }
         } catch (Exception e) {
             System.out.println("Can not build the result, error: "+e);
