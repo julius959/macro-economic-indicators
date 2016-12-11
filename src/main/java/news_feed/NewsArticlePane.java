@@ -12,8 +12,15 @@ import view.Main;
  */
 public class NewsArticlePane extends BorderPane {
 
+    /**
+     * Constructor for a NewsArticlePane
+     * @param article The NewsArticle instance that this pane is representing
+     * @param app The reference to the JavaFX application - needed for opening link in web browser
+     */
     public NewsArticlePane(NewsArticle article, Main app) {
+        //Call parent constructor of BorderPane
         super();
+
         this.setId("article-wrapper");
 
         //Creates and styles label containing title
