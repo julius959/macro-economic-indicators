@@ -15,7 +15,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.ImageViewBuilder;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import news_feed.NewsFeedPane;
@@ -29,10 +33,11 @@ import java.util.stream.Collectors;
 public class Main extends Application {
 
     private ScrollPane paneCountries;
-    private StackPane proceedPane;
+    private BorderPane proceedPane;
     private Pane graphIconPane;
     private Pane rssIconPane;
     private VBox countriesPlaceholder;
+    private VBox proceedInfo;
     private BorderPane mainPane;
     private HBox settingsPane;
     private Accordion indicatorsPlaceholder;
@@ -42,6 +47,8 @@ public class Main extends Application {
     private ScrollPane rssPane;
     private HashMap<String, DataDisplayWrapper> openedStages = new HashMap<>();
     private ArrayList<RadioButton> buttons = new ArrayList<>();
+    private Text currentIndicatorLabel = new Text();
+    private Text currentCountriesLabel = new Text();
 
 
     @Override
@@ -60,6 +67,7 @@ public class Main extends Application {
         implementScreensSwitcher();
         populateGraphsFilters();
         implementAdditionalPanes();
+        populateProceedInformation();
 
         //Prevents resizing stage to smaller than initial size
         primaryStage.setMinHeight(primaryStage.getHeight());
@@ -81,33 +89,47 @@ public class Main extends Application {
         cb.setPadding(new Insets(5));
 
         cb.setOnMouseClicked(event -> {
-            Integer index = Arrays.asList(Model.countries).indexOf(country);
-            if (cb.isSelected()) {
-                // add to it
-                if (!Model.currentCountries.contains(index)) {
-                    Model.currentCountries.add(index);
+            if (Model.currentCountries.size() < 8) {
+                Integer index = Arrays.asList(Model.countries).indexOf(country);
+                if (cb.isSelected()) {
+                    // add to it
+                    if (!Model.currentCountries.contains(index)) {
+                        Model.currentCountries.add(index);
+                    }
+
+                } else {
+                    // remove from it
+                    if (Model.currentCountries.contains(index)) {
+                        Model.currentCountries.remove(index);
+                    }
+
                 }
 
+                if (howManyChecked(countriesPlaceholder) > 0) {
+                    if (!proceedPane.isVisible()) {
+                        proceedPane.setVisible(true);
+                        getAnimationFor(proceedPane, true).playFromStart();
+                    }
+
+                } else {
+                    // getAnimationFor(proceedPane, false).play();
+                    // ^ not working yet :(
+                    proceedPane.setVisible(false);
+
+                }
+
+                updateLabel(currentCountriesLabel, currentCountriesToString());
             } else {
-                // remove from it
-                if (Model.currentCountries.contains(index)) {
-                    Model.currentCountries.remove(index);
-                }
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Too many countries");
+                alert.setHeaderText("Sorry, but you can't chose more than 8 countries at the same time");
+                alert.setContentText("We have implemented this limitation as to make sure data " +
+                        "visualisation is still keeps its informative purpose");
 
+                alert.showAndWait();
+                cb.setSelected(false);
             }
 
-            if (howManyChecked(countriesPlaceholder) > 0) {
-                if (!proceedPane.isVisible()) {
-                    proceedPane.setVisible(true);
-                    getAnimationFor(proceedPane, true).playFromStart();
-                }
-
-            } else {
-                // getAnimationFor(proceedPane, false).play();
-                // ^ not working yet :(
-                proceedPane.setVisible(false);
-
-            }
         });
 
         HBox toReturn = new HBox();
@@ -156,6 +178,7 @@ public class Main extends Application {
                     getAnimationFor(paneCountries, true).playFromStart();
 
                 }
+                updateLabel(currentIndicatorLabel, getIndicatorLabelFromCode(Model.currentIndicator));
             });
             optionButton.setToggleGroup(toggleGroup);
             vBox.getChildren().add(optionButton);
@@ -203,9 +226,10 @@ public class Main extends Application {
         indicatorsPlaceholder = (Accordion) scene.lookup("#indicators-wrapper");
         paneCountries = (ScrollPane) scene.lookup("#pane-countries");
         countriesPlaceholder = (VBox) paneCountries.getContent().lookup("#countries-wrapper");
-        proceedPane = (StackPane) scene.lookup("#pane-proceed");
+        proceedPane = (BorderPane) scene.lookup("#pane-proceed");
         topBar = (Pane) scene.lookup("#top-bar");
         proceedButton = (Button) scene.lookup("#proceed-button");
+        proceedInfo = (VBox) scene.lookup("#proceed-info");
     }
 
     private void implementScreensSwitcher() {
@@ -345,11 +369,29 @@ public class Main extends Application {
         return toReturn;
     }
 
-
-
     public void showLink(String url) {
         getHostServices().showDocument(url);
     }
 
+    private void populateProceedInformation() {
 
+        Text ci = new Text("Current indicator: ");
+        Text cc = new Text("Current countries: ");
+        proceedInfo.getChildren().addAll(ci, currentIndicatorLabel, cc, currentCountriesLabel);
+    }
+
+    private void updateLabel(Text target, String text) {
+        target.setText(text);
+    }
+
+    private String currentCountriesToString() {
+        String toReturn = "";
+        for(Integer i : Model.currentCountries) {
+            toReturn = toReturn + Model.countries[i].getName() + ", ";
+        }
+        if (toReturn.length() > 2) {
+            return toReturn.substring(0, toReturn.length() - 2);
+        }
+        return toReturn;
+    }
 }

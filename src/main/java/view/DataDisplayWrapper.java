@@ -34,18 +34,15 @@ public class DataDisplayWrapper extends Stage {
     Thread displayingDataThread;
     BarChartPane bp;
     VBox vbCountryTables;
-    //ProgressBr bar;
     ProgressIndicator pi;
 
     public DataDisplayWrapper() {
         super();
         inCountries = new ArrayList<>(Model.currentCountries);
 
-        //bar = new ProgressBr();
         pi = new ProgressIndicator(-1);
         pi.setMaxWidth(100);
         pi.setMaxHeight(100);
-        //pi.setPadding(new Insets(100));
 
 
         this.setTitle(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
