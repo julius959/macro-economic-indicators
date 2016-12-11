@@ -2,16 +2,13 @@ package news_feed;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.feed.synd.SyndLink;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 import org.jdom.Element;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /*--
@@ -69,10 +66,16 @@ import java.util.List;
  on the JDOM Project, please see <http://www.jdom.org/>.
 
  */
+
+
+/**
+ * Class that represents the NewsFeed model representing a feed of XML data retrieved via RSS from the BBC
+ */
 public class NewsFeed {
-    //News feed
+    //News feed from XML
     private static SyndFeed sfFeed;
 
+    //Establishes connection to the RSS news feed
     private static void establishConnection() throws IOException, FeedException {
         //URL of BBC Economy RSS feed
         URL feedUrl = new URL("http://feeds.bbci.co.uk/news/business/economy/rss.xml");
@@ -82,6 +85,12 @@ public class NewsFeed {
         sfFeed = sfiInput.build(new XmlReader(feedUrl));
     }
 
+    /**
+     * Retrieve the latest economy-related news from the BBC
+     * @return ArrayList of NewsArticle objects
+     * @throws IOException Thrown if url is not found
+     * @throws FeedException Thrown if there are issues parsing the XML
+     */
     public static ArrayList<NewsArticle> getNews() throws IOException, FeedException {
         //Establish connection to feed
         establishConnection();
@@ -107,9 +116,7 @@ public class NewsFeed {
 
             alstArticles.add(new NewsArticle(seArticle.getTitle(), seArticle.getLink(), seArticle.getDescription().getValue(), seArticle.getPublishedDate(), imgURL));
         }
-
-
-
+        //Returns the list of news articles
         return alstArticles;
     }
 }
