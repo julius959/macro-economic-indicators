@@ -9,7 +9,7 @@
 }
 
 .titled-pane > .title > .arrow-button > .arrow{
-   -fx-background-color: white;
+   -fx-background-color: #F55028;
 }
 
 .titled-pane > .title {
@@ -33,7 +33,9 @@
 
 .radio-button .dot {
     -fx-padding: 3px;
+    -fx-mark-color: #F55028;
 }
+
 
 .radio-button::focused .dot {
     -fx-background-color: #2c3138;
@@ -43,10 +45,16 @@
     -fx-text-fill: white;
 }
 
+.check-box {
+    -fx-mark-color: #F55028;
+}
+
 .root {
     -fx-font-family: "Roboto";
     -fx-font-size: 16px;
     -fx-background-color: #3e4249;
+    -fx-focus-color: #F55028;
+    -fx-accent: #F55028;
 }
 
 #countries-wrapper {
@@ -112,9 +120,6 @@
     -fx-alignment: top-center;
     -fx-text-fill: white;
     -fx-color-label-visible: true;
-    -fx-padding: 60px 20px 20px 20px;
+    -fx-padding: 80px 20px 20px 20px;
 }
-
-
-
 
