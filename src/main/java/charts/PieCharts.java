@@ -10,6 +10,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import view.DataDisplayWrapper;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -28,15 +29,15 @@ public class PieCharts extends StackPane {
     private ObservableList<PieChart.Data> pieChartData; // ObservableList holding the data of the PieChart
     private double totalValues; // value holding the total value-amount in the PieChart, needed to calculate percentage for a pie in the tooltip that is displayed when hovering over a pie
     private TranslateTransition tt; // TranslateTransition used for animation when PieChart is first displayed
-
-    public PieCharts(ArrayList<TreeMap<Integer, Number>> data) {
+    private DataDisplayWrapper currentWrapper;
+    public PieCharts(ArrayList<TreeMap<Integer, Number>> data, DataDisplayWrapper currentWrapper) {
 
         super();
         totalValues = 0;
         pieChart = new PieChart();
-        String pieChartTitle = "Average " + Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
+        String pieChartTitle = "Average " + currentWrapper.getcurrentIndicatorObject().getLabelFromCode(currentWrapper.getcurrentIndicatorCode());
         pieChart.setTitle(pieChartTitle);
-
+        this.currentWrapper = currentWrapper;
         this.addData(data); // calling method that adds all the data to the PieChart
         this.getChildren().add(pieChart); // adding PieChart to pane
         for (final PieChart.Data dataInPie : pieChart.getData()) {
@@ -112,7 +113,7 @@ public class PieCharts extends StackPane {
             }
             double valueToInsert = average / data.get(i).size(); // calculating average by taking the summed value divided by the amount of values
             totalValues += valueToInsert;
-            pieChartData.add(new PieChart.Data(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName(), valueToInsert)); // adding data to PieChartData that is then added to the PieChart
+            pieChartData.add(new PieChart.Data(Model.getInstance().countries[currentWrapper.getInCountries().get(i)].getName(), valueToInsert)); // adding data to PieChartData that is then added to the PieChart
         }
         pieChart.getData().addAll(pieChartData); 
     }

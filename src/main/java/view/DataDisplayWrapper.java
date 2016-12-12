@@ -1,5 +1,6 @@
 package view;
 
+import api_model.Indicator;
 import api_model.Model;
 import bar_chart.BarChartPane;
 import charts.LineCharts;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-class DataDisplayWrapper extends Stage {
+public class DataDisplayWrapper extends Stage {
 
     /**
      * Used to hold the data for all necessary countries
@@ -67,7 +68,8 @@ class DataDisplayWrapper extends Stage {
         Model.getInstance();
         //init inCountries
         inCountries = new ArrayList<>(Model.currentCountries);
-
+        this.indicatorObject = Model.getInstance().currentObjectIndicator;
+        this.indicatorCode = Model.getInstance().currentIndicator;
         //init loading spinner
         pi = new ProgressIndicator(-1);
         pi.setStyle("-fx-progress-color: #F55028");
@@ -90,7 +92,7 @@ class DataDisplayWrapper extends Stage {
         spCountryTables.setPadding(new Insets(0));
 
         //init the main pane (bar chart pane)
-        bp = new BarChartPane(data);
+        bp = new BarChartPane(data,this);
         this.setCenterPane(bp);
         //starts the thread
         startThread();
@@ -102,7 +104,8 @@ class DataDisplayWrapper extends Stage {
         setMinHeight(500);
         setMinWidth(800);
     }
-
+    private Indicator indicatorObject;
+    private String indicatorCode;
     /**
      * Method used to start/restart the loading thread with the current values in the Model.
      */
@@ -112,6 +115,7 @@ class DataDisplayWrapper extends Stage {
             displayingDataThread.stop();
         }
         inCountries = new ArrayList<>(Model.currentCountries);
+
         Task task = newTask();
         pi.progressProperty().bind(task.progressProperty());
         this.setCenterPane(pi);
@@ -147,7 +151,7 @@ class DataDisplayWrapper extends Stage {
                 vbCountryTables.getChildren().clear();
                 for (int i = 0; i < data.size(); ++i) {
                     vbCountryTables.getChildren().add(new TableViewPane(data.get(i),
-                            Model.countries[Model.currentCountries.get(i)].getName()));
+                            Model.countries[Model.currentCountries.get(i)].getName(),DataDisplayWrapper.this));
                 }
             }
         };
@@ -231,7 +235,7 @@ class DataDisplayWrapper extends Stage {
             pieButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
             pieButton.setPadding(new Insets(10));
             toReturn.getChildren().add(pieButton);
-            pieButton.setOnMouseClicked(e -> this.setCenterPane(new PieCharts(data)));
+            pieButton.setOnMouseClicked(e -> this.setCenterPane(new PieCharts(data,this)));
         }
 
 
@@ -241,9 +245,9 @@ class DataDisplayWrapper extends Stage {
         //Display tables in center of scene
         tableButton.setOnMouseClicked(e -> this.setCenterPane(spCountryTables));
 
-        lineButton.setOnMouseClicked(e -> this.setCenterPane(new LineCharts(data)));
+        lineButton.setOnMouseClicked(e -> this.setCenterPane(new LineCharts(data,this)));
 
-        chartButton.setOnMouseClicked(e -> this.setCenterPane(new BarChartPane(data)));
+        chartButton.setOnMouseClicked(e -> this.setCenterPane(new BarChartPane(data,this)));
 
         return toReturn;
     }
@@ -252,8 +256,9 @@ class DataDisplayWrapper extends Stage {
      * Method used to get the number of countries currently in the wrapper.
      * @return no of countries in the wrapper
      */
-    ArrayList<Integer> getInCountries() {
+    public ArrayList<Integer> getInCountries() {
         return inCountries;
     }
-
+    public Indicator getcurrentIndicatorObject(){return indicatorObject;}
+    public String getcurrentIndicatorCode(){return indicatorCode;}
 }

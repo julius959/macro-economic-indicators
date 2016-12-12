@@ -7,6 +7,8 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
+import view.DataDisplayWrapper;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -22,7 +24,8 @@ public class BarChartPane extends StackPane {
      * Constructor for a BarChartPane
      * @param data ArrayList containing a TreeMap for every country that has data to be displayed
      */
-    public BarChartPane(ArrayList<TreeMap<Integer, Number>> data) {
+    private DataDisplayWrapper currentWrapper;
+    public BarChartPane(ArrayList<TreeMap<Integer, Number>> data, DataDisplayWrapper currentWrapper) {
         super();
 
         //Creates x and y axis
@@ -31,12 +34,12 @@ public class BarChartPane extends StackPane {
 
         //Initialises empty bar chart
         barChart = new BarChart<>(dateAxis, valueAxis);
-
+        this.currentWrapper = currentWrapper;
         //Adds title and axis labels
-        String chartTitle = Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
+        String chartTitle = currentWrapper.getcurrentIndicatorObject().getLabelFromCode(currentWrapper.getcurrentIndicatorCode());
         barChart.setTitle(chartTitle);
         dateAxis.setLabel("Year");
-        valueAxis.setLabel(Model.getInstance().currentObjectIndicator.getSubIndicatorUnitFromCode(Model.currentIndicator));
+        valueAxis.setLabel(currentWrapper.getcurrentIndicatorObject().getSubIndicatorUnitFromCode(currentWrapper.getcurrentIndicatorCode()));
 
         //Populate chart with given data
         passData(data);
@@ -54,7 +57,7 @@ public class BarChartPane extends StackPane {
         barChart.getData().clear();
 
         //Retrieves name of current indicator
-        String chartTitle = Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
+        String chartTitle = currentWrapper.getcurrentIndicatorObject().getLabelFromCode(currentWrapper.getcurrentIndicatorCode());
 
         //Store data to 3 decimal places
         DecimalFormat yValFormat = new DecimalFormat(".###");
@@ -64,7 +67,7 @@ public class BarChartPane extends StackPane {
             //Create new series of data for each country
             XYChart.Series<String, Number> tempSeries = new XYChart.Series<>();
             //Retrieve corresponding country for this series of data and add it to name of this series
-            String country = Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName();
+            String country = Model.getInstance().countries[currentWrapper.getInCountries().get(i)].getName();
             tempSeries.setName(country);
             //Get the date values
             ArrayList<Integer> alstKeys = new ArrayList<>(data.get(i).keySet());
