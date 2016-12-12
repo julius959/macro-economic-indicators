@@ -11,30 +11,30 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
-import view.Main;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class retrieves data from the ExchangeRatesModel and displays the data in a TableView in a scrollpane
+ *
+ * @author jacobklerfelt
+ * Created 2016-12-02
+ */
 public class ExchangeRatesPane extends ScrollPane {
 
-    HashMap<String, String> data;
+    // HashMap holding the data retrived from the ExchangeRatesModel
+    private HashMap<String, String> data;
 
-    public ExchangeRatesPane(Main app) {
+    public ExchangeRatesPane() {
 
         super();
-        this.data = ExchangeRatesModel.getData();
+        this.data = ExchangeRatesModel.getData(); // retrieving data from the ExchangeRatesModel
 
         TableView<TableData> myTable = new TableView<TableData>();
         ArrayList<TableData> temp = new ArrayList<TableData>();
-        for(String dataInMap : data.keySet()) {
+        for(String dataInMap : data.keySet()) { // iterating through data and adding it to an arraylist of TableData
             temp.add(new TableData(dataInMap, data.get(dataInMap)));
         }
-
-        final VBox vbox = new VBox();
-        vbox.getChildren().add(myTable);
-        setContent(vbox);
-
 
         ObservableList<TableData> myTableData = FXCollections.observableArrayList();
         myTableData.addAll(temp);
@@ -78,27 +78,29 @@ public class ExchangeRatesPane extends ScrollPane {
                             }
                             this.setText(item);
                         }
+
                     }
                 };
             }
         });
 
+        final VBox vbox = new VBox();
+        vbox.getChildren().add(myTable);
+        setContent(vbox);
         setFitToWidth(true);
-        //setPrefViewportHeight(300);
-
     }
 
     public static class TableData {
-        SimpleStringProperty one, two;
+        SimpleStringProperty currencyProperty, rateProperty;
 
         public TableData(String one, String two) {
-            this.one = new SimpleStringProperty(one);
-            this.two = new SimpleStringProperty(two);
+            this.currencyProperty = new SimpleStringProperty(one);
+            this.rateProperty = new SimpleStringProperty(two);
         }
-        public String getOne(){return one.get();}
-        public void setOne(String one){this.one.set(one);}
-        public String getTwo(){return two.get();}
-        public void setTwo(String three){this.two.set(three);
+        public String getOne(){return currencyProperty.get();}
+        public void setOne(String toSet){this.currencyProperty.set(toSet);}
+        public String getTwo(){return rateProperty.get();}
+        public void setTwo(String toSet){rateProperty.set(toSet);
         }
 
 
