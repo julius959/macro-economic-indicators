@@ -8,6 +8,15 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
+import java.util.ArrayList;
+import java.util.HashMap;
+import view.Main;
+
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
@@ -15,6 +24,7 @@ import view.Main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 public class ExchangeRatesPane extends ScrollPane {
 
@@ -36,6 +46,8 @@ public class ExchangeRatesPane extends ScrollPane {
         setContent(vbox);
 
 
+
+
         ObservableList<TableData> myTableData = FXCollections.observableArrayList();
         myTableData.addAll(temp);
 
@@ -49,18 +61,7 @@ public class ExchangeRatesPane extends ScrollPane {
         myTable.getColumns().addAll(currencyColumn,  rateColumn);
         myTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        currencyColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
-            public TableCell call(TableColumn param) {
-                return new TableCell<TableData, String>() {
 
-                    @Override
-                    public void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        this.setText(item);
-                    }
-                };
-            }
-        });
 
 
         rateColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
@@ -71,11 +72,13 @@ public class ExchangeRatesPane extends ScrollPane {
                     public void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
                         if (!isEmpty()) {
+
                             this.setTextFill(Color.web("#8EF561"));
                             if (item.contains("-")) {
                                 item = item.substring(1);
                                 this.setTextFill(Color.web("#F5A58F"));
                             }
+
                             this.setText(item);
                         }
                     }
@@ -83,8 +86,10 @@ public class ExchangeRatesPane extends ScrollPane {
             }
         });
 
+
         setFitToWidth(true);
         //setPrefViewportHeight(300);
+
 
     }
 

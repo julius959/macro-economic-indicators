@@ -109,6 +109,14 @@ public class Main extends Application {
      * reference to the label used to show the current countries selected
      */
     private Label currentCountriesLabel = new Label();
+    /**
+     * Reference to the about pane icon
+     */
+    private Pane aboutIconPane;
+    /**
+     * Reference to the about pane
+     */
+    private ScrollPane aboutpane;
 
     /**
      * Starting point of the application. All the view creation, styling, view-related logic is applied inside here.
@@ -134,6 +142,8 @@ public class Main extends Application {
 
         implementScreensSwitcher();
 
+
+        aboutpane = new AboutPane(this);
         populateGraphsFilters();
 
         implementAdditionalPanes();
@@ -182,6 +192,8 @@ public class Main extends Application {
         topBar = (BorderPane) scene.lookup("#top-bar");
         proceedButton = (Button) scene.lookup("#proceed-button");
         proceedInfo = (VBox) scene.lookup("#proceed-info");
+
+        aboutIconPane = (Pane) scene.lookup("#icon-4-placeholder");
 
         rssPane = new NewsFeedPane(this);
         exchangeRatesPane = new ExchangeRatesPane(this);
@@ -284,55 +296,55 @@ public class Main extends Application {
         cb.setPadding(new Insets(5));
 
         cb.setOnMouseClicked(event -> {
-                Integer index = Arrays.asList(Model.countries).indexOf(country);
-                if (cb.isSelected()) {
-                    // user want to add
-                    // check for limit
-                    if (Model.currentCountries.size() < 8) {
-                        //add to current countries
-                        if (!Model.currentCountries.contains(index)) {
-                            Model.currentCountries.add(index);
-                        }
-                    } else {
-                        //too many countries
-                        //alert the user
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Too many countries");
-                        alert.setHeaderText("Sorry, but you can't chose more than 8 countries at the same time");
-                        alert.setContentText("We have implemented this limitation as to make sure data " +
-                                "visualisation is still keeps its informative purpose");
-
-                        alert.showAndWait();
-                        cb.setSelected(false);
+            Integer index = Arrays.asList(Model.countries).indexOf(country);
+            if (cb.isSelected()) {
+                // user want to add
+                // check for limit
+                if (Model.currentCountries.size() < 8) {
+                    //add to current countries
+                    if (!Model.currentCountries.contains(index)) {
+                        Model.currentCountries.add(index);
                     }
-
-
                 } else {
-                    // remove from current countries
-                    if (Model.currentCountries.contains(index)) {
-                        Model.currentCountries.remove(index);
-                    }
+                    //too many countries
+                    //alert the user
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Too many countries");
+                    alert.setHeaderText("Sorry, but you can't chose more than 8 countries at the same time");
+                    alert.setContentText("We have implemented this limitation as to make sure data " +
+                            "visualisation is still keeps its informative purpose");
 
-                }
-
-                //checker to see if last pane should be shown
-                if (howManyChecked(countriesPlaceholder) > 0) {
-                    if (!proceedPane.isVisible()) {
-                        proceedPane.setVisible(true);
-                        getAnimationFor(proceedPane, true).playFromStart();
-                    }
-
-                } else {
-                    // getAnimationFor(proceedPane, false).play();
-                    // ^ not working yet :(
-                    proceedPane.setVisible(false);
-
+                    alert.showAndWait();
+                    cb.setSelected(false);
                 }
 
 
-                //update the text in the rightmost pane such that it reflects all current countries after a selection is done
-                updateLabel(currentCountriesLabel, currentCountriesToString());
-            });
+            } else {
+                // remove from current countries
+                if (Model.currentCountries.contains(index)) {
+                    Model.currentCountries.remove(index);
+                }
+
+            }
+
+            //checker to see if last pane should be shown
+            if (howManyChecked(countriesPlaceholder) > 0) {
+                if (!proceedPane.isVisible()) {
+                    proceedPane.setVisible(true);
+                    getAnimationFor(proceedPane, true).playFromStart();
+                }
+
+            } else {
+                // getAnimationFor(proceedPane, false).play();
+                // ^ not working yet :(
+                proceedPane.setVisible(false);
+
+            }
+
+
+            //update the text in the rightmost pane such that it reflects all current countries after a selection is done
+            updateLabel(currentCountriesLabel, currentCountriesToString());
+        });
         HBox toReturn = new HBox();
         Image image = country.loadFlag();
 
@@ -454,15 +466,37 @@ public class Main extends Application {
         exchangeImage.setLayoutX(25);
         exchangeIconPane.getChildren().add(exchangeImage);
 
+
+        ImageView aboutImage = new ImageView();
+        aboutImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("about-icon.png")));
+        aboutImage.setSmooth(true);
+        aboutImage.setCache(true);
+        aboutImage.setFitHeight(50);
+        aboutImage.setFitWidth(50);
+        aboutImage.setLayoutX(25);
+        aboutIconPane.getChildren().add(aboutImage);
+
+
+        aboutIconPane.setOnMouseClicked(event -> {
+            if(mainPane.getCenter() != aboutpane){
+                mainPane.getChildren().remove(mainPane.getCenter());
+                aboutIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
+                graphIconPane.setStyle("");
+                rssIconPane.setStyle("");
+                mainPane.setCenter(aboutpane);
+                topBar.getChildren().add(generateTitleText("About"));
+            }
+        });
+
         exchangeIconPane.setOnMouseClicked( event -> {
-                if(mainPane.getCenter() != exchangeRatesPane){
-                    mainPane.getChildren().remove(mainPane.getCenter());
-                    exchangeIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
-                    graphIconPane.setStyle("");
-                    rssIconPane.setStyle("");
-                    mainPane.setCenter(exchangeRatesPane);
-                    topBar.getChildren().add(generateTitleText("Exchange rates"));
-                }
+            if(mainPane.getCenter() != exchangeRatesPane){
+                mainPane.getChildren().remove(mainPane.getCenter());
+                exchangeIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
+                graphIconPane.setStyle("");
+                rssIconPane.setStyle("");
+                mainPane.setCenter(exchangeRatesPane);
+                topBar.getChildren().add(generateTitleText("Exchange rates"));
+            }
         });
 
         rssIconPane.setOnMouseClicked(event -> {

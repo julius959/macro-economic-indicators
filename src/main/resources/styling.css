@@ -127,6 +127,7 @@
     -fx-padding: 80px 20px 20px 20px;
 }
 
+
 .table-view {
     -fx-background-color: transparent;
 }
@@ -155,3 +156,4 @@
 .table-view .filler {
     -fx-background-color: transparent;
 }
+
