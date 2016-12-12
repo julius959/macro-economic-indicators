@@ -33,6 +33,9 @@ public class AboutPane extends ScrollPane {
 
     private void addContent() {
 
+        this.getStylesheets().add(this.getClass().getClassLoader()
+                .getResource("styling.css").toExternalForm());
+
         content.setAlignment(Pos.CENTER);
         setFitToWidth(true);
 
@@ -40,6 +43,7 @@ public class AboutPane extends ScrollPane {
         aboutPane.setStyle("-fx-background-color: rgba(65,68,75);");
 
         TextArea aboutlabel = new TextArea();
+        aboutlabel.setEditable(false);
 
         try {
             initialize(aboutlabel, getClass().getClassLoader().getResource("about.txt").getPath());
@@ -120,7 +124,7 @@ public class AboutPane extends ScrollPane {
                 "-fx-font-size: 15");
 
         TextArea jdom = new TextArea();
-        hamcrest.setEditable(false);
+        jdom.setEditable(false);
         try {
             initialize(jdom, getClass().getClassLoader().getResource("licenses/jdomLicense.txt").getPath());
         } catch (Exception e) {
@@ -136,35 +140,63 @@ public class AboutPane extends ScrollPane {
 
         TextArea json = new TextArea();
         json.setEditable(false);
+        json.setText("http://mvnrepository.com/artifact/org.json/json/20160810");
+        json.setEditable(false);
         TitledPane jsonPane = new TitledPane("JSON", json);
         jsonPane.setExpanded(false);
-        jsonPane.setCollapsible(false);
+        json.setStyle("-fx-text-fill: #ffffff;" +
+                "-fx-padding:20,0,0,0;" +
+                "-fx-font-size: 15");
+
+
 
         TextArea sqllite = new TextArea();
         sqllite.setEditable(false);
+        sqllite.setText("http://mvnrepository.com/artifact/org.xerial/sqlite-jdbc/3.15.1");
+        sqllite.setEditable(false);
         TitledPane SQLLitePane = new TitledPane("SQLite", sqllite);
         SQLLitePane.setExpanded(false);
-        SQLLitePane.setCollapsible(false);
+        sqllite.setStyle("-fx-text-fill: #ffffff;" +
+                "-fx-padding:20,0,0,0;" +
+                "-fx-font-size: 15");
+
+
 
         TextArea fixerio = new TextArea();
-        sqllite.setEditable(false);
+        fixerio.setEditable(false);
+        fixerio.setText("http://fixer.io");
         TitledPane fixerioPane = new TitledPane("Fixer.io", fixerio);
         fixerioPane.setExpanded(false);
-        fixerioPane.setCollapsible(false);
+        fixerio.setStyle("-fx-text-fill: #ffffff;" +
+                "-fx-padding:20,0,0,0;" +
+                "-fx-font-size: 15");
+
+
 
 
         TextArea flag = new TextArea();
         flag.setEditable(false);
+        flag.setText("http://flagpedia.net");
         TitledPane flagPane = new TitledPane("Flagpedia", flag);
         flagPane.setExpanded(false);
-        flagPane.setCollapsible(false);
+        flag.setStyle("-fx-text-fill: #ffffff;" +
+                "-fx-padding:20,0,0,0;" +
+                "-fx-font-size: 15");
+
+
 
 
 
         Accordion acordion = new Accordion();
 
         acordion.getPanes().addAll(jdomPane, junitPane, hamcrestPane, jsonPane, SQLLitePane,fixerioPane,flagPane);
-        acordion.setStyle("-fx-background-color: rgba(65,68,75)");
+        acordion.setStyle("-fx-background-color: rgba(65,68,75);" +
+                   "-fx-border-color: transparent;" +
+                "-fx-border-style:none;" +
+                "-fx-background-insets: 0;" +
+                "-fx-padding:0");
+
+
 
 
 
@@ -172,7 +204,9 @@ public class AboutPane extends ScrollPane {
         licenseTitle.setAlignment(Pos.CENTER);
         licenseTitle.setStyle("-fx-text-fill: #FFFFFF;" +
                 "   -fx-padding:20,0,0,0;" +
-                "-fx-font-size: 17");
+                "-fx-font-size: 17;" +
+                "fx-border-color:transparent;" +
+                "fx-border-style:none;");
         licenseTitle.setExpanded(false);
 
 
