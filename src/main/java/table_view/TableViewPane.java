@@ -14,6 +14,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import view.DataDisplayWrapper;
+
+import javax.xml.crypto.Data;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -32,7 +35,8 @@ public class TableViewPane extends StackPane {
      * @param dataIn TreeMap of query data for a single country, Year->Value
      * @param country The country who's data is being represented in this table
      */
-    public TableViewPane(TreeMap<Integer, Number> dataIn, String country) {
+    private DataDisplayWrapper currentWrapper;
+    public TableViewPane(TreeMap<Integer, Number> dataIn, String country, DataDisplayWrapper currentWrapper) {
         super();
 
         //Creates table title
@@ -40,7 +44,7 @@ public class TableViewPane extends StackPane {
         lblTableTitle.setFont(new Font("Arial", 20));
         HBox hbTableTitle = new HBox(lblTableTitle);
         hbTableTitle.setAlignment(Pos.CENTER);
-
+        this.currentWrapper = currentWrapper;
         //Initialises uneditable table
         table = new TableView<>();
         table.setEditable(false);
@@ -51,7 +55,7 @@ public class TableViewPane extends StackPane {
 
         //Initialises table columns and adds them to the table
         TableColumn<TableModelData, String> tbcolDate = new TableColumn<>("Year");
-        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator)+" "+Model.getInstance().currentObjectIndicator.getSubIndicatorUnitFromCode(Model.currentIndicator));
+        TableColumn<TableModelData, Number> tbcolValue = new TableColumn<>(currentWrapper.getcurrentIndicatorObject().getLabelFromCode(currentWrapper.getcurrentIndicatorCode())+" "+currentWrapper.getcurrentIndicatorObject().getSubIndicatorUnitFromCode(currentWrapper.getcurrentIndicatorCode()));
         tbcolDate.setStyle("-fx-alignment: CENTER;");
         tbcolValue.setStyle("-fx-alignment: CENTER;");
         table.getColumns().addAll(tbcolDate, tbcolValue);

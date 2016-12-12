@@ -9,6 +9,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import view.DataDisplayWrapper;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -20,19 +22,20 @@ import java.util.TreeMap;
  * Created 2016-11-25
  *
  */
+
 public class LineCharts extends StackPane {
 
     private LineChart<String,Number> lineChart; // Object of a LineChart
-
-    public LineCharts(ArrayList<TreeMap<Integer, Number>> data) {
+    DataDisplayWrapper currentWrapper;
+    public LineCharts(ArrayList<TreeMap<Integer, Number>> data, DataDisplayWrapper currentWrapper) {
 
         super();
 
         final CategoryAxis xAxis = new CategoryAxis(); // CategoryAxis that is going to work as the x-axis of the linechart
         final NumberAxis yAxis = new NumberAxis(); // NumberAxis that is going to work as the y-axis of the chart
-
+        this.currentWrapper = currentWrapper;
         lineChart = new LineChart<String, Number>(xAxis, yAxis);
-        String chartName = Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator); // Setting the name of the linechart by checking which indicator is currently chosen in the model
+        String chartName = currentWrapper.getcurrentIndicatorObject().getLabelFromCode(currentWrapper.getcurrentIndicatorCode()); // Setting the name of the linechart by checking which indicator is currently chosen in the model
         lineChart.setTitle(chartName);
         xAxis.setLabel("Date");
         yAxis.setLabel(chartName);
@@ -86,7 +89,7 @@ public class LineCharts extends StackPane {
         //populating the series with data
         for (int i = 0; i < data.size(); i++) { // looping through every country in the list and adding its data to an XYChart series that is then added to the linechart
             XYChart.Series series = new XYChart.Series();
-            series.setName(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName());
+            series.setName(Model.getInstance().countries[currentWrapper.getInCountries().get(i)].getName());
             for (Integer date : data.get(i).keySet()) {
                 series.getData().add(new XYChart.Data(String.valueOf(date), data.get(i).get(date)));
             }
