@@ -1,5 +1,4 @@
 package charts;
-
 import api_model.Model;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
@@ -19,14 +18,16 @@ import java.util.TreeMap;
 
 
 /**
- * Created by jacobklerfelt on 2016-11-25.
+ * Class for creating piecharts of economic data of countries chosen by the user of the program
+ * @author jacobklerfelt
+ * Created on 2016-11-25.
  */
 public class PieCharts extends StackPane {
 
-    private PieChart pieChart;
-    private ObservableList<PieChart.Data> pieChartData;
-    private double totalValues;
-    private TranslateTransition tt;
+    private PieChart pieChart; // Object of PieChart that is going to be displayed
+    private ObservableList<PieChart.Data> pieChartData; // ObservableList holding the data of the PieChart
+    private double totalValues; // value holding the total value-amount in the PieChart, needed to calculate percentage for a pie in the tooltip that is displayed when hovering over a pie
+    private TranslateTransition tt; // TranslateTransition used for animation when PieChart is first displayed
 
     public PieCharts(ArrayList<TreeMap<Integer, Number>> data) {
 
@@ -35,23 +36,21 @@ public class PieCharts extends StackPane {
         pieChart = new PieChart();
         String pieChartTitle = "Average " + Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
         pieChart.setTitle(pieChartTitle);
-        //     BigDecimal bd = new BigDecimal(2);
 
-
-        this.addData(data);
-        this.getChildren().add(pieChart);
+        this.addData(data); // calling method that adds all the data to the PieChart
+        this.getChildren().add(pieChart); // adding PieChart to pane
         for (final PieChart.Data dataInPie : pieChart.getData()) {
             dataInPie.getNode().setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
-                public void handle(MouseEvent event) {
+                public void handle(MouseEvent event) { // adding tooltip that is displayed when user hovers over a pie. Display country, value and percentage of pie for the hovered pie
                     BigDecimal nodeValue = new BigDecimal(dataInPie.getPieValue());
-                    DecimalFormat yValFormat = new DecimalFormat(".###");
+                    DecimalFormat yValFormat = new DecimalFormat(".###"); // displaying only 3 decimals
                     Tooltip.install(dataInPie.getNode(), new Tooltip("Country: " + dataInPie.getName() + "\n" + pieChartTitle + ": " + yValFormat.format(nodeValue) + "\nPercentage: " + Math.round(((dataInPie.getPieValue() / totalValues) * 100)) + "%"));
                 }
             });
         }
 
-        Thread anim = new Thread(new Runnable() {
+        Thread anim = new Thread(new Runnable() { // Thread for running animation when PieChart is first displayed
             @Override
             public void run() {
                 try {
@@ -62,14 +61,14 @@ public class PieCharts extends StackPane {
                 loadAnimate();
             }
         });
-        anim.start();
+        anim.start(); // starting animation
 
-        this.sceneProperty().addListener((obs, oldScene, newScene) -> {
+        this.sceneProperty().addListener((obs, oldScene, newScene) -> { // stopping animation is new scene is chosen by user
             if (newScene == null) {
                 anim.stop();
                 if (tt != null) {
                     tt.stop();
-                    System.out.println("Animation thread stopped!!!");
+                    System.out.println("Animation thread stopped");
                 }
 
             } else {
@@ -86,7 +85,6 @@ public class PieCharts extends StackPane {
             Bounds b1 = pieData.getNode().getBoundsInLocal();
             double newX = ((b1.getWidth()) / 2 + b1.getMinX()) / 7;
             double newY = ((b1.getHeight()) / 2 + b1.getMinY()) / 7;
-            // Make sure pie wedge location is reset
             pieData.getNode().setTranslateX(0);
             pieData.getNode().setTranslateY(0);
             tt = new TranslateTransition(
@@ -99,20 +97,23 @@ public class PieCharts extends StackPane {
 
         });
     }
-
+    /**
+     * Method for adding all the data given by the model to the PieChart
+     * @param data ArrayList of TreeMap containing data of the economic indicator currently chosen, for every country chosen by user
+     */
     private void addData(ArrayList<TreeMap<Integer, Number>> data) {
-        pieChart.getData().clear();
+        pieChart.getData().clear(); // removing all data from PieChart
         pieChartData = FXCollections.observableArrayList();
 
         for (int i = 0; i < data.size(); i++) {
             double average = 0;
             for (Number value : data.get(i).values()) {
-                average += value.doubleValue();
+                average += value.doubleValue(); // summing all values of a country of the period chosen before calculating average
             }
-            double valueToInsert = average / data.get(i).size();
+            double valueToInsert = average / data.get(i).size(); // calculating average by taking the summed value divided by the amount of values
             totalValues += valueToInsert;
-            pieChartData.add(new PieChart.Data(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName(), valueToInsert));
+            pieChartData.add(new PieChart.Data(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName(), valueToInsert)); // adding data to PieChartData that is then added to the PieChart
         }
-        pieChart.getData().addAll(pieChartData);
+        pieChart.getData().addAll(pieChartData); 
     }
 }
