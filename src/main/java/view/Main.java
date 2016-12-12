@@ -196,7 +196,7 @@ public class Main extends Application {
         aboutIconPane = (Pane) scene.lookup("#icon-4-placeholder");
 
         rssPane = new NewsFeedPane(this);
-        exchangeRatesPane = new ExchangeRatesPane(this);
+        exchangeRatesPane = new ExchangeRatesPane();
 
     }
 

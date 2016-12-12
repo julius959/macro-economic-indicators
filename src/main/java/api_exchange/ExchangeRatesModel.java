@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.Iterator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,7 +48,7 @@ public class ExchangeRatesModel{
      * have decreased since yesterday
      */
     public static TreeMap<String, String> getData() {
-        HashMap<String, String> exchangeRates = new HashMap<>();
+        TreeMap<String, String> exchangeRates = new TreeMap<>();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // DateFormat according to API
         Calendar cal = Calendar.getInstance();
         String currentDate = dateFormat.format(cal.getTime()); // String for current date
