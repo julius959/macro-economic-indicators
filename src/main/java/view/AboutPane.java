@@ -146,12 +146,24 @@ public class AboutPane extends ScrollPane {
         SQLLitePane.setExpanded(false);
         SQLLitePane.setCollapsible(false);
 
+        TextArea fixerio = new TextArea();
+        sqllite.setEditable(false);
+        TitledPane fixerioPane = new TitledPane("Fixer.io", fixerio);
+        fixerioPane.setExpanded(false);
+        fixerioPane.setCollapsible(false);
+
+
+        TextArea flag = new TextArea();
+        flag.setEditable(false);
+        TitledPane flagPane = new TitledPane("Flagpedia", flag);
+        flagPane.setExpanded(false);
+        flagPane.setCollapsible(false);
 
 
 
         Accordion acordion = new Accordion();
 
-        acordion.getPanes().addAll(jdomPane, junitPane, hamcrestPane, jsonPane, SQLLitePane);
+        acordion.getPanes().addAll(jdomPane, junitPane, hamcrestPane, jsonPane, SQLLitePane,fixerioPane,flagPane);
         acordion.setStyle("-fx-background-color: rgba(65,68,75)");
 
 
