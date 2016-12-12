@@ -142,7 +142,7 @@ public class AboutPane extends ScrollPane {
 
         TextArea sqllite = new TextArea();
         sqllite.setEditable(false);
-        TitledPane SQLLitePane = new TitledPane("SQLLite", sqllite);
+        TitledPane SQLLitePane = new TitledPane("SQLite", sqllite);
         SQLLitePane.setExpanded(false);
         SQLLitePane.setCollapsible(false);
 
