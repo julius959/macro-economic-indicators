@@ -26,7 +26,8 @@ public class NewsArticlePane extends BorderPane {
         //Creates and styles label containing title
         Label lblTitle = new Label(article.getTitle());
         lblTitle.setId("article-title");
-        lblTitle.setStyle("-fx-effect: dropshadow(gaussian, #000, 5, 0, 0,0);");
+        //lblTitle.setStyle("-fx-effect: dropshadow(gaussian, #000, 5, 0, 0,0);");
+        lblTitle.setStyle("-fx-text-fill: #F55028");
         lblTitle.setUnderline(true);
 
         //Creates and styles label containing description
@@ -49,7 +50,7 @@ public class NewsArticlePane extends BorderPane {
         //Stores retrieved image in an image view
         ImageView imageView = new ImageView(new Image(article.getImgURL(), 140, 140, true, true, true));
         imageView.setCache(true);
-        imageView.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
+        //imageView.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
         imageView.setId("article-image");
         //Adds image to the left slot in border pane
         setLeft(imageView);
