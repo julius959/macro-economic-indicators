@@ -9,32 +9,36 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+/**
+ * Class for creating LineCharts
+ * @author jacobklerfelt
+ * Created 2016-11-25
+ *
+ */
 public class LineCharts extends StackPane {
 
-    private LineChart<String,Number> lineChart;
-    private String chartName;
+    private LineChart<String,Number> lineChart; // Object of a LineChart
 
     public LineCharts(ArrayList<TreeMap<Integer, Number>> data) {
 
         super();
 
-        final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis = new NumberAxis();
+        final CategoryAxis xAxis = new CategoryAxis(); // CategoryAxis that is going to work as the x-axis of the linechart
+        final NumberAxis yAxis = new NumberAxis(); // NumberAxis that is going to work as the y-axis of the chart
 
         lineChart = new LineChart<String, Number>(xAxis, yAxis);
-        chartName = Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator);
+        String chartName = Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator); // Setting the name of the linechart by checking which indicator is currently chosen in the model
         lineChart.setTitle(chartName);
         xAxis.setLabel("Date");
-        yAxis.setLabel(Model.getInstance().currentObjectIndicator.getSubIndicatorUnitFromCode(Model.currentIndicator));
-        this.addData(data);
-        this.getChildren().add(lineChart);
-        for(final XYChart.Series<String, Number> series : lineChart.getData()) {
+        yAxis.setLabel(chartName);
+        this.addData(data); // calling method that will add all the data to the linechart
+        this.getChildren().add(lineChart); // adding lineChart to pane
+        for(final XYChart.Series<String, Number> series : lineChart.getData()) { // adding eventhandler to the different nodes in the linechart
             for (final XYChart.Data<String, Number> node : series.getData()) {
                 node.getNode().setOnMouseEntered(new EventHandler<MouseEvent>() {
                     @Override
@@ -42,30 +46,29 @@ public class LineCharts extends StackPane {
                         String dateToDisplay = node.getXValue();
                         BigDecimal valueToDisplay = new BigDecimal(node.getYValue().doubleValue());
 
-                        DecimalFormat yValFormat = new DecimalFormat(".###");
+                        DecimalFormat yValFormat = new DecimalFormat(".###"); // Setting a maximum number of 3 decimals to be displayed
 
-                        if (lineChart.getTitle().equals("GDP")) {
+                        if (chartName.equals("GDP") && chartName.equals("GDP per capita") && chartName.equals("GDP growth")) { // GDP has been chosen as indicator, economic cycle can be calculated and added to tooltip
                             int nodeIndex = series.getData().indexOf(node);
 
+                            if (nodeIndex > 0 && nodeIndex < series.getData().size() - 1) { // Node is not the first or last node in chart
+                                double valueBefore = series.getData().get(nodeIndex - 1).getYValue().doubleValue(); // value of the node before
+                                double valueAfter = series.getData().get(nodeIndex + 1).getYValue().doubleValue(); // value of the node after
+                                double value = node.getYValue().doubleValue(); // value of the current node
 
-                            if (nodeIndex > 0 && nodeIndex < series.getData().size() - 1) {
-                                double valueBefore = series.getData().get(nodeIndex - 1).getYValue().doubleValue();
-                                double valueAfter = series.getData().get(nodeIndex + 1).getYValue().doubleValue();
-                                double value = node.getYValue().doubleValue();
-
-                                if (valueBefore < value && value > valueAfter) {
+                                if (valueBefore < value && value > valueAfter) { // current nodes value is larger than node before and after, economic cyle is expansion peak
                                     Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay) + "\nEconomic Cycle: Expansion Peak"));
-                                } else if (valueBefore > value && valueAfter > value) {
+                                } else if (valueBefore > value && valueAfter > value) { // current nodes value is smaller than node before and after, economic cycle is low peak
                                     Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay) + "\nEconomic Cycle: Low Peak"));
-                                } else if (valueBefore < value && valueAfter > value) {
+                                } else if (valueBefore < value && valueAfter > value) { // current nodes value has increased since node before, but is smaller than node after, economic cycle is recovery
                                     Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay) + "\nEconomic Cycle: Economic Recovery"));
-                                } else if (value < valueBefore && valueAfter < value) {
+                                } else if (value < valueBefore && valueAfter < value) { // value has decreased since node before, but is decreasing further - economic cycle is economic contraction
                                     Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay) + "\nEconomic Cycle: Economic Contraction"));
                                 }
-                            } else {
+                            } else { // node is either first or last node in chart, economic cycle can not be calculated
                                 Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay)));
                             }
-                        } else {
+                        } else { // Chart is not displaying GDP-related data so economic cycle can not be calculated, adding default tooltip with information of the date and value of every node
                             Tooltip.install(node.getNode(), new Tooltip("Date: " + dateToDisplay + "\n" + chartName + ": " + yValFormat.format(valueToDisplay)));
                         }
                     }
@@ -73,11 +76,15 @@ public class LineCharts extends StackPane {
             }
         }
     }
-
+    
+    /**
+     * Method that iterates through list of data given by the model and adds the data to XYSeries that each is added to the LineChart
+     * @param data ArrayList of TreeMaps, each containing data of some sort for every country chosen by user
+     */
     private void addData(ArrayList <TreeMap<Integer,Number>> data){
         lineChart.getData().clear();
         //populating the series with data
-        for (int i = 0; i < data.size(); i++) {
+        for (int i = 0; i < data.size(); i++) { // looping through every country in the list and adding its data to an XYChart series that is then added to the linechart
             XYChart.Series series = new XYChart.Series();
             series.setName(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName());
             for (Integer date : data.get(i).keySet()) {
