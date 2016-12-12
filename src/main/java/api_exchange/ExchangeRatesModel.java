@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * This class works as a model for the display of the exchange rates in the program. The class retrieves data from 
@@ -45,7 +45,7 @@ public class ExchangeRatesModel{
      * @return HashMap exchangeRates with currencies and their corresponding rates. Negative values indicate that the rate has decreased since yesterday
      * have decreased since yesterday
      */
-    public static HashMap<String, String> getData() {
+    public static TreeMap<String, String> getData() {
         HashMap<String, String> exchangeRates = new HashMap<>();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // DateFormat according to API
         Calendar cal = Calendar.getInstance();

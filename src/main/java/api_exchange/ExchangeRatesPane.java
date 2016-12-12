@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * This class retrieves data from the ExchangeRatesModel and displays the data in a TableView in a scrollpane
@@ -22,8 +22,8 @@ import java.util.HashMap;
  */
 public class ExchangeRatesPane extends ScrollPane {
 
-    // HashMap holding the data retrived from the ExchangeRatesModel
-    private HashMap<String, String> data;
+    // TreeMap holding the data retrived from the ExchangeRatesModel
+    private TreeMap<String, String> data;
 
     public ExchangeRatesPane() {
 
