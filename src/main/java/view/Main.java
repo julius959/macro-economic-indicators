@@ -1,6 +1,6 @@
 package view;
 
-import api_exchange.*;
+import api_exchange.ExchangeRatesPane;
 import api_model.Country;
 import api_model.Indicator;
 import api_model.Model;
@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import news_feed.NewsFeedPane;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,61 +31,146 @@ import java.util.stream.Collectors;
 
 public class Main extends Application {
 
+
+    /**
+     * Reference to the Scrolling pane holding all countries checkboxes
+     */
     private ScrollPane paneCountries;
+    /**
+     * Reference to the right-most pane shown in the graph generator, the proceed one
+     */
     private BorderPane proceedPane;
+    /**
+     * Reference to the first icon, linked to the graph generator
+     */
     private Pane graphIconPane;
+    /**
+     * Reference to the second icon, linked to the rss feed
+     */
     private Pane rssIconPane;
+    /**
+     * Reference to the third icon, linked to the exchange rates pane
+     */
     private Pane exchangeIconPane;
+    /**
+     * Reference to the exchange rates pane
+     */
     private ScrollPane exchangeRatesPane;
+    /**
+     * Reference to the Vbox used to hold the countries checkboxes
+     */
     private VBox countriesPlaceholder;
+    /**
+     * Reference to the VBox holding the labels for "current selected" fields
+     */
     private VBox proceedInfo;
+    /**
+     * Reference to the main pane
+     */
     private BorderPane mainPane;
+    /**
+     * Reference to the graph generator pane
+     */
     private HBox settingsPane;
+    /**
+     * Reference to the Accordion used to display all the indicators
+     */
     private Accordion indicatorsPlaceholder;
+    /**
+     * Reference to the left-most bar used to navigate through the application
+     */
     private VBox controlBar;
+    /**
+     * Reference to the topbar
+     */
     private BorderPane topBar;
+    /**
+     * Reference to the proceed button
+     */
     private Button proceedButton;
+    /**
+     * Reference to the rss feed pane
+     */
     private ScrollPane rssPane;
+    /**
+     * Reference to the currently opened stages linked with their indicator. We settled on this storing approached
+     * as to be able to update panes currently open with more countries, without making duplicate windows
+     */
     private HashMap<String, DataDisplayWrapper> openedStages = new HashMap<>();
+    /**
+     * Reference to all the radio buttons used (for indicators)
+     */
     private ArrayList<RadioButton> buttons = new ArrayList<>();
+    /**
+     * Reference to the label used to show the current indicator selected
+     */
     private Label currentIndicatorLabel = new Label();
+    /**
+     * reference to the label used to show the current countries selected
+     */
     private Label currentCountriesLabel = new Label();
 
+    private Pane aboutIconPane;
 
+    private ScrollPane aboutpane;
+
+    /**
+     * Starting point of the application. All the view creation, styling, view-related logic is applied inside here.
+     * @param primaryStage JavaFx standard, the primary stage is passed as an argument
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        //get instance of model
         Model.getInstance();
 
-        exchangeRatesPane = new ExchangeRatesPane(this);
-        rssPane = new NewsFeedPane(this);
-
-        Model.getInstance();
+        //load css
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
+        //set title
         primaryStage.setTitle("Macro Economic Helper");
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
+        //init all variables + gets references from fxml ids
         getReferences(scene);
+        //applies css + manual styling
         stylePanes(scene);
-        primaryStage.show();
 
         implementScreensSwitcher();
+
+
+        aboutpane = new aboutPane(this);
         populateGraphsFilters();
+
         implementAdditionalPanes();
+
+        //populate labels from proceed part
         populateProceedInformation();
+        //logic for close all mechanism
         implementCloseAll();
 
         //Prevents resizing stage to smaller than initial size
         primaryStage.setMinHeight(primaryStage.getHeight());
         primaryStage.setMinWidth(primaryStage.getWidth());
 
+        //show main stage
+        primaryStage.show();
     }
 
+    /**
+     * Method used to launch the app
+     * @param args extra args currently not in use
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Method used to redirect the user from Rss feed to an external browser
+     * @param url
+     */
     public void showLink(String url) {
+        //external process method used to redirect from rss feed to the web
         getHostServices().showDocument(url);
     }
 
@@ -103,7 +189,10 @@ public class Main extends Application {
         proceedButton = (Button) scene.lookup("#proceed-button");
         proceedInfo = (VBox) scene.lookup("#proceed-info");
 
+        aboutIconPane = (Pane) scene.lookup("#icon-4-placeholder");
+
         rssPane = new NewsFeedPane(this);
+        exchangeRatesPane = new ExchangeRatesPane(this);
 
     }
 
@@ -203,55 +292,55 @@ public class Main extends Application {
         cb.setPadding(new Insets(5));
 
         cb.setOnMouseClicked(event -> {
-                Integer index = Arrays.asList(Model.countries).indexOf(country);
-                if (cb.isSelected()) {
-                    // user want to add
-                    // check for limit
-                    if (Model.currentCountries.size() < 8) {
-                        //add to current countries
-                        if (!Model.currentCountries.contains(index)) {
-                            Model.currentCountries.add(index);
-                        }
-                    } else {
-                        //too many countries
-                        //alert the user
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Too many countries");
-                        alert.setHeaderText("Sorry, but you can't chose more than 8 countries at the same time");
-                        alert.setContentText("We have implemented this limitation as to make sure data " +
-                                "visualisation is still keeps its informative purpose");
-
-                        alert.showAndWait();
-                        cb.setSelected(false);
+            Integer index = Arrays.asList(Model.countries).indexOf(country);
+            if (cb.isSelected()) {
+                // user want to add
+                // check for limit
+                if (Model.currentCountries.size() < 8) {
+                    //add to current countries
+                    if (!Model.currentCountries.contains(index)) {
+                        Model.currentCountries.add(index);
                     }
-
-
                 } else {
-                    // remove from current countries
-                    if (Model.currentCountries.contains(index)) {
-                        Model.currentCountries.remove(index);
-                    }
+                    //too many countries
+                    //alert the user
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Too many countries");
+                    alert.setHeaderText("Sorry, but you can't chose more than 8 countries at the same time");
+                    alert.setContentText("We have implemented this limitation as to make sure data " +
+                            "visualisation is still keeps its informative purpose");
 
-                }
-
-                //checker to see if last pane should be shown
-                if (howManyChecked(countriesPlaceholder) > 0) {
-                    if (!proceedPane.isVisible()) {
-                        proceedPane.setVisible(true);
-                        getAnimationFor(proceedPane, true).playFromStart();
-                    }
-
-                } else {
-                    // getAnimationFor(proceedPane, false).play();
-                    // ^ not working yet :(
-                    proceedPane.setVisible(false);
-
+                    alert.showAndWait();
+                    cb.setSelected(false);
                 }
 
 
-                //update the text in the rightmost pane such that it reflects all current countries after a selection is done
-                updateLabel(currentCountriesLabel, currentCountriesToString());
-            });
+            } else {
+                // remove from current countries
+                if (Model.currentCountries.contains(index)) {
+                    Model.currentCountries.remove(index);
+                }
+
+            }
+
+            //checker to see if last pane should be shown
+            if (howManyChecked(countriesPlaceholder) > 0) {
+                if (!proceedPane.isVisible()) {
+                    proceedPane.setVisible(true);
+                    getAnimationFor(proceedPane, true).playFromStart();
+                }
+
+            } else {
+                // getAnimationFor(proceedPane, false).play();
+                // ^ not working yet :(
+                proceedPane.setVisible(false);
+
+            }
+
+
+            //update the text in the rightmost pane such that it reflects all current countries after a selection is done
+            updateLabel(currentCountriesLabel, currentCountriesToString());
+        });
         HBox toReturn = new HBox();
         Image image = country.loadFlag();
 
@@ -341,6 +430,7 @@ public class Main extends Application {
 
     private void implementScreensSwitcher() {
 
+        //icon for graph generator
         ImageView graphImage = new ImageView();
         graphImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("icon_statistics.png")));
         graphImage.setSmooth(true);
@@ -352,6 +442,7 @@ public class Main extends Application {
         graphImage.setId("graph-icon");
         graphIconPane.getChildren().add(graphImage);
 
+        //image for rss feed
         ImageView rssImage = new ImageView();
         rssImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("icon_rss.png")));
         rssImage.setSmooth(true);
@@ -361,6 +452,7 @@ public class Main extends Application {
         rssImage.setLayoutX(25);
         rssIconPane.getChildren().add(rssImage);
 
+        //image for exchange feed
         ImageView exchangeImage = new ImageView();
         exchangeImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("exchange-rates.png")));
         exchangeImage.setSmooth(true);
@@ -370,15 +462,37 @@ public class Main extends Application {
         exchangeImage.setLayoutX(25);
         exchangeIconPane.getChildren().add(exchangeImage);
 
+
+        ImageView aboutImage = new ImageView();
+        aboutImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("exchange-rates.png")));
+        aboutImage.setSmooth(true);
+        aboutImage.setCache(true);
+        aboutImage.setFitHeight(50);
+        aboutImage.setFitWidth(50);
+        aboutImage.setLayoutX(25);
+        aboutIconPane.getChildren().add(aboutImage);
+
+
+        aboutIconPane.setOnMouseClicked(event -> {
+            if(mainPane.getCenter() != aboutpane){
+                mainPane.getChildren().remove(mainPane.getCenter());
+                aboutIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
+                graphIconPane.setStyle("");
+                rssIconPane.setStyle("");
+                mainPane.setCenter(aboutpane);
+                topBar.getChildren().add(generateTitleText("About"));
+            }
+        });
+
         exchangeIconPane.setOnMouseClicked( event -> {
-                if(mainPane.getCenter() != exchangeRatesPane){
-                    mainPane.getChildren().remove(mainPane.getCenter());
-                    exchangeIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
-                    graphIconPane.setStyle("");
-                    rssIconPane.setStyle("");
-                    mainPane.setCenter(exchangeRatesPane);
-                    topBar.getChildren().add(generateTitleText("Exchange rates"));
-                }
+            if(mainPane.getCenter() != exchangeRatesPane){
+                mainPane.getChildren().remove(mainPane.getCenter());
+                exchangeIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
+                graphIconPane.setStyle("");
+                rssIconPane.setStyle("");
+                mainPane.setCenter(exchangeRatesPane);
+                topBar.getChildren().add(generateTitleText("Exchange rates"));
+            }
         });
 
         rssIconPane.setOnMouseClicked(event -> {
