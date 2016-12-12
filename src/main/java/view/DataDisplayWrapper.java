@@ -56,6 +56,7 @@ class DataDisplayWrapper extends Stage {
         vbCountryTables = new VBox(10);
         spCountryTables = new ScrollPane(vbCountryTables);
         spCountryTables.setFitToWidth(true);
+        spCountryTables.setPadding(new Insets(0));
 
 
         bp = new BarChartPane(data);
