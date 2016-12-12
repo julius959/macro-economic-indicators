@@ -1,4 +1,6 @@
-* {
+
+
+.spinner {
     -fx-focus-color: #F55028;
     -fx-accent: #F55028;
 }
