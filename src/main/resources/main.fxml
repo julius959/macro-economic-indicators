@@ -13,7 +13,6 @@
            <Pane id="icon-1-placeholder" minHeight="100.0" minWidth="100.0" />
            <Pane id="icon-2-placeholder" prefHeight="100.0" prefWidth="100.0" />
            <Pane id="icon-3-placeholder" prefHeight="100.0" prefWidth="100.0" />
-           <Pane prefHeight="100.0" prefWidth="100.0" />
        </VBox>
    </left>
    <center>
