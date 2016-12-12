@@ -37,45 +37,33 @@ public class ExchangeRatesPane extends ScrollPane {
         }
 
         ObservableList<TableData> myTableData = FXCollections.observableArrayList();
-        myTableData.addAll(temp);
+        myTableData.addAll(temp); // adding arraylist of data to TableData
 
-        TableColumn currencyColumn = new TableColumn("Currency");
+        TableColumn currencyColumn = new TableColumn("Currency"); // creating column that is going to hold currency data
         currencyColumn.setCellValueFactory(new PropertyValueFactory<TableData, String>("one"));
 
-        TableColumn rateColumn = new TableColumn("Rate (Base = £)");
+        TableColumn rateColumn = new TableColumn("Rate (Base = £)"); // creating column that is going to hold rates
         rateColumn.setCellValueFactory(new PropertyValueFactory<TableData, String>("two"));
 
-        myTable.setItems(myTableData);
-        myTable.getColumns().addAll(currencyColumn,  rateColumn);
+        myTable.setItems(myTableData); // adding TableData to TableView
+        myTable.getColumns().addAll(currencyColumn,  rateColumn); // adding both columns to TableView
         myTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        currencyColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
+        rateColumn.setCellFactory(new Callback<TableColumn, TableCell>() { // styling of rates 
             public TableCell call(TableColumn param) {
                 return new TableCell<TableData, String>() {
 
                     @Override
                     public void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
-                        this.setText(item);
-                    }
-                };
-            }
-        });
-
-
-        rateColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
-            public TableCell call(TableColumn param) {
-                return new TableCell<TableData, String>() {
-
-                    @Override
-                    public void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (!isEmpty()) {
-                            this.setTextFill(Color.web("#8EF561"));
-                            if (item.contains("-")) {
+                        if (!isEmpty()) {               
+                            if (item.contains("-")) { // rate has decreased since yesterday, setting red color text color
                                 item = item.substring(1);
                                 this.setTextFill(Color.web("#F5A58F"));
                             }
+			    else{
+           		        this.setTextFill(Color.web("#8EF561")); // rate has increased, setting green text color
+			    }	
                             this.setText(item);
                         }
 
@@ -83,7 +71,7 @@ public class ExchangeRatesPane extends ScrollPane {
                 };
             }
         });
-
+	// adding table to VBox and VBox to pane
         final VBox vbox = new VBox();
         vbox.getChildren().add(myTable);
         setContent(vbox);
