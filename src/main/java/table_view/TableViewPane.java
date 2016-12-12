@@ -45,7 +45,9 @@ public class TableViewPane extends StackPane {
         table = new TableView<>();
         table.setEditable(false);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         table.setPadding(new Insets(0));
+
 
         //Initialises table columns and adds them to the table
         TableColumn<TableModelData, String> tbcolDate = new TableColumn<>("Year");

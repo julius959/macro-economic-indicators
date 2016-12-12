@@ -8,6 +8,15 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
+import java.util.ArrayList;
+import java.util.HashMap;
+import view.Main;
+
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
@@ -20,6 +29,7 @@ import java.util.TreeMap;
  * @author jacobklerfelt
  * Created 2016-12-02
  */
+
 public class ExchangeRatesPane extends ScrollPane {
 
     // TreeMap holding the data retrived from the ExchangeRatesModel
@@ -35,6 +45,10 @@ public class ExchangeRatesPane extends ScrollPane {
         for(String dataInMap : data.keySet()) { // iterating through data and adding it to an arraylist of TableData
             temp.add(new TableData(dataInMap, data.get(dataInMap)));
         }
+
+        final VBox vbox = new VBox();
+        vbox.getChildren().add(myTable);
+        setContent(vbox);
 
         ObservableList<TableData> myTableData = FXCollections.observableArrayList();
         myTableData.addAll(temp); // adding arraylist of data to TableData
@@ -64,6 +78,7 @@ public class ExchangeRatesPane extends ScrollPane {
 			    else{
            		        this.setTextFill(Color.web("#8EF561")); // rate has increased, setting green text color
 			    }	
+
                             this.setText(item);
                         }
 
@@ -71,11 +86,10 @@ public class ExchangeRatesPane extends ScrollPane {
                 };
             }
         });
-	// adding table to VBox and VBox to pane
-        final VBox vbox = new VBox();
-        vbox.getChildren().add(myTable);
-        setContent(vbox);
+
         setFitToWidth(true);
+        //setPrefViewportHeight(300);
+
     }
 
     public static class TableData {
