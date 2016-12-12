@@ -10,45 +10,43 @@ import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Spinner;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import table_view.TableViewPane;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Created by loopiezlol on 05/12/2016.
- */
-public class DataDisplayWrapper extends Stage {
+class DataDisplayWrapper extends Stage {
 
-    ArrayList<TreeMap<Integer, Number>> data = new ArrayList<>();
-    BorderPane mainPane;
-    ScrollPane spCountryTables;
-    ArrayList<Integer> inCountries = new ArrayList<>();
-    Thread displayingDataThread;
-    BarChartPane bp;
+    private ArrayList<TreeMap<Integer, Number>> data = new ArrayList<>();
+    private BorderPane mainPane;
+    private ScrollPane spCountryTables;
+    private ArrayList<Integer> inCountries = new ArrayList<>();
+    private Thread displayingDataThread;
+    private BarChartPane bp;
+    private VBox vbCountryTables;
+    private ProgressIndicator pi;
 
-    VBox vbCountryTables;
-    ProgressBr bar;
-
-    public DataDisplayWrapper() {
+    DataDisplayWrapper() {
         super();
-
+        Model.getInstance();
         inCountries = new ArrayList<>(Model.currentCountries);
 
-        bar = new ProgressBr();
+        pi = new ProgressIndicator(-1);
+        pi.setMaxWidth(100);
+        pi.setMaxHeight(100);
 
 
-        this.setTitle(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
+        this.setTitle(Model.currentObjectIndicator.getLabelFromCode(Model.currentIndicator));
         mainPane = new BorderPane();
         Scene scene = new Scene(mainPane, 800, 500);
 
@@ -70,28 +68,26 @@ public class DataDisplayWrapper extends Stage {
         setMinWidth(800);
     }
 
+    void startThread() {
 
-    public void startThread() {
         if (displayingDataThread != null) {
             displayingDataThread.stop();
         }
         inCountries = new ArrayList<>(Model.currentCountries);
         Task task = newTask();
-        bar.activateProgressBar(task);
-        bar.getDialogStage().show();
+        pi.progressProperty().bind(task.progressProperty());
+        this.setCenterPane(pi);
 
         displayingDataThread = new Thread(task);
         displayingDataThread.start();
     }
 
-    private Task<ArrayList<TreeMap<Integer, Number>>> newTask() {
-        return new Task<ArrayList<TreeMap<Integer, Number>>>() {
+    private Task<ArrayList> newTask() {
+        return new Task<ArrayList>() {
 
             @Override
-            protected ArrayList<TreeMap<Integer, Number>> call() throws Exception {
-                ArrayList<TreeMap<Integer, Number>> res = setData(Model.getInstance().gatherData());
-
-                return res;
+            protected ArrayList call() throws Exception {
+                return setData(Model.getInstance().gatherData());
             }
 
             @Override
@@ -110,18 +106,17 @@ public class DataDisplayWrapper extends Stage {
 
                 bp.passData(getValue());
                 setCenterPane(bp);
-                bar.getDialogStage().close();
                 //Create and add a table for each country in the data
                 vbCountryTables.getChildren().clear();
                 for (int i = 0; i < data.size(); ++i) {
                     vbCountryTables.getChildren().add(new TableViewPane(data.get(i),
-                            Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName()));
+                            Model.countries[Model.currentCountries.get(i)].getName()));
                 }
             }
         };
     }
 
-    public ArrayList setData(ArrayList<TreeMap<Integer, BigDecimal>> inData) {
+    private ArrayList setData(ArrayList<TreeMap<Integer, BigDecimal>> inData) {
         data.clear();
         for (TreeMap<Integer, BigDecimal> val : inData) {
             TreeMap<Integer, Number> toAdd = new TreeMap<>();
@@ -131,18 +126,17 @@ public class DataDisplayWrapper extends Stage {
             data.add(toAdd);
         }
         return data;
-        // this.setCenterPane(new BarChartPane(data));
     }
 
-    public void setCenterPane(Node node) {
+    private void setCenterPane(Node node) {
         mainPane.setCenter(node);
     }
 
-    public void clearData() {
+    void clearData() {
         data.clear();
     }
 
-    public HBox generateTopBar() {
+    private HBox generateTopBar() {
         HBox toReturn = new HBox();
 
         toReturn.setStyle(" -fx-pref-height: 40px; -fx-background-color: #F55028;");
@@ -150,7 +144,6 @@ public class DataDisplayWrapper extends Stage {
         Button chartButton = new Button("Bar Chart");
         chartButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         chartButton.setPadding(new Insets(10));
-        //chartButton.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
 
         Button tableButton = new Button("Table");
         tableButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
@@ -200,36 +193,23 @@ public class DataDisplayWrapper extends Stage {
             pieButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
             pieButton.setPadding(new Insets(10));
             toReturn.getChildren().add(pieButton);
-            pieButton.setOnMouseClicked(e -> {
-
-                this.setCenterPane(new PieCharts(data));
-            });
+            pieButton.setOnMouseClicked(e -> this.setCenterPane(new PieCharts(data)));
         }
-
-
 
         toReturn.getChildren().add(startSpinner);
         toReturn.getChildren().add(endSpinner);
 
         //Display tables in center of scene
-        tableButton.setOnMouseClicked(e -> {
-            this.setCenterPane(spCountryTables);
-        });
+        tableButton.setOnMouseClicked(e -> this.setCenterPane(spCountryTables));
 
-        lineButton.setOnMouseClicked(e -> {
-            this.setCenterPane(new LineCharts(data));
-        });
+        lineButton.setOnMouseClicked(e -> this.setCenterPane(new LineCharts(data)));
 
-        chartButton.setOnMouseClicked(e -> {
-            this.setCenterPane(new BarChartPane(data));
-        });
-
+        chartButton.setOnMouseClicked(e -> this.setCenterPane(new BarChartPane(data)));
 
         return toReturn;
     }
 
-
-    public ArrayList<Integer> getInCountries() {
+    ArrayList<Integer> getInCountries() {
         return inCountries;
     }
 
