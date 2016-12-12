@@ -4,8 +4,6 @@ import api_model.Model;
 import bar_chart.BarChartPane;
 import charts.LineCharts;
 import charts.PieCharts;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -42,6 +40,7 @@ class DataDisplayWrapper extends Stage {
         inCountries = new ArrayList<>(Model.currentCountries);
 
         pi = new ProgressIndicator(-1);
+        pi.setStyle("-fx-progress-color: #F55028");
         pi.setMaxWidth(100);
         pi.setMaxHeight(100);
 
@@ -49,6 +48,9 @@ class DataDisplayWrapper extends Stage {
         this.setTitle(Model.currentObjectIndicator.getLabelFromCode(Model.currentIndicator));
         mainPane = new BorderPane();
         Scene scene = new Scene(mainPane, 800, 500);
+
+        scene.getStylesheets().add(this.getClass().getClassLoader()
+                .getResource("extra.css").toExternalForm());
 
         //Creates scroll pane for all country tables
         vbCountryTables = new VBox(10);
@@ -152,33 +154,29 @@ class DataDisplayWrapper extends Stage {
         Button lineButton = new Button("Line Chart");
         lineButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         lineButton.setPadding(new Insets(10));
-        System.out.println(Model.timeRanges.get(Model.currentIndicator).getStartYear()+" "+Model.timeRanges.get(Model.currentIndicator).getEndYear());
-        Spinner<Integer> startSpinner = new Spinner<>(1960, Model.getInstance().currentYear - 1 , Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getStartYear()),1);
-        Spinner<Integer> endSpinner = new Spinner(1960, Model.getInstance().currentYear - 1, Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getEndYear())-1,1);
+
+        Spinner<Integer> startSpinner = new Spinner<>(1960, Model.currentYear - 1 , Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getStartYear()),1);
+        startSpinner.setPadding(new Insets(10));
+        startSpinner.setStyle("-fx-background-color: transparent;");
+
+        Spinner<Integer> endSpinner = new Spinner(1960, Model.currentYear - 1, Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getEndYear())-1,1);
+        endSpinner.setPadding(new Insets(10));
+        endSpinner.setStyle("-fx-background-color: transparent;");
+
 //        startSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1960,Model.getInstance().currentYear-1,Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getStartYear())));
 //        endSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1960,Model.getInstance().currentYear-1,Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getEndYear())));
 
 
-        startSpinner.valueProperty().addListener(new ChangeListener<Integer>() {
-            @Override
-            public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-                Model.getInstance().timeRanges.get(Model.getInstance().currentIndicator).setStartYear(Integer.toString((int) startSpinner.getValue()));
-                System.out.println("START YEAR "+Model.timeRanges.get(Model.currentIndicator).getStartYear());
-                System.out.println(startSpinner.getValue());
-                startThread();
+        startSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Model.timeRanges.get(Model.currentIndicator).setStartYear(Integer.toString((int) startSpinner.getValue()));
+            startThread();
 
-            }
         });
 
 
-        endSpinner.valueProperty().addListener(new ChangeListener<Integer>() {
-            @Override
-            public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-                Model.getInstance().timeRanges.get(Model.getInstance().currentIndicator).setEndYear(Integer.toString((int) endSpinner.getValue()));
-                 System.out.println("END YEAR "+Model.timeRanges.get(Model.currentIndicator).getEndYear());
-                System.out.println(endSpinner.getValue());
-                startThread();
-            }
+        endSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Model.timeRanges.get(Model.currentIndicator).setEndYear(Integer.toString(endSpinner.getValue()));
+            startThread();
         });
 
 
