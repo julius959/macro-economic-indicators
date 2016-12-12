@@ -109,9 +109,13 @@ public class Main extends Application {
      * reference to the label used to show the current countries selected
      */
     private Label currentCountriesLabel = new Label();
-
+    /**
+     * Reference to the about pane icon
+     */
     private Pane aboutIconPane;
-
+    /**
+     * Reference to the about pane
+     */
     private ScrollPane aboutpane;
 
     /**
@@ -139,7 +143,7 @@ public class Main extends Application {
         implementScreensSwitcher();
 
 
-        aboutpane = new aboutPane(this);
+        aboutpane = new AboutPane(this);
         populateGraphsFilters();
 
         implementAdditionalPanes();
@@ -464,7 +468,7 @@ public class Main extends Application {
 
 
         ImageView aboutImage = new ImageView();
-        aboutImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("exchange-rates.png")));
+        aboutImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("about-icon.png")));
         aboutImage.setSmooth(true);
         aboutImage.setCache(true);
         aboutImage.setFitHeight(50);

@@ -61,20 +61,7 @@ public class ExchangeRatesPane extends ScrollPane {
         myTable.getColumns().addAll(currencyColumn,  rateColumn);
         myTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        currencyColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
-            public TableCell call(TableColumn param) {
-                return new TableCell<TableData, String>() {
 
-                    @Override
-                    public void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-
-
-                        this.setText(item);
-                    }
-                };
-            }
-        });
 
 
         rateColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
