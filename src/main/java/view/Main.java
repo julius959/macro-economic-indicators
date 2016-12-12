@@ -1,5 +1,6 @@
 package view;
 
+import api_exchange.*;
 import api_model.Country;
 import api_model.Indicator;
 import api_model.Model;
@@ -21,7 +22,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import news_feed.NewsFeedPane;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,6 +34,8 @@ public class Main extends Application {
     private BorderPane proceedPane;
     private Pane graphIconPane;
     private Pane rssIconPane;
+    private Pane exchangeIconPane;
+    private ScrollPane exchangeRatesPane;
     private VBox countriesPlaceholder;
     private VBox proceedInfo;
     private BorderPane mainPane;
@@ -51,6 +53,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Model.getInstance();
+
+        exchangeRatesPane = new ExchangeRatesPane(this);
+        rssPane = new NewsFeedPane(this);
 
         Model.getInstance();
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
@@ -72,7 +78,6 @@ public class Main extends Application {
         primaryStage.setMinHeight(primaryStage.getHeight());
         primaryStage.setMinWidth(primaryStage.getWidth());
 
-
     }
 
     public static void main(String[] args) {
@@ -89,6 +94,7 @@ public class Main extends Application {
         controlBar = (VBox) scene.lookup("#control-bar");
         graphIconPane = (Pane) scene.lookup("#icon-1-placeholder");
         rssIconPane = (Pane) scene.lookup("#icon-2-placeholder");
+        exchangeIconPane = (Pane) scene.lookup("#icon-3-placeholder");
         indicatorsPlaceholder = (Accordion) scene.lookup("#indicators-wrapper");
         paneCountries = (ScrollPane) scene.lookup("#pane-countries");
         countriesPlaceholder = (VBox) paneCountries.getContent().lookup("#countries-wrapper");
@@ -131,54 +137,6 @@ public class Main extends Application {
         proceedPane.setVisible(false);
     }
 
-    private void implementScreensSwitcher() {
-
-        // graph icon
-        ImageView graphImage = new ImageView();
-        graphImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("icon_statistics.png")));
-        graphImage.setSmooth(true);
-        graphImage.setCache(true);
-        graphImage.setFitWidth(50);
-        graphImage.setFitHeight(50);
-        graphImage.setLayoutX(25);
-        graphImage.setLayoutY(25);
-        graphImage.setId("graph-icon");
-        graphIconPane.getChildren().add(graphImage);
-
-        //rss image
-        ImageView rssImage = new ImageView();
-        rssImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("icon_rss.png")));
-        rssImage.setSmooth(true);
-        rssImage.setCache(true);
-        rssImage.setFitHeight(50);
-        rssImage.setFitWidth(50);
-        rssImage.setLayoutX(25);
-        rssIconPane.getChildren().add(rssImage);
-
-        //click listeners
-        rssIconPane.setOnMouseClicked(event -> {
-            if (mainPane.getCenter() != rssPane) {
-                mainPane.getChildren().remove(mainPane.getCenter());
-                getAnimationFor(rssPane, true).playFromStart();
-                rssIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
-                graphIconPane.setStyle("");
-                mainPane.setCenter(rssPane);
-                topBar.setLeft(generateTitleText("Rss feed"));
-            }
-        });
-
-        graphIconPane.setOnMouseClicked(event -> {
-            if (mainPane.getCenter() != settingsPane) {
-                mainPane.getChildren().remove(mainPane.getCenter());
-                mainPane.setCenter(settingsPane);
-                graphIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
-                rssIconPane.setStyle("");
-                getAnimationFor(settingsPane, true).playFromStart();
-                topBar.setLeft(generateTitleText("Graph generator"));
-            }
-        });
-    }
-
     private void implementCloseAll() {
         Button button = new Button("Close all windows");
         button.setStyle("-fx-background-color: transparent; " +
@@ -187,6 +145,7 @@ public class Main extends Application {
             if (openedStages.size() > 0) {
                 openedStages.entrySet().forEach(entry -> {
                     entry.getValue().close();
+                    openedStages = new HashMap<>();
                 });
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -368,6 +327,88 @@ public class Main extends Application {
         return indicators.stream().map(this::generateIndicator).collect(Collectors.toCollection(ArrayList::new));
     }
 
+    private int howManyChecked(VBox placeholder) {
+        int count = 0;
+        for (Node node : placeholder.getChildren()) {
+            HBox checkboxPlaceholder = (HBox) node;
+            CheckBox checkBox = (CheckBox) checkboxPlaceholder.getChildren().get(1);
+            if (checkBox.isSelected()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void implementScreensSwitcher() {
+
+        ImageView graphImage = new ImageView();
+        graphImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("icon_statistics.png")));
+        graphImage.setSmooth(true);
+        graphImage.setCache(true);
+        graphImage.setFitWidth(50);
+        graphImage.setFitHeight(50);
+        graphImage.setLayoutX(25);
+        graphImage.setLayoutY(25);
+        graphImage.setId("graph-icon");
+        graphIconPane.getChildren().add(graphImage);
+
+        ImageView rssImage = new ImageView();
+        rssImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("icon_rss.png")));
+        rssImage.setSmooth(true);
+        rssImage.setCache(true);
+        rssImage.setFitHeight(50);
+        rssImage.setFitWidth(50);
+        rssImage.setLayoutX(25);
+        rssIconPane.getChildren().add(rssImage);
+
+        ImageView exchangeImage = new ImageView();
+        exchangeImage.setImage(new Image(getClass().getClassLoader().getResourceAsStream("exchange-rates.png")));
+        exchangeImage.setSmooth(true);
+        exchangeImage.setCache(true);
+        exchangeImage.setFitHeight(50);
+        exchangeImage.setFitWidth(50);
+        exchangeImage.setLayoutX(25);
+        exchangeIconPane.getChildren().add(exchangeImage);
+
+        exchangeIconPane.setOnMouseClicked( event -> {
+                if(mainPane.getCenter() != exchangeRatesPane){
+                    mainPane.getChildren().remove(mainPane.getCenter());
+                    exchangeIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
+                    graphIconPane.setStyle("");
+                    rssIconPane.setStyle("");
+                    mainPane.setCenter(exchangeRatesPane);
+                    topBar.getChildren().add(generateTitleText("Exchange rates"));
+                }
+        });
+
+        rssIconPane.setOnMouseClicked(event -> {
+            if (mainPane.getCenter() != rssPane) {
+                mainPane.getChildren().remove(mainPane.getCenter());
+                getAnimationFor(rssPane, true).playFromStart();
+                rssIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
+                graphIconPane.setStyle("");
+                exchangeIconPane.setStyle("");
+                mainPane.setCenter(rssPane);
+                topBar.getChildren().add(generateTitleText("RSS News feed"));
+            }
+        });
+
+        graphIconPane.setOnMouseClicked(event -> {
+            if (mainPane.getCenter() != settingsPane) {
+                mainPane.getChildren().remove(mainPane.getCenter());
+                mainPane.setCenter(settingsPane);
+                graphIconPane.setStyle("-fx-effect: dropshadow(gaussian, #000, 15, 0, 0,0);");
+                rssIconPane.setStyle("");
+                exchangeIconPane.setStyle("");
+                getAnimationFor(settingsPane, true).playFromStart();
+                topBar.getChildren().add(generateTitleText("Graph generator"));
+            }
+
+
+        });
+    }
+
+
     private static Label generateTitleText(String text) {
         //factory method
         Label textElement = new Label(text);
@@ -418,18 +459,6 @@ public class Main extends Application {
         return toReturn;
     }
 
-    private int howManyChecked(VBox placeholder) {
-        //iterate over all checkboxes to see how many are checked
-        int count = 0;
-        for (Node node : placeholder.getChildren()) {
-            HBox checkboxPlaceholder = (HBox) node;
-            CheckBox checkBox = (CheckBox) checkboxPlaceholder.getChildren().get(1);
-            if (checkBox.isSelected()) {
-                count++;
-            }
-        }
-        return count;
-    }
 
     private String getIndicatorLabelFromCode(String code) {
 
