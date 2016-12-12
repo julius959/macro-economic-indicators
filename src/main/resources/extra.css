@@ -1,0 +1,40 @@
+* {
+    -fx-focus-color: #F55028;
+    -fx-accent: #F55028;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-body-color: #F55028;
+    -fx-border-style: none;
+    -fx-focus-color: transparent;
+    -fx-border-color: transparent;
+
+}
+
+.spinner .increment-arrow-button:focused,
+.spinner .decrement-arrow-button:focused {
+    -fx-focus-color: transparent;
+    -fx-paint-focus-color: transparent;
+    -fx-border-color: transparent;
+
+}
+
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover {
+    /* interpolate color between yellow and red based on first color brightness */
+    -fx-body-color: ladder(#AAA, #cb431e 0%, red 100%);
+}
+
+.spinner .increment-arrow-button:hover:pressed,
+.spinner .decrement-arrow-button:hover:pressed,
+.spinner .increment-arrow-button:pressed,
+.spinner .decrement-arrow-button:pressed {
+    /* interpolate color between yellow and red based on first color brightness */
+    -fx-body-color: ladder(#AAA, #cb431e 0%, red 100%);
+}
+
+.spinner > .text-field {
+    -fx-background-color: #3e4249;
+    -fx-text-fill: white;
+}
