@@ -9,6 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import view.Main;
 
@@ -70,8 +71,10 @@ public class ExchangeRatesPane extends ScrollPane {
                     public void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
                         if (!isEmpty()) {
+                            this.setTextFill(Color.web("#8EF561"));
                             if (item.contains("-")) {
                                 item = item.substring(1);
+                                this.setTextFill(Color.web("#F5A58F"));
                             }
                             this.setText(item);
                         }
