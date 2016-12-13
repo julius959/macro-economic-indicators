@@ -1,4 +1,4 @@
-package charts;
+package indicator_views;
 
 import javafx.event.EventHandler;
 import javafx.scene.chart.LineChart;

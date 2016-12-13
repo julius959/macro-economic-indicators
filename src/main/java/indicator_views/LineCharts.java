@@ -1,4 +1,4 @@
-package charts;
+package indicator_views;
 
 import api_model.Model;
 import javafx.event.EventHandler;

@@ -1,4 +1,4 @@
-package table_view;
+package indicator_views;
 
 import api_model.Model;
 import javafx.beans.property.SimpleStringProperty;
