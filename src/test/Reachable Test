@@ -11,4 +11,17 @@ News Article Pane: fully reachable
 News Feed: fully reachable
 News Feed Pane: fully reachable
 
-Last updated 4-12-16
+Exchange Rate Model: fully reachable
+Country: fully reachable
+Indicator: fully reachable
+TimeRange: fully reachable
+
+PhillipsCurve: never used
+
+TableViewPane: fully reachable
+TableViewTest: fully reachable
+
+DataDisplayWrapper: fully reachable
+ProgressBar: fully reachable
+
+Last updated 13-12-16

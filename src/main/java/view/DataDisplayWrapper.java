@@ -3,6 +3,7 @@ package view;
 import api_model.Model;
 import bar_chart.BarChartPane;
 import charts.LineCharts;
+import charts.PhillipsCurve;
 import charts.PieCharts;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -165,7 +166,6 @@ public class DataDisplayWrapper extends Stage {
 //        startSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1960,Model.getInstance().currentYear-1,Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getStartYear())));
 //        endSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1960,Model.getInstance().currentYear-1,Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getEndYear())));
 
-
         startSpinner.valueProperty().addListener(new ChangeListener<Integer>() {
             @Override
             public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
@@ -194,8 +194,18 @@ public class DataDisplayWrapper extends Stage {
         toReturn.getChildren().add(tableButton);
 
 
+        if (Model.currentCountries.size() < 2) {
+            Button philButton = new Button("Philips Curve");
+            philButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
+            philButton.setPadding(new Insets(10));
+            toReturn.getChildren().add(philButton);
+            philButton.setOnMouseClicked(e -> {
 
-        if (Model.currentCountries.size() > 1) {
+                this.setCenterPane(new PhillipsCurve(data));
+            });
+        }
+
+        if (Model.currentCountries.size() > 0) {
             Button pieButton = new Button("Pie Chart");
             pieButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
             pieButton.setPadding(new Insets(10));
@@ -223,6 +233,7 @@ public class DataDisplayWrapper extends Stage {
         chartButton.setOnMouseClicked(e -> {
             this.setCenterPane(new BarChartPane(data));
         });
+
 
 
         return toReturn;

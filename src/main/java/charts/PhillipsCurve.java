@@ -18,7 +18,7 @@ public class PhillipsCurve extends StackPane {
 
     private LineChart<Number,Number> lineChart;
 
-    public PhillipsCurve(ArrayList<TreeMap<Integer, Integer>> data) {
+    public PhillipsCurve(ArrayList<TreeMap<Integer, Number>> data) {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Inflation");
@@ -54,9 +54,9 @@ public class PhillipsCurve extends StackPane {
     }
 
 
-    private void addData(ArrayList<TreeMap<Integer, Integer>> data) {
+    private void addData(ArrayList<TreeMap<Integer, Number>> data) {
         lineChart.getData().clear();
-        for (TreeMap<Integer, Integer> temp : data) {
+        for (TreeMap<Integer, Number> temp : data) {
             XYChart.Series series = new XYChart.Series();
             series.setName("Country"); // wrapper from Vlad
             for (Integer inflation : temp.keySet()) {

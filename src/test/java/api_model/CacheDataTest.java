@@ -20,6 +20,8 @@ public class CacheDataTest {
                 "NE.IMP.GNFS.ZS", "NE.EXP.GNFS.ZS", "SI.POV.GINI"));
         for (int l = 0; l < Model.countries.length; l++) {
             for (int k = 0; k < ind.size(); k++) {
+                Model.getInstance().timeRanges.get(ind.get(k)).setStartYear("0000");
+                Model.getInstance().timeRanges.get(ind.get(k)).setEndYear("9999");
                 assertEquals(Model.getInstance().getData(l, ind.get(k), Model.getInstance().timeRanges.get(ind.get(k)).getStartYear(), Model.getInstance().timeRanges.get(ind.get(k)).getEndYear())
                         ,(APIData.getInstance().getData(l, ind.get(k), Model.getInstance().timeRanges.get(ind.get(k)).getStartYear(), Model.getInstance().timeRanges.get(ind.get(k)).getEndYear())));
             }

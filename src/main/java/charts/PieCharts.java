@@ -103,7 +103,6 @@ public class PieCharts extends StackPane {
     private void addData(ArrayList<TreeMap<Integer, Number>> data) {
         pieChart.getData().clear();
         pieChartData = FXCollections.observableArrayList();
-
         for (int i = 0; i < data.size(); i++) {
             double average = 0;
             for (Number value : data.get(i).values()) {

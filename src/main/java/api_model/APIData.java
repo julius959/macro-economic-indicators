@@ -47,11 +47,11 @@ public class APIData {
                 sb.append(inputLine);
             }
         } catch (Exception e) {
-            System.out.println("Could not connect");
+  //          System.out.println("Could not connect");
         }
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
-        System.out.println("Getting response from server  " + totalTime);
+  //      System.out.println("Getting response from server  " + totalTime);
         return sb;
     }
 
@@ -67,10 +67,10 @@ public class APIData {
             JSONArray array1 = array.getJSONArray(1);
             for (int i = 0; i < array1.length(); ++i) {
                 JSONObject currentObject = array1.getJSONObject(i);
-                System.out.println(array1);
+ //               System.out.println(array1);
                 try {
                     BigDecimal value = currentObject.getBigDecimal("value");
-                    System.out.println("VALUES ARE " + value);
+//                    System.out.println("VALUES ARE " + value);
                     data.put(Integer.parseInt(currentObject.getString("date")), approximateValues(value,indicator)); // CONVERT INTO POUNDS
                 } catch (Exception e) {
                     System.out.printf(currentObject.getString("date") + " has no values");
@@ -78,10 +78,10 @@ public class APIData {
 
             }
         } catch (Exception e) {
-            System.out.println("Can not build the result");
+//            System.out.println("Can not build the result");
         }
         }
-        System.out.println(data);
+ //       System.out.println(data);
         return data;
 
 
