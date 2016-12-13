@@ -62,6 +62,7 @@ public class DataDisplayWrapper extends Stage {
     /**
      *Constructor for the wrapper. It will automatically load a bar chart pane, having other possible view types accessible from this pane's topbar
      */
+    private HBox toReturn;
     DataDisplayWrapper() {
         super();
         //get model instance
@@ -166,6 +167,15 @@ public class DataDisplayWrapper extends Stage {
                     vbCountryTables.getChildren().add(new TableViewPane(data.get(i),
                             Model.countries[getInCountries().get(i)].getName(),DataDisplayWrapper.this));
                 }
+//
+//                if (inCountries.size() > 1) {
+//                    Button pieButton = new Button("Pie Chart");
+//                    pieButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
+//                    pieButton.setPadding(new Insets(10));
+//                    toReturn.getChildren().add(pieButton);
+//                    pieButton.setOnMouseClicked(e -> setCenterPane(new PieCharts(data,DataDisplayWrapper.this)));
+//                }
+
             }
         };
     }
@@ -197,7 +207,7 @@ public class DataDisplayWrapper extends Stage {
 
     private HBox generateTopBar() {
         //placeholder
-        HBox toReturn = new HBox();
+         toReturn = new HBox();
         toReturn.setStyle(" -fx-pref-height: 40px; -fx-background-color: #F55028;");
 
         //chart button
