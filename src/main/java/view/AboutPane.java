@@ -2,20 +2,10 @@ package view;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.*;
-import javafx.scene.paint.*;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.text.Text;
-
-import java.awt.*;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.Scanner;
 
 
@@ -42,47 +32,51 @@ public class AboutPane extends ScrollPane {
         StackPane aboutPane = new StackPane();
         aboutPane.setStyle("-fx-background-color: rgba(65,68,75);");
 
-        TextArea aboutlabel = new TextArea();
-        aboutlabel.setEditable(false);
+        //Sorry about this guys :/
+        String sAbout = "This is a standalone application designed to support A Level Economic students" +
+                " with access to visualisations of macro-economic data. \n" +
+                "All the indicators present in this application have been cherry-picked from the AQA A Level syllabus." +
+                " Thus providing students with comprehensive, thorough information about the current and historic " +
+                "macro-economic state of many relevant economies.\n" +
+                "\n" +
+                "Key features:\n" +
+                "- Compare up to 43 countries across 21 different indicators\n" +
+                "- Visualises macro-economic data using: Bar Charts, Line Charts, Tabular data and Pie Charts\n" +
+                "- Compare and query multiple macro-economic data at the same time - side by side\n" +
+                "- Keep up-to-date with the latest Economic news from the BBC without leaving the app\n" +
+                "- Keep up-to-date with the current Exchange Rates for 31 different currencies\n";
 
-        try {
-            initialize(aboutlabel, getClass().getClassLoader().getResource("about.txt").getPath());
-        } catch (Exception e) {
-        }
-        aboutlabel.setStyle("-fx-background-color: rgba(65,68,75);" +
+        //Creates a label with about text
+        Label label = new Label(sAbout);
+        //Centres text, word wraps text and styles background
+        label.setAlignment(Pos.CENTER);
+        label.setWrapText(true);
+        label.setStyle("-fx-background-color: rgba(65,68,75);" +
                 "-fx-text-fill: white;" +
+                "-fx-text-alignment: center;" +
                 "fx-font-size:15");
-        aboutPane.getChildren().add(aboutlabel);
+        //Adds label to title pane
+        aboutPane.getChildren().add(label);
 
 
         TitledPane aboutTitle = new TitledPane("About", aboutPane);
         aboutTitle.setAlignment(Pos.CENTER);
         aboutTitle.setStyle("-fx-text-fill: #ffffff;" +
                 "-fx-padding:20,0,0,0;" +
-                "-fx-font-size: 17;");
+                "-fx-font-size: 17;" +
+                "-fx-color: rgba(65,68,75)");
 
         content.getChildren().add(aboutTitle);
         aboutTitle.setExpanded(false);
 
-
-
-
-
-
-
         StackPane pane = new StackPane();
-       // pane.setAlignment(Pos.CENTER);
         pane.setStyle("-fx-background-color: rgba(65,68,75)");
         Label teamlabel = new Label();
         pane.getChildren().add(teamlabel);
 
-        //teamlabel.setEditable(false);
         teamlabel.setText("Khalil Ahmed\nVlad Niculescu\nCătălin Buruiană\nJacob Klerfelt\nJihwan Sang");
 
-
-
         TitledPane teamTitle = new TitledPane("Team", pane);
-
 
         teamTitle.setAlignment(Pos.CENTER);
         teamTitle.setStyle("-fx-text-fill: #ffffff;" +
@@ -95,7 +89,6 @@ public class AboutPane extends ScrollPane {
                 "-fx-background-color: rgba(65,68,75);");
         content.getChildren().add(teamTitle);
         teamTitle.setExpanded(false);
-
 
         TextArea jUnit = new TextArea();
         jUnit.setEditable(false);
@@ -148,8 +141,6 @@ public class AboutPane extends ScrollPane {
                 "-fx-padding:20,0,0,0;" +
                 "-fx-font-size: 15");
 
-
-
         TextArea sqllite = new TextArea();
         sqllite.setEditable(false);
         sqllite.setText("http://mvnrepository.com/artifact/org.xerial/sqlite-jdbc/3.15.1");
@@ -160,8 +151,6 @@ public class AboutPane extends ScrollPane {
                 "-fx-padding:20,0,0,0;" +
                 "-fx-font-size: 15");
 
-
-
         TextArea fixerio = new TextArea();
         fixerio.setEditable(false);
         fixerio.setText("http://fixer.io");
@@ -170,9 +159,6 @@ public class AboutPane extends ScrollPane {
         fixerio.setStyle("-fx-text-fill: #ffffff;" +
                 "-fx-padding:20,0,0,0;" +
                 "-fx-font-size: 15");
-
-
-
 
         TextArea flag = new TextArea();
         flag.setEditable(false);
@@ -183,10 +169,6 @@ public class AboutPane extends ScrollPane {
                 "-fx-padding:20,0,0,0;" +
                 "-fx-font-size: 15");
 
-
-
-
-
         Accordion acordion = new Accordion();
 
         acordion.getPanes().addAll(jdomPane, junitPane, hamcrestPane, jsonPane, SQLLitePane,fixerioPane,flagPane);
@@ -196,25 +178,17 @@ public class AboutPane extends ScrollPane {
                 "-fx-background-insets: 0;" +
                 "-fx-padding:0");
 
-
-
-
-
         TitledPane licenseTitle = new TitledPane("Licenses", acordion);
         licenseTitle.setAlignment(Pos.CENTER);
         licenseTitle.setStyle("-fx-text-fill: #FFFFFF;" +
                 "   -fx-padding:20,0,0,0;" +
                 "-fx-font-size: 17;" +
                 "fx-border-color:transparent;" +
-                "fx-border-style:none;");
+                "fx-border-style:none;" +
+                "-fx-color: rgba(65,68,75)");
         licenseTitle.setExpanded(false);
 
-
-
-
         content.getChildren().add(licenseTitle);
-
-
 
         setContent(content);
     }
