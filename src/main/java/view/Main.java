@@ -205,7 +205,7 @@ public class Main extends Application {
         scene.getStylesheets().add(this.getClass().getClassLoader()
                 .getResource("styling.css").toExternalForm());
 
-        topBar.setLeft(generateTitleText("Graph generator"));
+        topBar.setLeft(generateTitleText("Graph Generator"));
         controlBar.setStyle("-fx-background-color: #2c3138");
         topBar.setStyle("-fx-background-color: #F55028");
         topBar.setPadding(new Insets(10));
@@ -484,7 +484,7 @@ public class Main extends Application {
                 graphIconPane.setStyle("");
                 rssIconPane.setStyle("");
                 mainPane.setCenter(aboutpane);
-                topBar.getChildren().add(generateTitleText("About"));
+                topBar.setLeft(generateTitleText("About"));
             }
         });
 
@@ -495,7 +495,7 @@ public class Main extends Application {
                 graphIconPane.setStyle("");
                 rssIconPane.setStyle("");
                 mainPane.setCenter(exchangeRatesPane);
-                topBar.getChildren().add(generateTitleText("Exchange rates"));
+                topBar.setLeft(generateTitleText("Exchange Rates"));
             }
         });
 
@@ -507,7 +507,7 @@ public class Main extends Application {
                 graphIconPane.setStyle("");
                 exchangeIconPane.setStyle("");
                 mainPane.setCenter(rssPane);
-                topBar.getChildren().add(generateTitleText("RSS News feed"));
+                topBar.setLeft(generateTitleText("News Feed"));
             }
         });
 
@@ -519,7 +519,7 @@ public class Main extends Application {
                 rssIconPane.setStyle("");
                 exchangeIconPane.setStyle("");
                 getAnimationFor(settingsPane, true).playFromStart();
-                topBar.getChildren().add(generateTitleText("Graph generator"));
+                topBar.setLeft(generateTitleText("Graph Generator"));
             }
 
 

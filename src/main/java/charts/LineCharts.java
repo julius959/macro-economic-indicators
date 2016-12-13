@@ -51,7 +51,7 @@ public class LineCharts extends StackPane {
 
                         DecimalFormat yValFormat = new DecimalFormat(".###"); // Setting a maximum number of 3 decimals to be displayed
 
-                        if (chartName.equals("GDP") && chartName.equals("GDP per capita") && chartName.equals("GDP growth")) { // GDP has been chosen as indicator, economic cycle can be calculated and added to tooltip
+                        if (chartName.equals("GDP") || chartName.equals("GDP per capita") || chartName.equals("GDP growth")) { // GDP has been chosen as indicator, economic cycle can be calculated and added to tooltip
                             int nodeIndex = series.getData().indexOf(node);
 
                             if (nodeIndex > 0 && nodeIndex < series.getData().size() - 1) { // Node is not the first or last node in chart
