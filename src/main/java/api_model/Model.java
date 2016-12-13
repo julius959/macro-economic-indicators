@@ -263,7 +263,7 @@ public class Model {
      * </p>
      * @return Returns an ArrayList containing the data for each selected country in a TreeMap.
      */
-    public ArrayList<TreeMap<Integer, BigDecimal>> gatherData() {
+    public ArrayList<TreeMap<Integer, BigDecimal>> gatherData(ArrayList<Integer> c, String indicator) {
         ExecutorService executor = Executors.newFixedThreadPool(10);
         TreeMap<Integer, BigDecimal>[] res = new TreeMap[currentCountries.size()];
         for (int i = 0; i < currentCountries.size(); ++i) {
@@ -271,7 +271,7 @@ public class Model {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    res[finalI] = getData(currentCountries.get(finalI), currentIndicator, timeRanges.get(currentIndicator).getStartYear(), timeRanges.get(currentIndicator).getEndYear());
+                    res[finalI] = getData(c.get(finalI), indicator, timeRanges.get(indicator).getStartYear(), timeRanges.get(indicator).getEndYear());
                 }
             });
         }
