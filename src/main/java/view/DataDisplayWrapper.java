@@ -62,6 +62,7 @@ public class DataDisplayWrapper extends Stage {
     /**
      *Constructor for the wrapper. It will automatically load a bar chart pane, having other possible view types accessible from this pane's topbar
      */
+    private Button pieButton;
     private HBox toReturn;
     DataDisplayWrapper() {
         super();
@@ -167,15 +168,8 @@ public class DataDisplayWrapper extends Stage {
                     vbCountryTables.getChildren().add(new TableViewPane(data.get(i),
                             Model.countries[getInCountries().get(i)].getName(),DataDisplayWrapper.this));
                 }
-//
-//                if (inCountries.size() > 1) {
-//                    Button pieButton = new Button("Pie Chart");
-//                    pieButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
-//                    pieButton.setPadding(new Insets(10));
-//                    toReturn.getChildren().add(pieButton);
-//                    pieButton.setOnMouseClicked(e -> setCenterPane(new PieCharts(data,DataDisplayWrapper.this)));
-//                }
-
+                if(inCountries.size()<=1)  pieButton.setVisible(false);
+                else pieButton.setVisible(true);
             }
         };
     }
@@ -253,13 +247,13 @@ public class DataDisplayWrapper extends Stage {
 
 
         //pie chart button if there are multiple countries
-        if (inCountries.size() > 1) {
-            Button pieButton = new Button("Pie Chart");
+      //  if (Model.currentCountries.size() > 1) {
+             pieButton = new Button("Pie Chart");
             pieButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
             pieButton.setPadding(new Insets(10));
             toReturn.getChildren().add(pieButton);
             pieButton.setOnMouseClicked(e -> this.setCenterPane(new PieCharts(data,this)));
-        }
+     //   }
 
 
         toReturn.getChildren().add(startSpinner);
