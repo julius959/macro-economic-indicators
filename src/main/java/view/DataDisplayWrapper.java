@@ -243,7 +243,7 @@ public class DataDisplayWrapper extends Stage {
 
 
         //pie chart button if there are multiple countries
-        if (Model.currentCountries.size() > 1) {
+        if (inCountries.size() > 1) {
             Button pieButton = new Button("Pie Chart");
             pieButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
             pieButton.setPadding(new Insets(10));
