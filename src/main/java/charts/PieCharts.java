@@ -1,6 +1,7 @@
 package charts;
 
 import api_model.Model;
+import javafx.animation.Interpolatable;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -103,15 +104,24 @@ public class PieCharts extends StackPane {
     private void addData(ArrayList<TreeMap<Integer, Number>> data) {
         pieChart.getData().clear();
         pieChartData = FXCollections.observableArrayList();
-        for (int i = 0; i < data.size(); i++) {
-            double average = 0;
-            for (Number value : data.get(i).values()) {
-                average += value.doubleValue();
+        if(data.size() == 1){
+            ArrayList<Number> numb = new ArrayList<Number>(data.get(0).values());
+            System.out.println(numb.get(0));
+            for (int i = 0; i < data.get(0).size(); i++){
+                pieChartData.add(new PieChart.Data(Model.getInstance().currentIndicator, (double)numb.get(i)));
             }
-            double valueToInsert = average / data.get(i).size();
-            totalValues += valueToInsert;
-            pieChartData.add(new PieChart.Data(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName(), valueToInsert));
         }
-        pieChart.getData().addAll(pieChartData);
+        else{
+            for (int i = 0; i < data.size(); i++) {
+                double average = 0;
+                for (Number value : data.get(i).values()) {
+                    average += value.doubleValue();
+                }
+                double valueToInsert = average / data.get(i).size();
+                totalValues += valueToInsert;
+                pieChartData.add(new PieChart.Data(Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName(), valueToInsert));
+            }
+            pieChart.getData().addAll(pieChartData);
+        }
     }
 }
