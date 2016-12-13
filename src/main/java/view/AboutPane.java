@@ -14,13 +14,23 @@ import java.util.Scanner;
  * Created by Vlad Niculescu on 12/12/2016.
  */
 public class AboutPane extends ScrollPane {
+    /**
+     * VBox containing all the about information
+     */
     VBox content = new VBox();
 
+    /**
+     * Constructor that creates the about pane
+     * @param app
+     */
     public AboutPane(Main app) {
         super();
         addContent();
     }
 
+    /**
+     * Method that adds the whole content into the view.
+     */
     private void addContent() {
 
         this.getStylesheets().add(this.getClass().getClassLoader()
@@ -58,7 +68,7 @@ public class AboutPane extends ScrollPane {
         //Adds label to title pane
         aboutPane.getChildren().add(label);
 
-
+        //About title pane that contains a lebel containing a short description about the application and it's key features.
         TitledPane aboutTitle = new TitledPane("About", aboutPane);
         aboutTitle.setAlignment(Pos.CENTER);
         aboutTitle.setStyle("-fx-text-fill: #ffffff;" +
@@ -69,13 +79,14 @@ public class AboutPane extends ScrollPane {
         content.getChildren().add(aboutTitle);
         aboutTitle.setExpanded(false);
 
+
         StackPane pane = new StackPane();
         pane.setStyle("-fx-background-color: rgba(65,68,75)");
         Label teamlabel = new Label();
         pane.getChildren().add(teamlabel);
 
         teamlabel.setText("Khalil Ahmed\nVlad Niculescu\nCătălin Buruiană\nJacob Klerfelt\nJihwan Sang");
-
+        //Team title pane that contains the names of the team members
         TitledPane teamTitle = new TitledPane("Team", pane);
 
         teamTitle.setAlignment(Pos.CENTER);
@@ -194,6 +205,12 @@ public class AboutPane extends ScrollPane {
     }
 
     // Retrieves the text from the txt file.
+
+    /**
+     * Method that parses the text from the txt files and appendts it to the TextArea.
+     * @param textlabel
+     * @param path
+     */
     private void initialize(TextArea textlabel, String path) {
         try {
             Scanner s = new Scanner(new File(path)).useDelimiter("\\s+");
