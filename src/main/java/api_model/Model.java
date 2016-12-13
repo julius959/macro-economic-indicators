@@ -261,6 +261,8 @@ public class Model {
      * Methods that gathers the data for all the current countries selected and the indicator.
      * <p>The data is retrieved using multithreading so the data is being retrieved simultaneously either from the api or from cache. The executor service handles the all the tasks being executed in parallel.
      * </p>
+     * @param c List of the countries that needs to be queried
+     * @param indicator Current indicator that needs to be queried
      * @return Returns an ArrayList containing the data for each selected country in a TreeMap.
      */
     public ArrayList<TreeMap<Integer, BigDecimal>> gatherData(ArrayList<Integer> c, String indicator) {

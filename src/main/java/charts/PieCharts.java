@@ -35,7 +35,7 @@ public class PieCharts extends StackPane {
         super();
         totalValues = 0;
         pieChart = new PieChart();
-        String pieChartTitle = "" + currentWrapper.getcurrentIndicatorObject().getLabelFromCode(currentWrapper.getcurrentIndicatorCode());
+        String pieChartTitle = "Average " + currentWrapper.getcurrentIndicatorObject().getLabelFromCode(currentWrapper.getcurrentIndicatorCode());
         pieChart.setTitle(pieChartTitle);
         this.currentWrapper = currentWrapper;
         this.addData(data); // calling method that adds all the data to the PieChart

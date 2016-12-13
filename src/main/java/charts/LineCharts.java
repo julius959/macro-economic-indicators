@@ -38,7 +38,7 @@ public class LineCharts extends StackPane {
         String chartName = currentWrapper.getcurrentIndicatorObject().getLabelFromCode(currentWrapper.getcurrentIndicatorCode()); // Setting the name of the linechart by checking which indicator is currently chosen in the model
         lineChart.setTitle(chartName);
         xAxis.setLabel("Date");
-        yAxis.setLabel(chartName);
+        yAxis.setLabel(currentWrapper.getcurrentIndicatorObject().getSubIndicatorUnitFromCode(currentWrapper.getcurrentIndicatorCode()));
         this.addData(data); // calling method that will add all the data to the linechart
         this.getChildren().add(lineChart); // adding lineChart to pane
         for(final XYChart.Series<String, Number> series : lineChart.getData()) { // adding eventhandler to the different nodes in the linechart
