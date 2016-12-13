@@ -1,4 +1,4 @@
-package bar_chart;
+package indicator_views;
 
 import api_model.Model;
 import javafx.scene.chart.BarChart;

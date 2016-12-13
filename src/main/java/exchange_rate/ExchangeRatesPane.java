@@ -1,4 +1,4 @@
-package api_exchange;
+package exchange_rate;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -9,18 +9,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import java.util.ArrayList;
-import java.util.HashMap;
-import view.Main;
 
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.util.Callback;
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 /**

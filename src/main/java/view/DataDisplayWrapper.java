@@ -2,9 +2,9 @@ package view;
 
 import api_model.Indicator;
 import api_model.Model;
-import bar_chart.BarChartPane;
-import charts.LineCharts;
-import charts.PieCharts;
+import indicator_views.BarChartPane;
+import indicator_views.LineCharts;
+import indicator_views.PieCharts;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -17,7 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import table_view.TableViewPane;
+import indicator_views.TableViewPane;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

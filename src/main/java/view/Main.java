@@ -1,6 +1,6 @@
 package view;
 
-import api_exchange.ExchangeRatesPane;
+import exchange_rate.ExchangeRatesPane;
 import api_model.Country;
 import api_model.Indicator;
 import api_model.Model;
