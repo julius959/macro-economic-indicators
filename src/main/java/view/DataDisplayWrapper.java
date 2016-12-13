@@ -123,6 +123,19 @@ public class DataDisplayWrapper extends Stage {
         displayingDataThread = new Thread(task);
         displayingDataThread.start();
     }
+    void restartThread(){
+        if (displayingDataThread != null) {
+            displayingDataThread.stop();
+        }
+
+
+        Task task = newTask();
+        pi.progressProperty().bind(task.progressProperty());
+        this.setCenterPane(pi);
+
+        displayingDataThread = new Thread(task);
+        displayingDataThread.start();
+    }
 
     //factory method for a new task
     private Task<ArrayList> newTask() {
@@ -130,7 +143,7 @@ public class DataDisplayWrapper extends Stage {
 
             @Override
             protected ArrayList call() throws Exception {
-                return setData(Model.getInstance().gatherData());
+                return setData(Model.getInstance().gatherData(inCountries,indicatorCode));
             }
 
             @Override
@@ -151,7 +164,7 @@ public class DataDisplayWrapper extends Stage {
                 vbCountryTables.getChildren().clear();
                 for (int i = 0; i < data.size(); ++i) {
                     vbCountryTables.getChildren().add(new TableViewPane(data.get(i),
-                            Model.countries[Model.currentCountries.get(i)].getName(),DataDisplayWrapper.this));
+                            Model.countries[getInCountries().get(i)].getName(),DataDisplayWrapper.this));
                 }
             }
         };
@@ -212,15 +225,15 @@ public class DataDisplayWrapper extends Stage {
 
         //listener to start spinner
         startSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Model.timeRanges.get(Model.currentIndicator).setStartYear(Integer.toString((int) startSpinner.getValue()));
-            startThread();
+            Model.timeRanges.get(indicatorCode).setStartYear(Integer.toString((int) startSpinner.getValue()));
+            restartThread();
 
         });
 
         //listener to end spinner
         endSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Model.timeRanges.get(Model.currentIndicator).setEndYear(Integer.toString(endSpinner.getValue()));
-            startThread();
+            Model.timeRanges.get(indicatorCode).setEndYear(Integer.toString(endSpinner.getValue()));
+            restartThread();
         });
 
 
