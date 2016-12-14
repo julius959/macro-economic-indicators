@@ -69,7 +69,6 @@ public class PieCharts extends StackPane {
                 anim.stop();
                 if (tt != null) {
                     tt.stop();
-                    System.out.println("Animation thread stopped");
                 }
 
             } else {

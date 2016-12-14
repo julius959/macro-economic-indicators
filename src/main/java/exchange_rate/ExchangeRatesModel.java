@@ -36,7 +36,6 @@ public class ExchangeRatesModel{
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             stringbuilder.append(bufferedReader.readLine());
         } catch (Exception e) {
-            System.out.println("Error");
         }
         return stringbuilder; 
     }
@@ -76,7 +75,6 @@ public class ExchangeRatesModel{
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error");
         }
         return exchangeRates; // returning HashMap containing all the currencies and their exchangerates
     }

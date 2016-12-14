@@ -382,7 +382,6 @@ public class Main extends Application {
         for (String option : indicator.getSubIndicatorsLabels()) {
             RadioButton optionButton = generateIndicatorOption(option, true);
             optionButton.setOnMouseClicked(event -> {
-                System.out.println(indicator.getCodeFromLabel(option));
                 Model.currentIndicator = indicator.getCodeFromLabel(option);
                 Model.currentObjectIndicator = indicator;
                 if (howManyChecked(countriesPlaceholder) == 0) {

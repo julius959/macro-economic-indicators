@@ -46,7 +46,6 @@ public class Country {
             try{
                 flagImage = new Image(getOnlineFlag());
             }catch (Exception e2){
-                System.out.println("Failed to retrieve the flag from online "+ e2);
             }
         }
        return flagImage;
@@ -112,7 +111,6 @@ public class Country {
                     is.close();
                     os.close();
                 } catch (Exception e) {
-                    System.out.println("Could not download flag for " + flagCode);
                 }
             }
         }).start();

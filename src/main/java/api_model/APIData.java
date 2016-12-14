@@ -57,7 +57,6 @@ public class APIData {
                 sb.append(inputLine);
             }
         } catch (Exception e) {
-            System.out.println("Could not connect, error: "+e);
         }
         return sb;
     }
@@ -87,7 +86,6 @@ public class APIData {
                 } catch (Exception e) {}
             }
         } catch (Exception e) {
-            System.out.println("Can not build the result, error: "+e);
         }
         }
         return data;
@@ -125,7 +123,6 @@ public class APIData {
             c.commit();
             c.close();
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
     }
 }

@@ -243,7 +243,6 @@ public class Model {
         if (isCached(newQuerriedData,startDate,endDate)) {
             finalHashmap = CacheData.getInstance().getData(countryIndex, indicator, startDate, endDate);
             if (!finalHashmap.isEmpty()) emptyData = false;
-            else System.out.println("DATA COULD NOT BE RETRIEVED FROM CACHE");
         } else {
             finalHashmap = APIData.getInstance().getData(countryIndex, indicator, startDate, endDate);
             if (!finalHashmap.isEmpty()) {
