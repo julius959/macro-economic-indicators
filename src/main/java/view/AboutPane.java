@@ -6,6 +6,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 
@@ -104,7 +105,7 @@ public class AboutPane extends ScrollPane {
         TextArea jUnit = new TextArea();
         jUnit.setEditable(false);
         try {
-            initialize(jUnit, getClass().getClassLoader().getResource("licenses/junitLicense.txt").getPath());
+            initialize(jUnit, getClass().getClassLoader().getResourceAsStream("licenses/junitLicense.txt"));
         } catch (Exception e) {
         }
 
@@ -117,7 +118,7 @@ public class AboutPane extends ScrollPane {
         TextArea hamcrest = new TextArea();
         hamcrest.setEditable(false);
         try {
-            initialize(hamcrest, getClass().getClassLoader().getResource("licenses/hamcrestLicense.txt").getPath());
+            initialize(hamcrest, getClass().getClassLoader().getResourceAsStream("licenses/hamcrestLicense.txt"));
         } catch (Exception e) {
         }
 
@@ -130,7 +131,7 @@ public class AboutPane extends ScrollPane {
         TextArea jdom = new TextArea();
         jdom.setEditable(false);
         try {
-            initialize(jdom, getClass().getClassLoader().getResource("licenses/jdomLicense.txt").getPath());
+            initialize(jdom, getClass().getClassLoader().getResourceAsStream("licenses/jdomLicense.txt"));
         } catch (Exception e) {
         }
 
@@ -209,11 +210,10 @@ public class AboutPane extends ScrollPane {
     /**
      * Method that parses the text from the txt files and appendts it to the TextArea.
      * @param textlabel
-     * @param path
+     * @param inputStream
      */
-    private void initialize(TextArea textlabel, String path) {
-        try {
-            Scanner s = new Scanner(new File(path)).useDelimiter("\\s+");
+    private void initialize(TextArea textlabel, InputStream inputStream) {
+            Scanner s = new Scanner(inputStream).useDelimiter("\\s+");
             while (s.hasNext()) {
                 if (s.hasNextInt()) {
                     textlabel.appendText(s.nextInt() + " ");
@@ -221,8 +221,5 @@ public class AboutPane extends ScrollPane {
                     textlabel.appendText(s.next() + " ");
                 }
             }
-        } catch (FileNotFoundException ex) {
-            System.err.println(ex);
-        }
     }
 }
