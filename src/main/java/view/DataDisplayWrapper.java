@@ -1,68 +1,102 @@
 package view;
 
+import api_model.Indicator;
 import api_model.Model;
-import bar_chart.BarChartPane;
-import charts.LineCharts;
-import charts.PhillipsCurve;
-import charts.PieCharts;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import indicator_views.BarChartPane;
+import indicator_views.LineCharts;
+import indicator_views.PieCharts;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Spinner;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import table_view.TableViewPane;
+import indicator_views.TableViewPane;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Created by loopiezlol on 05/12/2016.
- */
 public class DataDisplayWrapper extends Stage {
 
-    ArrayList<TreeMap<Integer, Number>> data = new ArrayList<>();
-    BorderPane mainPane;
-    ScrollPane spCountryTables;
-    ArrayList<Integer> inCountries = new ArrayList<>();
-    Thread displayingDataThread;
-    BarChartPane bp;
+    /**
+     * Used to hold the data for all necessary countries
+     */
+    private ArrayList<TreeMap<Integer, Number>> data = new ArrayList<>();
+    /**
+     * Reference for the main pane, holding everything
+     */
+    private BorderPane mainPane;
+    /**
+     * Reference to the scroll pane keeping all tables (when there are multiple countries)
+     */
+    private ScrollPane spCountryTables;
+    /**
+     * Reference to current countries in the wrapper
+     */
+    private ArrayList<Integer> inCountries = new ArrayList<>();
+    /**
+     * Reference to the Thread used to load the data from the internet/cache
+     */
+    private Thread displayingDataThread;
+    /**
+     * Reference to the Bar Chart Pane (first one shown)
+     */
+    private BarChartPane bp;
+    /**
+     * Reference to the Vbox keeping the multiple countries tables
+     */
+    private VBox vbCountryTables;
+    /**
+     * Reference to the loading spinner
+     */
+    private ProgressIndicator pi;
 
-    VBox vbCountryTables;
-    ProgressBr bar;
-
-    public DataDisplayWrapper() {
+    /**
+     *Constructor for the wrapper. It will automatically load a bar chart pane, having other possible view types accessible from this pane's topbar
+     */
+    DataDisplayWrapper() {
         super();
-
+        //get model instance
+        Model.getInstance();
+        //init inCountries
         inCountries = new ArrayList<>(Model.currentCountries);
+        this.indicatorObject = Model.getInstance().currentObjectIndicator;
+        this.indicatorCode = Model.getInstance().currentIndicator;
+        //init loading spinner
+        pi = new ProgressIndicator(-1);
+        pi.setStyle("-fx-progress-color: #F55028");
+        pi.setMaxWidth(100);
+        pi.setMaxHeight(100);
 
-        bar = new ProgressBr();
-
-
-        this.setTitle(Model.getInstance().currentObjectIndicator.getLabelFromCode(Model.getInstance().currentIndicator));
+        //sets the title
+        this.setTitle(Model.currentObjectIndicator.getLabelFromCode(Model.currentIndicator));
         mainPane = new BorderPane();
         Scene scene = new Scene(mainPane, 800, 500);
+
+        //load css
+        scene.getStylesheets().add(this.getClass().getClassLoader()
+                .getResource("extra.css").toExternalForm());
 
         //Creates scroll pane for all country tables
         vbCountryTables = new VBox(10);
         spCountryTables = new ScrollPane(vbCountryTables);
         spCountryTables.setFitToWidth(true);
+        spCountryTables.setPadding(new Insets(0));
 
-
-        bp = new BarChartPane(data);
+        //init the main pane (bar chart pane)
+        bp = new BarChartPane(data,this);
         this.setCenterPane(bp);
-
+        //starts the thread
         startThread();
+        //sets the top bar
         mainPane.setTop(generateTopBar());
         this.setScene(scene);
 
@@ -70,29 +104,46 @@ public class DataDisplayWrapper extends Stage {
         setMinHeight(500);
         setMinWidth(800);
     }
+    private Indicator indicatorObject;
+    private String indicatorCode;
+    /**
+     * Method used to start/restart the loading thread with the current values in the Model.
+     */
+    void startThread() {
 
-
-    public void startThread() {
         if (displayingDataThread != null) {
             displayingDataThread.stop();
         }
         inCountries = new ArrayList<>(Model.currentCountries);
+
         Task task = newTask();
-        bar.activateProgressBar(task);
-        bar.getDialogStage().show();
+        pi.progressProperty().bind(task.progressProperty());
+        this.setCenterPane(pi);
+
+        displayingDataThread = new Thread(task);
+        displayingDataThread.start();
+    }
+    void restartThread(){
+        if (displayingDataThread != null) {
+            displayingDataThread.stop();
+        }
+
+
+        Task task = newTask();
+        pi.progressProperty().bind(task.progressProperty());
+        this.setCenterPane(pi);
 
         displayingDataThread = new Thread(task);
         displayingDataThread.start();
     }
 
-    private Task<ArrayList<TreeMap<Integer, Number>>> newTask() {
-        return new Task<ArrayList<TreeMap<Integer, Number>>>() {
+    //factory method for a new task
+    private Task<ArrayList> newTask() {
+        return new Task<ArrayList>() {
 
             @Override
-            protected ArrayList<TreeMap<Integer, Number>> call() throws Exception {
-                ArrayList<TreeMap<Integer, Number>> res = setData(Model.getInstance().gatherData());
-
-                return res;
+            protected ArrayList call() throws Exception {
+                return setData(Model.getInstance().gatherData(inCountries,indicatorCode));
             }
 
             @Override
@@ -103,26 +154,24 @@ public class DataDisplayWrapper extends Stage {
                 }
             }
 
+            //when suceeded it will pass the data to bar chart pane (main one)
             @Override
             protected void succeeded() {
                 super.succeeded();
-                System.out.println(data.size());
-
-
                 bp.passData(getValue());
                 setCenterPane(bp);
-                bar.getDialogStage().close();
                 //Create and add a table for each country in the data
                 vbCountryTables.getChildren().clear();
                 for (int i = 0; i < data.size(); ++i) {
                     vbCountryTables.getChildren().add(new TableViewPane(data.get(i),
-                            Model.getInstance().countries[Model.getInstance().currentCountries.get(i)].getName()));
+                            Model.countries[getInCountries().get(i)].getName(),DataDisplayWrapper.this));
                 }
             }
         };
     }
 
-    public ArrayList setData(ArrayList<TreeMap<Integer, BigDecimal>> inData) {
+    //method used to populate the data inside given some other data input
+    private ArrayList setData(ArrayList<TreeMap<Integer, BigDecimal>> inData) {
         data.clear();
         for (TreeMap<Integer, BigDecimal> val : inData) {
             TreeMap<Integer, Number> toAdd = new TreeMap<>();
@@ -132,60 +181,59 @@ public class DataDisplayWrapper extends Stage {
             data.add(toAdd);
         }
         return data;
-        // this.setCenterPane(new BarChartPane(data));
     }
 
-    public void setCenterPane(Node node) {
+    //sets central pane
+    private void setCenterPane(Node node) {
         mainPane.setCenter(node);
     }
 
-    public void clearData() {
+    /**
+     * Method used to clear the data inside the wrapper
+     */
+    void clearData() {
         data.clear();
     }
 
-    public HBox generateTopBar() {
+    private HBox generateTopBar() {
+        //placeholder
         HBox toReturn = new HBox();
-
         toReturn.setStyle(" -fx-pref-height: 40px; -fx-background-color: #F55028;");
 
+        //chart button
         Button chartButton = new Button("Bar Chart");
         chartButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         chartButton.setPadding(new Insets(10));
-        //chartButton.setStyle("-fx-effect: dropshadow(gaussian, #000, 10, 0, 0,0);");
-
+        //table button
         Button tableButton = new Button("Table");
         tableButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         tableButton.setPadding(new Insets(10));
-
+        //line chart button
         Button lineButton = new Button("Line Chart");
         lineButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
         lineButton.setPadding(new Insets(10));
-        System.out.println(Model.timeRanges.get(Model.currentIndicator).getStartYear()+" "+Model.timeRanges.get(Model.currentIndicator).getEndYear());
-        Spinner<Integer> startSpinner = new Spinner<>(1960, Model.getInstance().currentYear - 1 , Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getStartYear()),1);
-        Spinner<Integer> endSpinner = new Spinner(1960, Model.getInstance().currentYear - 1, Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getEndYear())-1,1);
-//        startSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1960,Model.getInstance().currentYear-1,Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getStartYear())));
-//        endSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1960,Model.getInstance().currentYear-1,Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getEndYear())));
 
-        startSpinner.valueProperty().addListener(new ChangeListener<Integer>() {
-            @Override
-            public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-                Model.getInstance().timeRanges.get(Model.getInstance().currentIndicator).setStartYear(Integer.toString((int) startSpinner.getValue()));
-                System.out.println("START YEAR "+Model.timeRanges.get(Model.currentIndicator).getStartYear());
-                System.out.println(startSpinner.getValue());
-                startThread();
+        //start spinner
+        Spinner<Integer> startSpinner = new Spinner<>(1960, Model.currentYear - 1 , Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getStartYear()),1);
+        startSpinner.setPadding(new Insets(10));
+        startSpinner.setStyle("-fx-background-color: transparent;");
 
-            }
+        //end spinner
+        Spinner<Integer> endSpinner = new Spinner(1960, Model.currentYear - 1, Integer.parseInt(Model.timeRanges.get(Model.currentIndicator).getEndYear())-1,1);
+        endSpinner.setPadding(new Insets(10));
+        endSpinner.setStyle("-fx-background-color: transparent;");
+
+        //listener to start spinner
+        startSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Model.timeRanges.get(indicatorCode).setStartYear(Integer.toString((int) startSpinner.getValue()));
+            restartThread();
+
         });
 
-
-        endSpinner.valueProperty().addListener(new ChangeListener<Integer>() {
-            @Override
-            public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-                Model.getInstance().timeRanges.get(Model.getInstance().currentIndicator).setEndYear(Integer.toString((int) endSpinner.getValue()));
-                 System.out.println("END YEAR "+Model.timeRanges.get(Model.currentIndicator).getEndYear());
-                System.out.println(endSpinner.getValue());
-                startThread();
-            }
+        //listener to end spinner
+        endSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Model.timeRanges.get(indicatorCode).setEndYear(Integer.toString(endSpinner.getValue()));
+            restartThread();
         });
 
 
@@ -194,54 +242,36 @@ public class DataDisplayWrapper extends Stage {
         toReturn.getChildren().add(tableButton);
 
 
-        if (Model.currentCountries.size() < 2) {
-            Button philButton = new Button("Philips Curve");
-            philButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
-            philButton.setPadding(new Insets(10));
-            toReturn.getChildren().add(philButton);
-            philButton.setOnMouseClicked(e -> {
-
-                this.setCenterPane(new PhillipsCurve(data));
-            });
-        }
-
-        if (Model.currentCountries.size() > 0) {
+        //pie chart button if there are multiple countries
+        if (Model.currentCountries.size() > 1) {
             Button pieButton = new Button("Pie Chart");
             pieButton.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 16px");
             pieButton.setPadding(new Insets(10));
             toReturn.getChildren().add(pieButton);
-            pieButton.setOnMouseClicked(e -> {
-
-                this.setCenterPane(new PieCharts(data));
-            });
+            pieButton.setOnMouseClicked(e -> this.setCenterPane(new PieCharts(data,this)));
         }
-
 
 
         toReturn.getChildren().add(startSpinner);
         toReturn.getChildren().add(endSpinner);
 
         //Display tables in center of scene
-        tableButton.setOnMouseClicked(e -> {
-            this.setCenterPane(spCountryTables);
-        });
+        tableButton.setOnMouseClicked(e -> this.setCenterPane(spCountryTables));
 
-        lineButton.setOnMouseClicked(e -> {
-            this.setCenterPane(new LineCharts(data));
-        });
+        lineButton.setOnMouseClicked(e -> this.setCenterPane(new LineCharts(data,this)));
 
-        chartButton.setOnMouseClicked(e -> {
-            this.setCenterPane(new BarChartPane(data));
-        });
-
-
+        chartButton.setOnMouseClicked(e -> this.setCenterPane(new BarChartPane(data,this)));
 
         return toReturn;
     }
 
-
+    /**
+     * Method used to get the number of countries currently in the wrapper.
+     * @return no of countries in the wrapper
+     */
     public ArrayList<Integer> getInCountries() {
         return inCountries;
     }
-
+    public Indicator getcurrentIndicatorObject(){return indicatorObject;}
+    public String getcurrentIndicatorCode(){return indicatorCode;}
 }

@@ -1,8 +1,12 @@
 # projectWalk
-Main repository of team &lt;&lt;insert-name>> for Project Walk
+Main repository of Team Ecru for Project Walk
 
-# Trello
+This is a standalone application designed to support A Level Economic students with access to visualisations of macro-economic data.
+All the indicators present in this application have been cherry-picked from the AQA A Level syllabus. Thus providing students with comprehensive, thorough information about the current and historic macro-economic state of many relevant economies.
 
-Invite Link: https://trello.com/invite/b/bwSl4xC7/d713ba71163658244e25b2946a68983f/projectwalk
-
-**Main Link**: https://trello.com/b/bwSl4xC7/projectwalk
+Key features:
+- Compare up to 43 countries across 21 different indicators
+- Visualises macro-economic data using: Bar Charts, Line Charts, Tabular data and Pie Charts
+- Compare and query multiple macro-economic data at the same time - side by side
+- Keep up-to-date with the latest Economic news from the BBC without leaving the app
+- Keep up-to-date with the current Exchange Rates for 31 different currencies

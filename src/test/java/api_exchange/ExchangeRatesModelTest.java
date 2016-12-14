@@ -1,5 +1,6 @@
 package api_exchange;
 
+import exchange_rate.ExchangeRatesModel;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -10,7 +11,8 @@ import static org.junit.Assert.*;
 public class ExchangeRatesModelTest {
     @Test
     public void getData() throws Exception {
-
+        for (int i = 0; i < ExchangeRatesModel.getData().size(); i++) {
+            assertFalse(ExchangeRatesModel.getData().values().contains(null));
+        }
     }
-
 }

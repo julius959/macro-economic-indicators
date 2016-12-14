@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class NewsFeedTest {
     @Test
     public void getNews() throws Exception {
-
+        assertNotNull(NewsFeed.getNews());
     }
 
 }

@@ -22,6 +22,7 @@ public class CacheDataTest {
             for (int k = 1; k < ind.size(); k++) {
                 Model.getInstance().timeRanges.get(ind.get(k)).setStartYear("0000");
                 Model.getInstance().timeRanges.get(ind.get(k)).setEndYear("9999");
+                APIData.getInstance().saveLocally(l, ind.get(k), (Model.getInstance().getData(l, ind.get(k), Model.getInstance().timeRanges.get(ind.get(k)).getStartYear(), Model.getInstance().timeRanges.get(ind.get(k)).getEndYear())));
                 assertEquals(CacheData.getInstance().getData(l, ind.get(k), Model.getInstance().timeRanges.get(ind.get(k)).getStartYear(), Model.getInstance().timeRanges.get(ind.get(k)).getEndYear())
                         ,(APIData.getInstance().getData(l, ind.get(k), Model.getInstance().timeRanges.get(ind.get(k)).getStartYear(), Model.getInstance().timeRanges.get(ind.get(k)).getEndYear())));
             }

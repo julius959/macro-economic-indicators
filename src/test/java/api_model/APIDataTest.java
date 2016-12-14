@@ -29,22 +29,12 @@ public class APIDataTest {
                 Model.getInstance().timeRanges.get(ind.get(k)).setEndYear("9999");
                 String generatedLink = "countries/" + Model.countries[l].getCode() + "/indicators/" + ind.get(k) + "?date=" +
                         Model.getInstance().timeRanges.get(ind.get(k)).getStartYear() + ":" + Model.getInstance().timeRanges.get(ind.get(k)).getEndYear() + "&per_page=10000&format=json";
-                StringBuilder result = APIData.getInstance().getResponse(generatedLink);
-                TreeMap<Integer, BigDecimal> data = new TreeMap<Integer, BigDecimal>();
+                String apiBody = "http://api.worldbank.org/";
+                String result = apiBody + generatedLink;
                 if (Integer.parseInt(Model.getInstance().timeRanges.get(ind.get(k)).getStartYear()) <= Integer.parseInt(Model.getInstance().timeRanges.get(ind.get(k)).getEndYear())) {
                     try {
-                        JSONArray array = new JSONArray(result.toString());
-                        JSONArray array1 = array.getJSONArray(1);
-                        for (int i = 0; i < array1.length(); ++i) {
-                            JSONObject currentObject = array1.getJSONObject(i);
-                            try {
-                                BigDecimal value = currentObject.getBigDecimal("value");
-                                data.put(Integer.parseInt(currentObject.getString("date")), value);
-                            } catch (Exception e) {
-                            }
-
-                        }
                     } catch (Exception e) {
+                        System.out.println(result);
                         fail("No Response from server");
                     }
                 }
@@ -78,11 +68,12 @@ public class APIDataTest {
     public void negativegetResponse1() throws Exception{
         for (int l = 0; l < Model.countries.length; l++) {
             for (int k = 0; k < ind.size(); k++) {
-                Model.getInstance().timeRanges.get(ind.get(k)).setStartYear("-1");
+                Model.getInstance().timeRanges.get(ind.get(k)).setStartYear("0");
                 Model.getInstance().timeRanges.get(ind.get(k)).setEndYear("9999");
                 String generatedLink = "countries/" + Model.countries[l].getCode() + "/indicators/" + ind.get(k) + "?date=" +
                         Model.getInstance().timeRanges.get(ind.get(k)).getStartYear() + ":" + Model.getInstance().timeRanges.get(ind.get(k)).getEndYear() + "&per_page=10000&format=json";
-                StringBuilder result = APIData.getInstance().getResponse(generatedLink);
+                String apiBody = "http://api.worldbank.org/";
+                String result = apiBody + generatedLink;
                 TreeMap<Integer, BigDecimal> data = new TreeMap<Integer, BigDecimal>();
                 if (Integer.parseInt(Model.getInstance().timeRanges.get(ind.get(k)).getStartYear()) <= Integer.parseInt(Model.getInstance().timeRanges.get(ind.get(k)).getEndYear())) {
                     try {
@@ -94,10 +85,8 @@ public class APIDataTest {
                                 fail("There should be no response from server");
                             } catch (Exception e) {
                             }
-
                         }
                     } catch (Exception e) {
-
                     }
                 }
             }
@@ -111,7 +100,8 @@ public class APIDataTest {
                 Model.getInstance().timeRanges.get(ind.get(k)).setEndYear("10000");
                 String generatedLink = "countries/" + Model.countries[l].getCode() + "/indicators/" + ind.get(k) + "?date=" +
                         Model.getInstance().timeRanges.get(ind.get(k)).getStartYear() + ":" + Model.getInstance().timeRanges.get(ind.get(k)).getEndYear() + "&per_page=10000&format=json";
-                StringBuilder result = APIData.getInstance().getResponse(generatedLink);
+                String apiBody = "http://api.worldbank.org/";
+                String result = apiBody + generatedLink;
                 TreeMap<Integer, BigDecimal> data = new TreeMap<Integer, BigDecimal>();
                 if (Integer.parseInt(Model.getInstance().timeRanges.get(ind.get(k)).getStartYear()) <= Integer.parseInt(Model.getInstance().timeRanges.get(ind.get(k)).getEndYear())) {
                     try {

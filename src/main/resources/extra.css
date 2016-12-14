@@ -1,0 +1,71 @@
+.spinner {
+    -fx-focus-color: #F55028;
+    -fx-accent: #F55028;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-body-color: #F55028;
+    -fx-border-style: none;
+    -fx-focus-color: transparent;
+    -fx-border-color: transparent;
+
+}
+
+.spinner .increment-arrow-button:focused,
+.spinner .decrement-arrow-button:focused {
+    -fx-focus-color: transparent;
+    -fx-paint-focus-color: transparent;
+    -fx-border-color: transparent;
+
+}
+
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover {
+    /* interpolate color between yellow and red based on first color brightness */
+    -fx-body-color: ladder(#AAA, #cb431e 0%, red 100%);
+}
+
+.spinner .increment-arrow-button:hover:pressed,
+.spinner .decrement-arrow-button:hover:pressed,
+.spinner .increment-arrow-button:pressed,
+.spinner .decrement-arrow-button:pressed {
+    /* interpolate color between yellow and red based on first color brightness */
+    -fx-body-color: ladder(#AAA, #cb431e 0%, red 100%);
+}
+
+.spinner > .text-field {
+    -fx-background-color: #3e4249;
+    -fx-text-fill: white;
+}
+
+.table-view {
+    -fx-focus-color: #F55028;
+    -fx-accent: #F55028;
+}
+.table-view .column-header {
+    -fx-background-color: #F55028;
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+}
+
+.table-view .filler {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar {
+    -fx-control-inner-background: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #2c3138;
+}

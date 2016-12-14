@@ -9,7 +9,7 @@
 }
 
 .titled-pane > .title > .arrow-button > .arrow{
-   -fx-background-color: white;
+   -fx-background-color: #F55028;
 }
 
 .titled-pane > .title {
@@ -33,7 +33,9 @@
 
 .radio-button .dot {
     -fx-padding: 3px;
+    -fx-mark-color: #F55028;
 }
+
 
 .radio-button::focused .dot {
     -fx-background-color: #2c3138;
@@ -43,10 +45,20 @@
     -fx-text-fill: white;
 }
 
+.check-box {
+    -fx-mark-color: #F55028;
+}
+
 .root {
     -fx-font-family: "Roboto";
     -fx-font-size: 16px;
     -fx-background-color: #3e4249;
+
+}
+
+* {
+    -fx-focus-color: #F55028;
+    -fx-accent: #F55028;
 }
 
 #countries-wrapper {
@@ -108,17 +120,40 @@
     -fx-padding: 10px;
 }
 
-/*#wrapper-top-bar {*/
-    /*-fx-pref-height: 40px;*/
-    /*-fx-background-color: #F55028;*/
-/*}*/
-
-/*#chart-button,*/
-/*#table-button {*/
-    /*-fx-text-fill: white;*/
-    /*-fx-background-color: transparent;*/
-/*}*/
+#proceed-info {
+    -fx-alignment: top-center;
+    -fx-text-fill: white;
+    -fx-color-label-visible: true;
+    -fx-padding: 80px 20px 20px 20px;
+}
 
 
+.table-view {
+    -fx-background-color: transparent;
+}
+.table-view .column-header {
+    -fx-background-color: #2c3138;
+    -fx-text-fill: #F55028;
+}
 
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: #F55028;
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #2c3138;
+}
+.table-row-cell:selected,
+.table-row-cell:selected .label{
+    -fx-background-color: rgba(245, 80, 60, 1);
+    -fx-text-fill: white;
+}
+.table-view .filler {
+    -fx-background-color: transparent;
+}
 
