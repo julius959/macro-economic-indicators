@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -82,6 +83,7 @@ public class DataDisplayWrapper extends Stage {
         this.setTitle(Model.currentObjectIndicator.getLabelFromCode(Model.currentIndicator));
         mainPane = new BorderPane();
         Scene scene = new Scene(mainPane, 800, 500);
+        getIcons().add(new Image("icon_statistics.png"));
 
         //load css
         scene.getStylesheets().add(this.getClass().getClassLoader()

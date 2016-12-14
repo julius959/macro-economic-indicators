@@ -131,7 +131,10 @@ public class Main extends Application {
         //load css
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
         //set title
-        primaryStage.setTitle("Macro Economic Helper");
+        primaryStage.setTitle("Ecru Economics");
+
+        primaryStage.getIcons().add(new Image("icon_statistics.png"));
+
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
