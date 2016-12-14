@@ -15,6 +15,10 @@ public class TimeRangeTest {
             "FP.CPI.TOTL.ZG", "FP.CPI.TOTL", "IC.EXP.COST.CD", "IC.IMP.COST.CD", "FR.INR.RINR", "NY.GNS.ICTR.ZS", "GC.XPN.TOTL.GD.ZS", "GC.TAX.TOTL.GD.ZS", "GC.BAL.CASH.GD.ZS",
             "NE.IMP.GNFS.ZS", "NE.EXP.GNFS.ZS", "GC.DOD.TOTL.GD.ZS","SE.XPD.TOTL.GD.ZS", "SI.POV.GINI"));
     @Test
+    /**
+     *  Checks if the startyear for indicator is correctly changed when setStartYear method is used
+     **/
+
     public void setStartYear() throws Exception {
         for (int l = 0; l < Model.countries.length; l++) {
             for (int k = 1; k < ind.size(); k++) {
@@ -23,7 +27,9 @@ public class TimeRangeTest {
             }
         }
     }
-
+    /**
+     *  Checks if the endyear for indicator is correctly changed when setEndYear method is used
+     **/
     @Test
     public void setEndYear() throws Exception {
         for (int l = 0; l < Model.countries.length; l++) {
@@ -34,6 +40,9 @@ public class TimeRangeTest {
         }
     }
 
+    /**
+     *  Checks if the startyear for indicator is correctly retrieved
+     **/
     @Test
     public void getStartYear() throws Exception {
         for (int l = 0; l < Model.countries.length; l++) {
@@ -42,6 +51,9 @@ public class TimeRangeTest {
             }
         }
     }
+    /**
+     *  Checks if the endyear for indicator is correctly retrieved
+     **/
 
     @Test
     public void getEndYear() throws Exception {

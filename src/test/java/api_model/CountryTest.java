@@ -21,6 +21,10 @@ public class CountryTest {
     ArrayList<String> code = new ArrayList<String>(Arrays.asList("ar", "au", "at", "br", "ca", "cn", "hr", "cy", "dk", "eg", "fi", "fr", "deu", "gr", "hu", "in", "id", "ir", "it",
             "jp", "my", "mx", "mc", "ma", "nl", "pk", "pl", "pt", "qa", "kr", "ro", "ru", "sa", "sg", "za", "es", "se", "ch", "th", "tr", "ua", "gb", "usa"));
 
+    /**
+     * Checks if flag for each country actually loads, either from online or the resources folder
+     **/
+
     @Test
     public void loadFlag() throws Exception {
         for(int i = 0; i < Model.getInstance().countries.length; i++) {
@@ -28,12 +32,20 @@ public class CountryTest {
         }
     }
 
+    /**
+     * Retrieves the Name of the object Country, checks it with the array 'coun' to see if name is retrieved correctly
+     **/
+
     @Test
     public void getName() throws Exception {
         for(int i = 0; i < Model.getInstance().countries.length; i++){
             assertEquals(Model.getInstance().countries[i].getName(), coun.get(i));
         }
     }
+
+    /**
+     * Retrieves the Code of the object Country, checks it with the array 'code' to see if code is retrieved correctly
+     **/
 
     @Test
     public void getCode() throws Exception {

@@ -10,6 +10,9 @@ import static org.junit.Assert.*;
  */
 public class ExchangeRatesModelTest {
     @Test
+    /**
+     * This test checks if getData() returns null or not, when there is no internet connection, or there is something wrong with the API, the test would fail.
+     */
     public void getData() throws Exception {
         for (int i = 0; i < ExchangeRatesModel.getData().size(); i++) {
             assertFalse(ExchangeRatesModel.getData().values().contains(null));
